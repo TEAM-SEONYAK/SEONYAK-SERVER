@@ -1,4 +1,4 @@
-package org.sopt.seonyakserver;
+package org.sopt.seonyakServer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

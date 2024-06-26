@@ -1,4 +1,4 @@
-package org.sopt.seonyakserver;
+package org.sopt.seonyakServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
