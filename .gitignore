@@ -42,3 +42,4 @@ out/
 ### Config ###
 application-secret.properties
 application.yaml
+application.yml
