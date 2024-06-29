@@ -28,10 +28,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // PostgreSql
-    implementation group: 'org.postgresql', name:'postgresql', version:'42.7.3'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 
     // Spring WEB
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
