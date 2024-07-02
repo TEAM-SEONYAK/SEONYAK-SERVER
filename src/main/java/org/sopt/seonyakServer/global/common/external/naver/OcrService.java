@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
@@ -118,6 +120,8 @@ public class OcrService {
         JSONObject responseJson = new JSONObject(jsonResponse);
         JSONArray images = responseJson.getJSONArray("images");
 
+        Pattern pattern = Pattern.compile(".*?대학교");
+
         return IntStream.range(0, images.length())
                 .mapToObj(images::getJSONObject)
                 .flatMap(image -> {
@@ -126,7 +130,14 @@ public class OcrService {
                             .mapToObj(fields::getJSONObject);
                 })
                 .map(field -> field.getString("inferText"))
-                .filter(inferText -> inferText.contains("대학교"))
+                .filter(inferText -> pattern.matcher(inferText).find())
+                .map(inferText -> {
+                    Matcher matcher = pattern.matcher(inferText);
+                    if (matcher.find()) {
+                        return matcher.group();
+                    }
+                    return inferText;
+                })
                 .collect(Collectors.joining(", "));
     }
 }
