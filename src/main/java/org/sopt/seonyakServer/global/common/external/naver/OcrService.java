@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,8 +93,7 @@ public class OcrService {
         if (!file.isEmpty()) {
             out.write(("--" + boundary + "\r\n").getBytes("UTF-8"));
             StringBuilder fileString = new StringBuilder();
-            fileString
-                    .append("Content-Disposition:form-data; name=\"file\"; filename=");
+            fileString.append("Content-Disposition:form-data; name=\"file\"; filename=");
             fileString.append("\"" + file.getOriginalFilename() + "\"\r\n");
             fileString.append("Content-Type: application/octet-stream\r\n\r\n");
             out.write(fileString.toString().getBytes("UTF-8"));
@@ -116,24 +117,16 @@ public class OcrService {
     private String extractUnivText(String jsonResponse) {
         JSONObject responseJson = new JSONObject(jsonResponse);
         JSONArray images = responseJson.getJSONArray("images");
-        StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < images.length(); i++) {
-            JSONObject image = images.getJSONObject(i);
-            JSONArray fields = image.getJSONArray("fields");
-
-            for (int j = 0; j < fields.length(); j++) {
-                JSONObject field = fields.getJSONObject(j);
-                String inferText = field.getString("inferText");
-
-                if (inferText.contains("대학교")) {
-                    if (result.length() > 0) {
-                        result.append(", ");
-                    }
-                    result.append(inferText);
-                }
-            }
-        }
-        return result.toString();
+        return IntStream.range(0, images.length())
+                .mapToObj(images::getJSONObject)
+                .flatMap(image -> {
+                    JSONArray fields = image.getJSONArray("fields");
+                    return IntStream.range(0, fields.length())
+                            .mapToObj(fields::getJSONObject);
+                })
+                .map(field -> field.getString("inferText"))
+                .filter(inferText -> inferText.contains("대학교"))
+                .collect(Collectors.joining(", "));
     }
 }
