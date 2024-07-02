@@ -42,6 +42,7 @@ dependencies {
 
     // JSON
     implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'org.json:json:20231013'
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
