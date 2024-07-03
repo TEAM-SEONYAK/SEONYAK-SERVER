@@ -2,7 +2,7 @@ package org.sopt.seonyakServer.global.common.external.naver;
 
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import org.sopt.seonyakServer.global.common.dto.OcrTextResponse;
+import org.sopt.seonyakServer.global.common.dto.OcrUnivResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ public class OcrController {
     private final OcrService ocrService;
 
     @PostMapping("/univ")
-    public ResponseEntity<OcrTextResponse> ocrText(@RequestParam("imageFile") MultipartFile file) throws IOException {
+    public ResponseEntity<OcrUnivResponse> ocrText(@RequestParam("imageFile") MultipartFile file) throws IOException {
         return ResponseEntity.ok(ocrService.ocrText(file));
     }
 }

@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.sopt.seonyakServer.global.common.dto.OcrTextResponse;
+import org.sopt.seonyakServer.global.common.dto.OcrUnivResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class OcrService {
     private final OcrConfig ocrConfig;
 
-    public OcrTextResponse ocrText(MultipartFile file) throws IOException {
+    public OcrUnivResponse ocrText(MultipartFile file) throws IOException {
         // OCR 설정파일로부터 URL, Secret Key 가져옴
         String apiUrl = ocrConfig.getApiUrl();
         String apiKey = ocrConfig.getApiKey();
@@ -76,7 +76,7 @@ public class OcrService {
         }
         br.close();
 
-        return OcrTextResponse.of(extractUnivText(response.toString()));
+        return OcrUnivResponse.of(extractUnivText(response.toString()));
     }
 
 
