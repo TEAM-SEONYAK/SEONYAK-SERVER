@@ -138,6 +138,6 @@ public class OcrService {
                     }
                     return inferText;
                 })
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining(","));
     }
 }

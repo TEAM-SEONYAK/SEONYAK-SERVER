@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/ocr")
 @RequiredArgsConstructor
 public class OcrController {
 
     private final OcrService ocrService;
 
-    @PostMapping("/ocr")
+    @PostMapping("/univ")
     public ResponseEntity<OcrTextResponse> ocrText(@RequestParam("imageFile") MultipartFile file) throws IOException {
         return ResponseEntity.ok(ocrService.ocrText(file));
     }
