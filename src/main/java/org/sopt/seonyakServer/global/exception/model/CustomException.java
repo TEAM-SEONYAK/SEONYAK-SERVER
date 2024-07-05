@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 
 @Getter
-public class CustomException extends RuntimeException{
+public class CustomException extends RuntimeException {
     private final ErrorType errorType;
 
     public CustomException(ErrorType errorType) {

@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
 import org.sopt.seonyakServer.domain.member.service.MemberService;
-import org.sopt.seonyakServer.global.common.dto.ResponseDto;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +20,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public ResponseDto<LoginSuccessResponse> login(
+    public ResponseEntity<LoginSuccessResponse> login(
             @RequestParam final String authorizationCode,
             @RequestBody @Valid final MemberLoginRequest loginRequest
     ) {
         LoginSuccessResponse loginSuccessResponse = memberService.create(authorizationCode, loginRequest);
 
-        return ResponseDto.success(loginSuccessResponse);
+        return ResponseEntity.ok(loginSuccessResponse);
     }
 }
