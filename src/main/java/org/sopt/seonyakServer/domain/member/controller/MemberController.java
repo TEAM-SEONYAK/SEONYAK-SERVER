@@ -24,8 +24,6 @@ public class MemberController {
             @RequestParam final String authorizationCode,
             @RequestBody @Valid final MemberLoginRequest loginRequest
     ) {
-        LoginSuccessResponse loginSuccessResponse = memberService.create(authorizationCode, loginRequest);
-
-        return ResponseEntity.ok(loginSuccessResponse);
+        return ResponseEntity.ok(memberService.create(authorizationCode, loginRequest));
     }
 }
