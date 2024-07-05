@@ -1,10 +1,11 @@
 package org.sopt.seonyakServer.global.common.external.client;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum SocialType {
 
     GOOGLE("GOOGLE"),
