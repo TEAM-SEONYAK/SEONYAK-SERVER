@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
         } else if (StringUtils.hasText(bearerToken) && !bearerToken.startsWith("Bearer ")) {
-            throw new CustomException(ErrorType.INVALID_JWT_SIGNATURE);
+            throw new CustomException(ErrorType.BEARER_LOST_ERROR);
         }
 
         return null;

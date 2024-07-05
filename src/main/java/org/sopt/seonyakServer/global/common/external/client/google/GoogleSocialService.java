@@ -46,7 +46,7 @@ public class GoogleSocialService implements SocialService {
             // 인가 코드로 Access Token 받아오기
             accessToken = getOAuth2Authentication(authorizationCode, loginRequest.redirectUri());
         } catch (FeignException e) {
-            throw new CustomException(ErrorType.EXPIRED_JWT_TOKEN);
+            throw new CustomException(ErrorType.EXPIRED_AUTHENTICATION_CODE);
         }
 
         GoogleUserInfoResponse response = getGoogleUserInfo(accessToken);
