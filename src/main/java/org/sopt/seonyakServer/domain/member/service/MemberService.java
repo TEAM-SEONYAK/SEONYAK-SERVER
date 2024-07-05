@@ -34,9 +34,9 @@ public class MemberService {
 
     private LoginSuccessResponse getTokenDto(final MemberInfoResponse memberInfoResponse) {
         try {
-            if (isExistingMember(memberInfoResponse.socialId(), memberInfoResponse.socialType())) {
+            if (isExistingMember(memberInfoResponse.socialType(), memberInfoResponse.socialId())) {
                 return getTokenByMemberId(
-                        getBySocialId(memberInfoResponse.socialId(), memberInfoResponse.socialType()).getId()
+                        getBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId()).getId()
                 );
             } else {
                 Long id = createMember(memberInfoResponse);
@@ -45,7 +45,7 @@ public class MemberService {
             }
         } catch (DataIntegrityViolationException e) { // DB 무결성 제약 조건 위반 예외
             return getTokenByMemberId(
-                    getBySocialId(memberInfoResponse.socialId(), memberInfoResponse.socialType()).getId()
+                    getBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId()).getId()
             );
         }
     }
@@ -63,17 +63,17 @@ public class MemberService {
     }
 
     public boolean isExistingMember(
-            final String socialId,
-            final SocialType socialType
+            final SocialType socialType,
+            final String socialId
     ) {
-        return memberRepository.findBySocialTypeAndSocialId(socialId, socialType).isPresent();
+        return memberRepository.findBySocialTypeAndSocialId(socialType, socialId).isPresent();
     }
 
     public Member getBySocialId(
-            final String socialId,
-            final SocialType socialType
+            final SocialType socialType,
+            final String socialId
     ) {
-        Member member = memberRepository.findBySocialTypeAndSocialId(socialId, socialType).orElseThrow(
+        Member member = memberRepository.findBySocialTypeAndSocialId(socialType, socialId).orElseThrow(
                 () -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR)
         );
 
