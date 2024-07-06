@@ -14,7 +14,6 @@ import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +22,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final GoogleSocialService googleSocialService;
+    private final MemberManagementService memberManagementService;
 
     public LoginSuccessResponse create(
             final String authorizationCode,
@@ -33,24 +33,6 @@ public class MemberService {
         );
     }
 
-    private LoginSuccessResponse getTokenDto(final MemberInfoResponse memberInfoResponse) {
-        try {
-            if (isExistingMember(memberInfoResponse.socialType(), memberInfoResponse.socialId())) {
-                return getTokenByMemberId(
-                        getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
-                );
-            } else {
-                Long id = createMember(memberInfoResponse);
-
-                return getTokenByMemberId(id);
-            }
-        } catch (DataIntegrityViolationException e) { // DB 무결성 제약 조건 위반 예외
-            return getTokenByMemberId(
-                    getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
-            );
-        }
-    }
-
     public MemberInfoResponse getMemberInfoResponse(
             final String authorizationCode,
             final MemberLoginRequest loginRequest
@@ -59,6 +41,24 @@ public class MemberService {
             return googleSocialService.login(authorizationCode, loginRequest);
         }
         throw new CustomException(ErrorType.INVALID_SOCIAL_TYPE_ERROR);
+    }
+
+    private LoginSuccessResponse getTokenDto(final MemberInfoResponse memberInfoResponse) {
+        try {
+            if (isExistingMember(memberInfoResponse.socialType(), memberInfoResponse.socialId())) {
+                return getTokenByMemberId(
+                        getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
+                );
+            } else {
+                Long id = memberManagementService.createMember(memberInfoResponse);
+
+                return getTokenByMemberId(id);
+            }
+        } catch (DataIntegrityViolationException e) { // DB 무결성 제약 조건 위반 예외
+            return getTokenByMemberId(
+                    getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
+            );
+        }
     }
 
     public boolean isExistingMember(
@@ -77,17 +77,6 @@ public class MemberService {
         );
 
         return member.getId();
-    }
-
-    @Transactional
-    public Long createMember(final MemberInfoResponse memberInfoResponse) {
-        Member member = Member.of(
-                memberInfoResponse.socialType(),
-                memberInfoResponse.socialId(),
-                memberInfoResponse.email()
-        );
-
-        return memberRepository.save(member).getId();
     }
 
     public LoginSuccessResponse getTokenByMemberId(final Long id) {
