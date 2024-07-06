@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.sopt.seonyakServer.global.common.external.client.SocialType;
 
 @Entity
 @Getter

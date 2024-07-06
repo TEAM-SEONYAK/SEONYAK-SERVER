@@ -1,7 +1,7 @@
 package org.sopt.seonyakServer.global.common.external.client.dto;
 
 
-import org.sopt.seonyakServer.global.common.external.client.SocialType;
+import org.sopt.seonyakServer.domain.member.model.SocialType;
 
 public record MemberInfoResponse(
         SocialType socialType,

@@ -1,4 +1,4 @@
-package org.sopt.seonyakServer.global.common.external.client;
+package org.sopt.seonyakServer.domain.member.model;
 
 import lombok.AccessLevel;
 import lombok.Getter;

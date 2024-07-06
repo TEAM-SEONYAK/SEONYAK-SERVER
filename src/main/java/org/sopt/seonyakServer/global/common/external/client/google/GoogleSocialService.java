@@ -4,7 +4,7 @@ import feign.FeignException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.seonyakServer.global.common.external.client.SocialType;
+import org.sopt.seonyakServer.domain.member.model.SocialType;
 import org.sopt.seonyakServer.global.common.external.client.dto.GoogleUserInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
