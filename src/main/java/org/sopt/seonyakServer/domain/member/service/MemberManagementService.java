@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class MemberManagementService {
+    // 트랜잭션 작업을 관리할 서비스 클래스 (자기 호출 방지 및 단일 책임 원칙 준수)
 
     private final MemberRepository memberRepository;
 

@@ -24,6 +24,7 @@ public class MemberService {
     private final GoogleSocialService googleSocialService;
     private final MemberManagementService memberManagementService;
 
+    // JWT Access Token 생성
     public LoginSuccessResponse create(
             final String authorizationCode,
             final MemberLoginRequest loginRequest
@@ -33,6 +34,7 @@ public class MemberService {
         );
     }
 
+    // 소셜 플랫폼으로부터 해당 유저 정보를 받아옴
     public MemberInfoResponse getMemberInfoResponse(
             final String authorizationCode,
             final MemberLoginRequest loginRequest
@@ -43,6 +45,7 @@ public class MemberService {
         throw new CustomException(ErrorType.INVALID_SOCIAL_TYPE_ERROR);
     }
 
+    // Access Token을 생성할 때, 해당 유저의 회원가입 여부를 판단
     private LoginSuccessResponse getTokenDto(final MemberInfoResponse memberInfoResponse) {
         try {
             if (isExistingMember(memberInfoResponse.socialType(), memberInfoResponse.socialId())) {
