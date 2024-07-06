@@ -24,16 +24,19 @@ repositories {
 }
 
 dependencies {
+    // Spring WEB
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
     // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // PostgreSql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 
-    // Spring WEB
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-
-    //Actuator
+    // Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // Lombok
@@ -47,6 +50,34 @@ dependencies {
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // JWT
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Open Feign (External API)
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.2'
+
+    // Querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 쿼리 파라미터 로그 남기기
+}
+
+ext {
+    set('springCloudVersion', "2023.0.2")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 tasks.named('test') {
