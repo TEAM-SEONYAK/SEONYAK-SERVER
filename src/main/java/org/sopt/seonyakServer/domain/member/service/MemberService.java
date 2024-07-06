@@ -55,12 +55,10 @@ public class MemberService {
             final String authorizationCode,
             final MemberLoginRequest loginRequest
     ) {
-        switch (loginRequest.socialType()) {
-            case GOOGLE:
-                return googleSocialService.login(authorizationCode, loginRequest);
-            default:
-                throw new CustomException(ErrorType.INVALID_SOCIAL_TYPE_ERROR);
+        if (loginRequest.socialType() == SocialType.GOOGLE) {
+            return googleSocialService.login(authorizationCode, loginRequest);
         }
+        throw new CustomException(ErrorType.INVALID_SOCIAL_TYPE_ERROR);
     }
 
     public boolean isExistingMember(
