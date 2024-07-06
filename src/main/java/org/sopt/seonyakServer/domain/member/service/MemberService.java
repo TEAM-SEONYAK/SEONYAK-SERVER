@@ -37,7 +37,7 @@ public class MemberService {
         try {
             if (isExistingMember(memberInfoResponse.socialType(), memberInfoResponse.socialId())) {
                 return getTokenByMemberId(
-                        getBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId()).getId()
+                        getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
                 );
             } else {
                 Long id = createMember(memberInfoResponse);
@@ -46,7 +46,7 @@ public class MemberService {
             }
         } catch (DataIntegrityViolationException e) { // DB 무결성 제약 조건 위반 예외
             return getTokenByMemberId(
-                    getBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId()).getId()
+                    getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
             );
         }
     }
@@ -68,7 +68,7 @@ public class MemberService {
         return memberRepository.findBySocialTypeAndSocialId(socialType, socialId).isPresent();
     }
 
-    public Member getBySocialId(
+    public Long getMemberIdBySocialId(
             final SocialType socialType,
             final String socialId
     ) {
@@ -76,7 +76,7 @@ public class MemberService {
                 () -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR)
         );
 
-        return member;
+        return member.getId();
     }
 
     @Transactional
