@@ -14,6 +14,7 @@ import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -80,6 +81,7 @@ public class MemberService {
         return member;
     }
 
+    @Transactional
     public Long createMember(final MemberInfoResponse memberInfoResponse) {
         Member member = Member.of(
                 memberInfoResponse.socialType(),
