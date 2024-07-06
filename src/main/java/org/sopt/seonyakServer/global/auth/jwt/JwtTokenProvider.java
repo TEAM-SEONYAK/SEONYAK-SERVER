@@ -101,7 +101,7 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    public Long getMemberFromJwt(String token) {
+    public Long getMemberIdFromJwt(String token) {
         Claims claims = getBody(getTokenFromHeader(token));
 
         return Long.valueOf(claims.get(MEMBER_ID).toString());
