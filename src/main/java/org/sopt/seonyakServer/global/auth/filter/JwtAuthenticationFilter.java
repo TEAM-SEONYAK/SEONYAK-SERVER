@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.seonyakServer.global.auth.MemberAuthentication;
 import org.sopt.seonyakServer.global.auth.jwt.JwtTokenProvider;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
@@ -21,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -41,7 +43,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception exception) {
+            // SecurityConfig에서 permitAll을 적용해도, Spring Security의 필터 체인을 거치므로
+            // 여기서 바로 Exception throw를 하게 되면 permitAll과 상관 없이 ExceptionTranslationFilter로 처리가 넘어간다.
+            // 따라서 예외를 직접 throw로 던져주는 것이 아닌, 발생시키기만 하고 다음 필터 호출로 이어지게끔 해야 하고, (doFilter)
+            // 이렇게 하면 API의 permitAll 적용 여부에 따라 ExceptionTranslationFilter를 거칠지 판단하게 된다.
+            log.error("JwtAuthentication Authentication Exception Occurs! - {}", exception.getMessage());
         }
+        // 다음 필터로 요청 전달 (호출)
         filterChain.doFilter(request, response);
     }
 
