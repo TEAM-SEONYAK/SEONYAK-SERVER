@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -48,6 +49,11 @@ public class SecurityConfig {
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 헤더 설정 추가
+        http.headers(headers -> headers.addHeaderWriter(
+                new StaticHeadersWriter("Cross-Origin-Opener-Policy", "same-origin-allow-popups")
+        ));
 
         return http.build();
     }
