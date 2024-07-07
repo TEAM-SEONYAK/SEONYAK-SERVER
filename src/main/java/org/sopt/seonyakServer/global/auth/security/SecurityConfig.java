@@ -24,7 +24,7 @@ public class SecurityConfig {
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     private static final String[] AUTH_WHITE_LIST = {
-            "/api/**",
+            "/api/v1/auth/**",
             "/actuator/health",
             "/v3/api-docs/**",
             "/swagger-ui/**",
