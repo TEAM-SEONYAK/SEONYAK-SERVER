@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity // web Security를 사용할 수 있게
+@EnableWebSecurity // WebSecurity를 사용할 수 있게
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

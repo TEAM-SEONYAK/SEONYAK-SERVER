@@ -13,12 +13,9 @@ import java.util.Base64;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
-import org.sopt.seonyakServer.global.exception.enums.ErrorType;
-import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -36,16 +33,6 @@ public class JwtTokenProvider {
     protected void init() {
         //base64 라이브러리에서 encodeToString을 이용해서 byte[] 형식을 String 형식으로 변환
         JWT_SECRET = Base64.getEncoder().encodeToString(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private String getTokenFromHeader(final String token) {
-        if (!StringUtils.hasText(token)) {
-            throw new CustomException(ErrorType.UN_LOGIN_ERROR);
-        } else if (StringUtils.hasText(token) && !token.startsWith("Bearer ")) {
-            throw new CustomException(ErrorType.BEARER_LOST_ERROR);
-        }
-
-        return token.substring("Bearer ".length());
     }
 
     public String issueAccessToken(final Authentication authentication) {
@@ -80,7 +67,7 @@ public class JwtTokenProvider {
 
     public JwtValidationType validateToken(String token) {
         try {
-            final Claims claims = getBody(getTokenFromHeader(token));
+            final Claims claims = getBody(token);
             return JwtValidationType.VALID_JWT;
         } catch (MalformedJwtException ex) {
             return JwtValidationType.INVALID_JWT_TOKEN;
@@ -101,8 +88,8 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    public Long getMemberFromJwt(String token) {
-        Claims claims = getBody(getTokenFromHeader(token));
+    public Long getMemberIdFromJwt(String token) {
+        Claims claims = getBody(token);
 
         return Long.valueOf(claims.get(MEMBER_ID).toString());
     }

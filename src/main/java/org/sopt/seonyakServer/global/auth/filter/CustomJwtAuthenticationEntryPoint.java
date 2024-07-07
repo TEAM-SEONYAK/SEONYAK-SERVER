@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CustomJwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    // 사용자가 인증되지 않은 상태에서 보호된 리소스에 접근하려고 할 때 호출
 
     @Override
     public void commence(HttpServletRequest request,

@@ -1,6 +1,6 @@
 package org.sopt.seonyakServer.global.common.external.client.service;
 
-import org.sopt.seonyakServer.global.common.external.client.SocialType;
+import org.sopt.seonyakServer.domain.member.model.SocialType;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
 
