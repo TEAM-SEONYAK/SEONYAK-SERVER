@@ -114,14 +114,5 @@ public class GoogleMeetConfig {
             throw new CustomException(ErrorType.GET_GOOGLE_AUTHORIZER_ERROR);
 
         }
-        // Credentials가 null인 경우, 사용자 인증화면 띄줘줘야함
-//        URL authorizationUrl = userAuthorizer.getAuthorizationUrl(USER, "", null);
-//        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-//            Desktop.getDesktop().browse(authorizationUrl.toURI());
-//        } else {
-//            System.out.printf("Open the following URL to authorize access: %s\n", authorizationUrl.toExternalForm());
-//        }
-//        String code = localServerReceiver.waitForCode();
-//        return userAuthorizer.getAndStoreCredentialsFromCode(USER, code, URI.create(callbackUri));
     }
 }
