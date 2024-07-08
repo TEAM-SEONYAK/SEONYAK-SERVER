@@ -43,3 +43,7 @@ out/
 application-secret.properties
 application.yaml
 application.yml
+credentials.json
+
+### 구글미트 액세스 토큰 ###
+/tokens
