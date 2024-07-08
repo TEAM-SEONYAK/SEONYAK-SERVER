@@ -1,6 +1,5 @@
 package org.sopt.seonyakServer.global.common.external.client.google;
 
-import feign.FeignException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +8,6 @@ import org.sopt.seonyakServer.global.common.external.client.dto.GoogleUserInfoRe
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
 import org.sopt.seonyakServer.global.common.external.client.service.SocialService;
-import org.sopt.seonyakServer.global.exception.enums.ErrorType;
-import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,12 +39,12 @@ public class GoogleSocialService implements SocialService {
     ) {
         String accessToken;
 
-        try {
-            // 인가 코드로 Access Token 받아오기
-            accessToken = getOAuth2Authentication(authorizationCode, loginRequest.redirectUri());
-        } catch (FeignException e) {
-            throw new CustomException(ErrorType.EXPIRED_AUTHENTICATION_CODE);
-        }
+//        try {
+        // 인가 코드로 Access Token 받아오기
+        accessToken = getOAuth2Authentication(authorizationCode, loginRequest.redirectUri());
+//        } catch (FeignException e) {
+//            throw new CustomException(ErrorType.EXPIRED_AUTHENTICATION_CODE);
+//        }
 
         GoogleUserInfoResponse response = getGoogleUserInfo(accessToken);
 
