@@ -1,4 +1,4 @@
-package org.sopt.seonyakServer.global.common.external.client.google;
+package org.sopt.seonyakServer.global.common.external.client.service;
 
 import feign.FeignException;
 import lombok.Getter;
@@ -8,7 +8,8 @@ import org.sopt.seonyakServer.domain.member.model.SocialType;
 import org.sopt.seonyakServer.global.common.external.client.dto.GoogleUserInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
-import org.sopt.seonyakServer.global.common.external.client.service.SocialService;
+import org.sopt.seonyakServer.global.common.external.client.google.GoogleAccessTokenClient;
+import org.sopt.seonyakServer.global.common.external.client.google.GoogleUserClient;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
