@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.sopt.seonyakServer.global.common.dto.OcrUnivResponse;
+import org.sopt.seonyakServer.global.common.external.naver.dto.OcrUnivResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

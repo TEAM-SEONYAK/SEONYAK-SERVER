@@ -9,7 +9,7 @@ import org.sopt.seonyakServer.global.auth.MemberAuthentication;
 import org.sopt.seonyakServer.global.auth.jwt.JwtTokenProvider;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
-import org.sopt.seonyakServer.global.common.external.client.google.GoogleSocialService;
+import org.sopt.seonyakServer.global.common.external.client.service.GoogleSocialService;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.dao.DataIntegrityViolationException;
