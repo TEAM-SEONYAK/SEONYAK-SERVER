@@ -1,6 +1,5 @@
 package org.sopt.seonyakServer.global.common.external.client.service;
 
-import feign.FeignException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,12 +42,12 @@ public class GoogleSocialService implements SocialService {
     ) {
         String accessToken;
 
-        try {
-            // 인가 코드로 Access Token 받아오기
-            accessToken = getOAuth2Authentication(authorizationCode, loginRequest.redirectUri());
-        } catch (FeignException e) {
-            throw new CustomException(ErrorType.EXPIRED_AUTHENTICATION_CODE);
-        }
+//        try {
+        // 인가 코드로 Access Token 받아오기
+        accessToken = getOAuth2Authentication(authorizationCode, loginRequest.redirectUri());
+//        } catch (FeignException e) {
+//            throw new CustomException(ErrorType.EXPIRED_AUTHENTICATION_CODE);
+//        }
 
         GoogleUserInfoResponse response = getGoogleUserInfo(accessToken);
 
