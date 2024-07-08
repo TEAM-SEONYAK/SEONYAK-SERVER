@@ -8,15 +8,15 @@ import com.google.auth.oauth2.ClientId;
 import com.google.auth.oauth2.DefaultPKCEProvider;
 import com.google.auth.oauth2.TokenStore;
 import com.google.auth.oauth2.UserAuthorizer;
-import java.awt.Desktop;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import org.sopt.seonyakServer.global.exception.enums.ErrorType;
+import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -73,7 +73,7 @@ public class GoogleMeetConfig {
     public UserAuthorizer userAuthorizer(TokenStore tokenStore) throws IOException {
         try (InputStream in = getClass().getResourceAsStream(credentialsFilePath)) {
             if (in == null) {
-                throw new IOException("Resource not found: " + credentialsFilePath);
+                throw new CustomException(ErrorType.NOT_FOUND_CREDENTIALS_JSON_ERROR);
             }
             ClientId clientId = ClientId.fromStream(in);
             return UserAuthorizer.newBuilder()
@@ -93,7 +93,7 @@ public class GoogleMeetConfig {
 
     @Bean
     public LocalServerReceiver localServerReceiver() {
-        return new LocalServerReceiver.Builder().setPort(8082).build();
+        return new LocalServerReceiver.Builder().setPort(8081).build();
     }
 
     @Bean
@@ -106,17 +106,22 @@ public class GoogleMeetConfig {
     @Bean
     public Credentials credentials(UserAuthorizer userAuthorizer, LocalServerReceiver localServerReceiver)
             throws Exception {
+        // UserAuthorizer를 사용하여 지정된 사용자의 Credentials를 가져옴
         Credentials credentials = userAuthorizer.getCredentials(USER);
         if (credentials != null) {
             return credentials;
-        }
-        URL authorizationUrl = userAuthorizer.getAuthorizationUrl(USER, "", null);
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-            Desktop.getDesktop().browse(authorizationUrl.toURI());
         } else {
-            System.out.printf("Open the following URL to authorize access: %s\n", authorizationUrl.toExternalForm());
+            throw new CustomException(ErrorType.GET_GOOGLE_AUTHORIZER_ERROR);
+
         }
-        String code = localServerReceiver.waitForCode();
-        return userAuthorizer.getAndStoreCredentialsFromCode(USER, code, URI.create(callbackUri));
+        // Credentials가 null인 경우, 사용자 인증화면 띄줘줘야함
+//        URL authorizationUrl = userAuthorizer.getAuthorizationUrl(USER, "", null);
+//        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+//            Desktop.getDesktop().browse(authorizationUrl.toURI());
+//        } else {
+//            System.out.printf("Open the following URL to authorize access: %s\n", authorizationUrl.toExternalForm());
+//        }
+//        String code = localServerReceiver.waitForCode();
+//        return userAuthorizer.getAndStoreCredentialsFromCode(USER, code, URI.create(callbackUri));
     }
 }
