@@ -11,16 +11,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "university")
 public class University {
 
@@ -33,5 +30,20 @@ public class University {
     private String univName;
 
     @OneToMany(mappedBy = "university", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Department> departments;
+    private List<Department> departmentList;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private University(
+            final String univName
+    ) {
+        this.univName = univName;
+    }
+
+    public static University createUniversity(
+            final String univName
+    ) {
+        return University.builder()
+                .univName(univName)
+                .build();
+    }
 }
