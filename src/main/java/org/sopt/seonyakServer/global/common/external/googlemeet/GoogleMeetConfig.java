@@ -81,6 +81,7 @@ public class GoogleMeetConfig {
 
     @Bean
     public UserAuthorizer userAuthorizer(TokenStore tokenStore) throws IOException {
+        log.info("tlqkf token: " + tokenStore);
         ClassPathResource resource = new ClassPathResource("json/credentials.json");
         try (InputStream in = resource.getInputStream()) {
             String credentialsContent = new String(in.readAllBytes());
