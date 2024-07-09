@@ -1,6 +1,6 @@
 # ☀️💊 SEONYAK (선약)
 
-![KakaoTalk_Photo_2024-07-09-23-14-50](https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/b6c2d246-3281-4a5f-9134-3c15915e69a0)
+![Main_Image_Seonyak](https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/b6c2d246-3281-4a5f-9134-3c15915e69a0)
 
 ```
 " 더 큰 세상에서 걸음마를 뗄 후배들이 선배의 손을 잡고 뛸 수 있도록 "
@@ -17,8 +17,8 @@
 <div align="center">
 <table>
     <tr>
-        <td><img src="https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/600acc6b-2fc2-4069-b02a-a4439dc6ae0c" width="500vh"></td>
-        <td><img src="https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/7101de93-37a0-4958-87c0-769e7d8b3d5e" width="500vh"></td>
+        <td><img src="https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/6e98ef2a-efe5-4883-b283-c8bd81c8d8ac" width="500vh"></td>
+        <td><img src="https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/bd6d3bd4-72d0-4eef-a4c0-f0f87891a6df" width="500vh"></td>
     </tr>
     <tr>
         <td align="center"> 김창균 <a href="https://github.com/ckkim817"><img src="https://img.shields.io/badge/Github-181717?style=flat-square&logo=Github&logoColor=white"/></a></td>
@@ -27,10 +27,9 @@
 </table>
 </div>
 
-<br/>
+`김창균` - EC2, RDS 세팅 / 컨벤션들 작성 / 구글 소셜 로그인 연동 / API 개발
 
-김창균 - EC2, RDS 세팅 / 컨벤션들 작성 / 구글 소셜 로그인 연동 / API 개발
-홍석범 - 응답, 에러 처리를 포함한 프로젝트 초기 세팅 / DOCKER CI, CD 세팅 / 네이버 OCR, 구글 미트 회의실 개설 등 외부 API 연동 / API 개발
+`홍석범` - 응답, 에러 처리를 포함한 프로젝트 초기 세팅 / DOCKER CI, CD 세팅 / 네이버 OCR, 구글 미트 회의실 개설 등 외부 API 연동 / API 개발
 
 <br/>
 
@@ -38,7 +37,7 @@
 
 > **Git Flow**
 
-<img width="838" alt="Git_Flow_Seonyak" src="https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/7220369b-d515-4828-b496-1c907cdc7506">
+<img width="100%" alt="Git_Flow_Seonyak" src="https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/7220369b-d515-4828-b496-1c907cdc7506">
 
 - `main` 운영서버 브랜치
 - `hotfix` 핫픽스용 브랜치
@@ -185,36 +184,40 @@ ex) 코드 리뷰 간 참고사항, 질문 등 -->
 │       │       │       ├── 📂 dto
 │       │       │       │       ├── 📂 request
 │       │       │       │       └── 📂 response
+│       │       │       │
 │       │       │       ├── 📂 model
 │       │       │       ├── 📂 repository
 │       │       │       └── 📂 service
+│       │       │
 │       │       └── 📂 entity2
 │       │       │       ├── 📂 controller
 │       │       │       ├── 📂 dto
 │       │       │       │       ├── 📂 request
 │       │       │       │       └── 📂 response
+│       │       │       │
 │       │       │       ├── 📂 model
 │       │       │       ├── 📂 repository
 │       │       │       └── 📂 service
+│       │       │
 │       │       └── 📂 utils
-│       │       │
-│       │       │
-│       │       │
-│       │       │
+│       │
 │       └── 📂 global
 │               ├── 📂 auth
 │               │       ├── 📂 filter
 │               │       ├── 📂 jwt
 │               │       ├── 📂 redis
 │               │       └── 📂 security
+│               │
 │               ├── 📂 common
 │               │       ├── 📂 dto
 │               │       ├── 📂 external
 │               │       └── 📂 model
+│               │
 │               ├── 📂 config
-│               ├── 📂 exception
+│               └── 📂 exception
 │                       ├── 📂 enums
 │                       ├── 📂 model(CustomException)
 │                       └── GlobalExceptionHandler.java
+│
 └── SeonyakServerApplication.java
 ```
