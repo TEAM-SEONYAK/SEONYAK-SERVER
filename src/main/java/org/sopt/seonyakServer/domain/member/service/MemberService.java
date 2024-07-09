@@ -79,7 +79,7 @@ public class MemberService {
                 () -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR)
         );
 
-        return member.getId();
+        return member.getMemberId();
     }
 
     public LoginSuccessResponse getTokenByMemberId(final Long id) {
