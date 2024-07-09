@@ -62,7 +62,7 @@ public enum ErrorType {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50001", "알 수 없는 서버 에러가 발생했습니다."),
     GET_UPLOAD_PRESIGNED_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50002", "업로드를 위한 Presigned URL 획득에 실패했습니다."),
     GET_GOOGLE_MEET_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50003", "구글미트 URL 획득에 실패했습니다."),
-    GET_GOOGLE_AUTHORIZER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50004", "구글미트 URL 획득에 실패했습니다.");
+    GET_GOOGLE_AUTHORIZER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50004", "구글 인증유저 획득에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
