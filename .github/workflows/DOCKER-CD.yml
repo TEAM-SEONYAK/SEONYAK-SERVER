@@ -40,6 +40,8 @@ jobs:
           mkdir -p ./src/main/resources
           cd ./src/main/resources
           aws s3 cp --region ap-northeast-2 s3://${{ secrets.S3_BUCKET_NAME }}/json/credentials.json .
+          echo "Absolute path of credentials.json:"
+          echo "$(pwd)/credentials.json"
         shell: bash
 
       - name: 빌드
