@@ -28,12 +28,18 @@ jobs:
           cat ./application.yml
         working-directory: ${{ env.working-directory }}
 
-      - name: credentials.json 생성
-        id: create-json
-        uses: jsdaniell/create-json@1.1.2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          name: "credentials.json"
-          json: ${{ secrets.GOOGLE_CREDENTIALS }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: credentials.json 생성
+        run: |
+          cd ./SEONYAK-SERVER/src/main/resources
+          aws s3 cp --region ap-northeast-2 s3://${{ secrets.S3_BUCKET_NAME }}/json/credentials.json .
+        shell: bash
 
       - name: 빌드
         run: |
