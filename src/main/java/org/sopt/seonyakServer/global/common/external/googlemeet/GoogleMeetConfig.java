@@ -47,45 +47,32 @@ public class GoogleMeetConfig {
 
             @Override
             public String load(String id) throws IOException {
-                Path path = pathFor(id);
-                if (!Files.exists(path)) {
-                    return null;
-                }
-                String token = Files.readString(path);
                 if (!Files.exists(pathFor(id))) {
                     return null;
                 }
-                log.info("Loaded token from {}: {}", path, token);
                 return Files.readString(pathFor(id));
             }
 
             @Override
             public void store(String id, String token) throws IOException {
-                Path path = pathFor(id);
                 Files.createDirectories(Paths.get(".", tokensDirectoryPath));
                 Files.writeString(pathFor(id), token);
-                log.info("Stored token to {}: {}", path, token);
             }
 
             @Override
             public void delete(String id) throws IOException {
-                Path path = pathFor(id);
                 if (!Files.exists(pathFor(id))) {
                     return;
                 }
                 Files.delete(pathFor(id));
-                log.info("Deleted token at {}", path);
             }
         };
     }
 
     @Bean
     public UserAuthorizer userAuthorizer(TokenStore tokenStore) throws IOException {
-        log.info("tlqkf token: " + tokenStore);
         ClassPathResource resource = new ClassPathResource("json/credentials.json");
         try (InputStream in = resource.getInputStream()) {
-            String credentialsContent = new String(in.readAllBytes());
-            log.info("Loaded credentials.json content: {}", credentialsContent);
             ClientId clientId = ClientId.fromStream(in);
             return UserAuthorizer.newBuilder()
                     .setClientId(clientId)
@@ -123,7 +110,6 @@ public class GoogleMeetConfig {
             return credentials;
         } else {
             throw new CustomException(ErrorType.GET_GOOGLE_AUTHORIZER_ERROR);
-
         }
     }
 }
