@@ -32,7 +32,7 @@ jobs:
         id: create-json
         uses: jsdaniell/create-json@1.1.2
         with:
-          name: "./src/main/resources/credentials.json"
+          name: "credentials.json"
           json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: 빌드
