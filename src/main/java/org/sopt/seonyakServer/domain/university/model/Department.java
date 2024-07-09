@@ -10,16 +10,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "department")
 public class Department {
 
@@ -37,4 +34,27 @@ public class Department {
 
     @Column(name = "is_closed", nullable = false)
     private Boolean isClosed;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private Department(
+            final University university,
+            final String deptName,
+            final Boolean isClosed
+    ) {
+        this.university = university;
+        this.deptName = deptName;
+        this.isClosed = isClosed;
+    }
+
+    public static Department createDepartment(
+            final University university,
+            final String deptName,
+            final Boolean isClosed
+    ) {
+        return Department.builder()
+                .university(university)
+                .deptName(deptName)
+                .isClosed(isClosed)
+                .build();
+    }
 }
