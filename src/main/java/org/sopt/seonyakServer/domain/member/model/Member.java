@@ -28,20 +28,20 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "memberid")
+    @Column(name = "member_id")
     private Long memberId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "socialtype", nullable = false)
+    @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-    @Column(name = "socialid", nullable = false, length = 255)
+    @Column(name = "social_id", nullable = false, length = 255)
     private String socialId;
 
     @Column(name = "email", nullable = false, length = 255)
     private String email;
 
-    @Column(name = "issubscribed")
+    @Column(name = "is_subscribed")
     private Boolean isSubscribed;
 
     @Column(name = "nickname", length = 20)
@@ -50,10 +50,10 @@ public class Member {
     @Column(name = "image", length = 255)
     private String image;
 
-    @Column(name = "phonenumber", length = 255)
+    @Column(name = "phone_number", length = 255)
     private String phoneNumber;
 
-    @Column(name = "univname", length = 255)
+    @Column(name = "univ_name", length = 255)
     private String univName;
 
     @Column(name = "field", length = 255)
