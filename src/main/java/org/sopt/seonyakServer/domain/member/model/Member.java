@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +19,7 @@ import org.sopt.seonyakServer.domain.senior.model.Senior;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member {
 
@@ -65,7 +62,22 @@ public class Member {
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Senior senior;
 
-    public static Member createMember(SocialType socialType, String socialId, String email) {
+    @Builder(access = AccessLevel.PRIVATE)
+    private Member(
+            final SocialType socialType,
+            final String socialId,
+            final String email
+    ) {
+        this.socialType = socialType;
+        this.socialId = socialId;
+        this.email = email;
+    }
+
+    public static Member createMember(
+            final SocialType socialType,
+            final String socialId,
+            final String email
+    ) {
         return Member.builder()
                 .socialType(socialType)
                 .socialId(socialId)
