@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@Slf4j
 public class GoogleMeetConfig {
 
     @Value("${google.credentials.file.path}")
@@ -71,11 +73,12 @@ public class GoogleMeetConfig {
 
     @Bean
     public UserAuthorizer userAuthorizer(TokenStore tokenStore) throws IOException {
+        log.info("credentials path: " + credentialsFilePath);
         Path credentialsPath = Paths.get(credentialsFilePath);
+        if (!Files.exists(credentialsPath)) {
+            throw new CustomException(ErrorType.NOT_FOUND_CREDENTIALS_JSON_ERROR);
+        }
         try (InputStream in = Files.newInputStream(credentialsPath)) {
-            if (in == null) {
-                throw new CustomException(ErrorType.NOT_FOUND_CREDENTIALS_JSON_ERROR);
-            }
             ClientId clientId = ClientId.fromStream(in);
             return UserAuthorizer.newBuilder()
                     .setClientId(clientId)

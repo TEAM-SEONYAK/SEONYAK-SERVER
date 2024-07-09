@@ -26,6 +26,8 @@ jobs:
           touch ./application.yml
           echo "${{ secrets.CD_APPLICATION }}" > ./application.yml
           cat ./application.yml
+          echo "Absolute path of application.yml:"
+          echo "$(pwd)/application.yml"
         working-directory: ${{ env.working-directory }}
 
       - name: Configure AWS credentials
