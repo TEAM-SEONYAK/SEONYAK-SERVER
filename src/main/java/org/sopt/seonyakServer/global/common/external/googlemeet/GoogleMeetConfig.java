@@ -11,9 +11,6 @@ import com.google.auth.oauth2.UserAuthorizer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
@@ -22,6 +19,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Configuration
 @Slf4j
@@ -36,35 +41,76 @@ public class GoogleMeetConfig {
     @Value("${google.credentials.scopes}")
     private List<String> scopes;
 
+    @Value("${aws-property.s3-bucket-name}")
+    private String bucketName;
+
+    @Value("${aws-property.access-key}")
+    private String accessKeyId;
+
+    @Value("${aws-property.secret-key}")
+    private String secretAccessKey;
+
+    @Value("${aws-property.aws-region}")
+    private String awsRegion;
+
+    @Bean
+    public S3Client s3Client() {
+        return S3Client.builder()
+                .region(Region.of(awsRegion))
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(accessKeyId, secretAccessKey)
+                ))
+                .build();
+    }
+
     private static final String USER = "default";
 
     @Bean
-    public TokenStore tokenStore() {
+    public TokenStore tokenStore(S3Client s3Client) {
         return new TokenStore() {
-            private Path pathFor(String id) {
-                return Paths.get(".", tokensDirectoryPath, id + ".json");
+            private String s3KeyFor(String id) {
+                return tokensDirectoryPath + "/" + id + ".json";
             }
 
             @Override
             public String load(String id) throws IOException {
-                if (!Files.exists(pathFor(id))) {
+                String key = s3KeyFor(id);
+                try {
+                    InputStream inputStream = s3Client.getObject(GetObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .build());
+                    return new String(inputStream.readAllBytes());
+                } catch (Exception e) {
+                    log.error("Failed to load token from S3: " + e.getMessage(), e);
                     return null;
                 }
-                return Files.readString(pathFor(id));
             }
 
             @Override
             public void store(String id, String token) throws IOException {
-                Files.createDirectories(Paths.get(".", tokensDirectoryPath));
-                Files.writeString(pathFor(id), token);
+                String key = s3KeyFor(id);
+                try {
+                    s3Client.putObject(PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .build(), RequestBody.fromString(token));
+                } catch (Exception e) {
+                    log.error("Failed to store token in S3: " + e.getMessage(), e);
+                }
             }
 
             @Override
             public void delete(String id) throws IOException {
-                if (!Files.exists(pathFor(id))) {
-                    return;
+                String key = s3KeyFor(id);
+                try {
+                    s3Client.deleteObject(DeleteObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .build());
+                } catch (Exception e) {
+                    log.error("Failed to delete token from S3: " + e.getMessage(), e);
                 }
-                Files.delete(pathFor(id));
             }
         };
     }
