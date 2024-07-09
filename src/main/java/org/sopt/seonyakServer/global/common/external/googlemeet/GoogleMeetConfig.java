@@ -71,7 +71,8 @@ public class GoogleMeetConfig {
 
     @Bean
     public UserAuthorizer userAuthorizer(TokenStore tokenStore) throws IOException {
-        try (InputStream in = getClass().getResourceAsStream(credentialsFilePath)) {
+        Path credentialsPath = Paths.get(credentialsFilePath);
+        try (InputStream in = Files.newInputStream(credentialsPath)) {
             if (in == null) {
                 throw new CustomException(ErrorType.NOT_FOUND_CREDENTIALS_JSON_ERROR);
             }
