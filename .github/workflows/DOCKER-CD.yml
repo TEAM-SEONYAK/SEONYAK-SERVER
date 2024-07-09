@@ -29,11 +29,11 @@ jobs:
         working-directory: ${{ env.working-directory }}
 
       - name: credentials.json 생성
-        run: |
-          mkdir -p ./src/main/resources && cd $_
-          touch ./credentials.json
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > ./credentials.json
-        working-directory: ${{ env.working-directory }}
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "./src/main/resources/credentials.json"
+          json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: 빌드
         run: |
