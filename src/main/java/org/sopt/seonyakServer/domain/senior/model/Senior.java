@@ -11,7 +11,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Map;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +19,7 @@ import org.sopt.seonyakServer.domain.util.JsonConverter;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "senior")
 public class Senior {
 
@@ -65,4 +62,31 @@ public class Senior {
     @Column(name = "preffered_time_list", columnDefinition = "jsonb")
     @Convert(converter = JsonConverter.class)
     private Map<String, Object> prefferedTimeList;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private Senior(
+            Member member,
+            String businessCard,
+            String detailPosition,
+            Integer level
+    ) {
+        this.member = member;
+        this.businessCard = businessCard;
+        this.detailPosition = detailPosition;
+        this.level = level;
+    }
+
+    public static Senior createSenior(
+            Member member,
+            String businessCard,
+            String detailPosition,
+            Integer level
+    ) {
+        return Senior.builder()
+                .member(member)
+                .businessCard(businessCard)
+                .detailPosition(detailPosition)
+                .level(level)
+                .build();
+    }
 }
