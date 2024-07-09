@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p ./src/main/resources && cd $_
           touch ./credentials.json
-          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > ./credentials.json
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > | base64 -d > ./credentials.json
           cat ./credentials.json
         working-directory: ${{ env.working-directory }}
 
