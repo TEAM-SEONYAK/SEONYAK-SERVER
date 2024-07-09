@@ -16,12 +16,12 @@ public class MemberManagementService {
 
     @Transactional
     public Long createMember(final MemberInfoResponse memberInfoResponse) {
-        Member member = Member.of(
+        Member member = Member.createMember(
                 memberInfoResponse.socialType(),
                 memberInfoResponse.socialId(),
                 memberInfoResponse.email()
         );
 
-        return memberRepository.save(member).getId();
+        return memberRepository.save(member).getMemberId();
     }
 }
