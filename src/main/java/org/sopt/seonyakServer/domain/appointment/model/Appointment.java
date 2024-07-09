@@ -14,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.Map;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +24,7 @@ import org.sopt.seonyakServer.domain.util.JsonConverter;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "appointment")
 public class Appointment {
 
@@ -37,11 +34,11 @@ public class Appointment {
     private Long appointmentId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    @JoinColumn(name = "member_id", referencedColumnName = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "senior_id", referencedColumnName = "senior_id")
+    @JoinColumn(name = "senior_id", referencedColumnName = "senior_id", nullable = false)
     private Senior senior;
 
     @Enumerated(EnumType.STRING)
@@ -63,4 +60,31 @@ public class Appointment {
 
     @Column(name = "google_meet_link", length = 255)
     private String googleMeetLink;
+
+    @Builder(access = AccessLevel.PRIVATE)
+    private Appointment(
+            Member member,
+            Senior senior,
+            AppointmentStatus appointmentStatus,
+            Map<String, Object> timeList
+    ) {
+        this.member = member;
+        this.senior = senior;
+        this.appointmentStatus = appointmentStatus;
+        this.timeList = timeList;
+    }
+
+    public static Appointment createAppointment(
+            Member member,
+            Senior senior,
+            AppointmentStatus appointmentStatus,
+            Map<String, Object> timeList
+    ) {
+        return Appointment.builder()
+                .member(member)
+                .senior(senior)
+                .appointmentStatus(appointmentStatus)
+                .timeList(timeList)
+                .build();
+    }
 }
