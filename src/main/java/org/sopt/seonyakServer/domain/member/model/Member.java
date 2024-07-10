@@ -32,31 +32,31 @@ public class Member {
     @Column(name = "social_type", nullable = false)
     private SocialType socialType;
 
-    @Column(name = "social_id", nullable = false, length = 255)
+    @Column(name = "social_id", nullable = false)
     private String socialId;
 
-    @Column(name = "email", nullable = false, length = 255)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "is_subscribed")
     private Boolean isSubscribed;
 
-    @Column(name = "nickname", length = 20)
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "image", length = 255)
+    @Column(name = "image")
     private String image;
 
-    @Column(name = "phone_number", length = 255)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "univ_name", length = 255)
+    @Column(name = "univ_name")
     private String univName;
 
-    @Column(name = "field", length = 255)
+    @Column(name = "field")
     private String field;
 
-    @Column(name = "department", length = 255)
+    @Column(name = "department")
     private String department;
 
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
