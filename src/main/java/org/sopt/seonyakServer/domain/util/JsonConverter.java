@@ -7,6 +7,8 @@ import jakarta.persistence.Converter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.sopt.seonyakServer.global.exception.enums.ErrorType;
+import org.sopt.seonyakServer.global.exception.model.CustomException;
 
 @Converter
 public class JsonConverter implements AttributeConverter<Map<String, Object>, String> {
@@ -18,7 +20,7 @@ public class JsonConverter implements AttributeConverter<Map<String, Object>, St
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting map to JSON string.", e);
+            throw new CustomException(ErrorType.MAP_TO_JSON_ERROR);
         }
     }
 
@@ -27,7 +29,7 @@ public class JsonConverter implements AttributeConverter<Map<String, Object>, St
         try {
             return objectMapper.readValue(dbData, HashMap.class);
         } catch (IOException e) {
-            throw new RuntimeException("Error converting JSON string to map.", e);
+            throw new CustomException(ErrorType.JSON_TO_MAP_ERROR);
         }
     }
 }

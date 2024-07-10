@@ -30,36 +30,39 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "appointment_id")
-    private Long appointmentId;
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "member_id", referencedColumnName = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "senior_id", referencedColumnName = "senior_id", nullable = false)
+    @JoinColumn(name = "senior_id", referencedColumnName = "id", nullable = false)
     private Senior senior;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "appointment_status", nullable = false)
-    private AppointmentStatus appointmentStatus;
 
     @Column(name = "time_list", columnDefinition = "jsonb", nullable = false)
     @Convert(converter = JsonConverter.class)
     private Map<String, Object> timeList;
 
-    @Column(name = "topic", length = 255)
+    @Column(name = "topic")
     private String topic;
 
-    @Column(name = "personal_topic", length = 255)
+    @Column(name = "personal_topic")
     private String personalTopic;
 
-    @Column(name = "reject_reason", length = 255)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "appointment_status", nullable = false)
+    private AppointmentStatus appointmentStatus;
+
+    @Column(name = "google_meet_link")
+    private String googleMeetLink;
+
+    @Column(name = "reject_reason")
     private String rejectReason;
 
-    @Column(name = "google_meet_link", length = 255)
-    private String googleMeetLink;
+    @Column(name = "reject_detail")
+    private String rejectDetail;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Appointment(

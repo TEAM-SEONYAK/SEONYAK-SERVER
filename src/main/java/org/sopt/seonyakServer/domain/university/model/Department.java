@@ -22,24 +22,24 @@ public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dept_id")
-    private Long deptId;
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "univ_id", referencedColumnName = "univ_id", nullable = false)
+    @JoinColumn(name = "univ_id", referencedColumnName = "id", nullable = false)
     private University university;
 
-    @Column(name = "dept_name", nullable = false, length = 20)
+    @Column(name = "dept_name", nullable = false)
     private String deptName;
 
     @Column(name = "is_closed", nullable = false)
-    private Boolean isClosed;
+    private boolean isClosed;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Department(
             final University university,
             final String deptName,
-            final Boolean isClosed
+            final boolean isClosed
     ) {
         this.university = university;
         this.deptName = deptName;
@@ -49,7 +49,7 @@ public class Department {
     public static Department createDepartment(
             final University university,
             final String deptName,
-            final Boolean isClosed
+            final boolean isClosed
     ) {
         return Department.builder()
                 .university(university)
