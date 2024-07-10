@@ -32,31 +32,31 @@ public class Senior {
     @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
     private Member member;
 
-    @Column(name = "business_card", nullable = false, length = 255)
+    @Column(name = "business_card", nullable = false)
     private String businessCard;
 
-    @Column(name = "company", length = 255)
+    @Column(name = "company")
     private String company;
 
-    @Column(name = "position", length = 255)
+    @Column(name = "position")
     private String position;
 
-    @Column(name = "detail_position", nullable = false, length = 255)
+    @Column(name = "detail_position", nullable = false)
     private String detailPosition;
 
     @Column(name = "level", nullable = false)
     private int level;
 
-    @Column(name = "catchphrase", length = 255)
+    @Column(name = "catchphrase")
     private String catchphrase;
 
-    @Column(name = "career", length = 255)
+    @Column(name = "career")
     private String career;
 
-    @Column(name = "award", length = 255)
+    @Column(name = "award")
     private String award;
 
-    @Column(name = "story", length = 255)
+    @Column(name = "story")
     private String story;
 
     @Column(name = "is_day_of_week", nullable = false)

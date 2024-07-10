@@ -45,22 +45,22 @@ public class Appointment {
     @Convert(converter = JsonConverter.class)
     private Map<String, Object> timeList;
 
-    @Column(name = "topic", length = 255)
+    @Column(name = "topic")
     private String topic;
 
-    @Column(name = "personal_topic", length = 255)
+    @Column(name = "personal_topic")
     private String personalTopic;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "appointment_status", nullable = false)
     private AppointmentStatus appointmentStatus;
 
-    @Column(name = "google_meet_link", length = 255)
+    @Column(name = "google_meet_link")
     private String googleMeetLink;
 
-    @Column(name = "reject_reason", length = 255)
+    @Column(name = "reject_reason")
     private String rejectReason;
-    
+
     @Builder(access = AccessLevel.PRIVATE)
     private Appointment(
             Member member,

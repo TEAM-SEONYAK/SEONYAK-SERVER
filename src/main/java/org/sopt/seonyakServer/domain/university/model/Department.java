@@ -29,7 +29,7 @@ public class Department {
     @JoinColumn(name = "univ_id", referencedColumnName = "id", nullable = false)
     private University university;
 
-    @Column(name = "dept_name", nullable = false, length = 20)
+    @Column(name = "dept_name", nullable = false)
     private String deptName;
 
     @Column(name = "is_closed", nullable = false)
