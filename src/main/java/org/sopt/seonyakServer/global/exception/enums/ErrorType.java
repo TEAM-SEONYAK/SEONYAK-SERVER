@@ -22,6 +22,8 @@ public enum ErrorType {
     INVALID_CODE_HEADER_ERROR(HttpStatus.BAD_REQUEST, "40007", "code 헤더값의 형식이 잘못되었습니다."),
     INVALID_SOCIAL_TYPE_ERROR(HttpStatus.BAD_REQUEST, "40008", "유효하지 않은 Social Type입니다."),
     BEARER_LOST_ERROR(HttpStatus.BAD_REQUEST, "40009", "요청한 토큰이 Bearer 토큰이 아닙니다."),
+    MAP_TO_JSON_ERROR(HttpStatus.BAD_REQUEST, "40016", "Map을 JSON 문자열로 변환하는 중 오류가 발생했습니다."),
+    JSON_TO_MAP_ERROR(HttpStatus.BAD_REQUEST, "40017", "JSON 문자열을 Map으로 변환하는 중 오류가 발생했습니다."),
 
     // S3 관련 오류
     IMAGE_EXTENSION_ERROR(HttpStatus.BAD_REQUEST, "40051", "이미지 확장자는 jpg, png, webp만 가능합니다."),
