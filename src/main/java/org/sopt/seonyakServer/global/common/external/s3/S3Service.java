@@ -5,6 +5,8 @@ import java.time.Duration;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.global.common.external.s3.dto.PreSignedUrlResponse;
+import org.sopt.seonyakServer.global.exception.enums.ErrorType;
+import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -27,26 +29,30 @@ public class S3Service {
     private final static String imagePath = "profiles/";
 
     public PreSignedUrlResponse getUploadPreSignedUrl() {
-        // UUID 파일명 생성
-        String uuidFileName = UUID.randomUUID().toString() + ".jpg";
-        // 경로 + 파일 이름
-        String key = imagePath + uuidFileName;
+        try {
+            // UUID 파일명 생성
+            String uuidFileName = UUID.randomUUID().toString() + ".jpg";
+            // 경로 + 파일 이름
+            String key = imagePath + uuidFileName;
 
-        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(bucketName)
-                .key(key)
-                .build();
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
 
-        // S3에서 업로드는 PUT 요청
-        PutObjectPresignRequest preSignedUrlRequest = PutObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(PRE_SIGNED_URL_EXPIRE_MINUTE))
-                .putObjectRequest(putObjectRequest)
-                .build();
+            // S3에서 업로드는 PUT 요청
+            PutObjectPresignRequest preSignedUrlRequest = PutObjectPresignRequest.builder()
+                    .signatureDuration(Duration.ofMinutes(PRE_SIGNED_URL_EXPIRE_MINUTE))
+                    .putObjectRequest(putObjectRequest)
+                    .build();
 
-        // Persigned URL 생성
-        URL url = s3Presigner.presignPutObject(preSignedUrlRequest).url();
+            // Persigned URL 생성
+            URL url = s3Presigner.presignPutObject(preSignedUrlRequest).url();
 
-        return PreSignedUrlResponse.of(uuidFileName, url.toString());
+            return PreSignedUrlResponse.of(uuidFileName, url.toString());
+
+        } catch (RuntimeException e) {
+            throw new CustomException(ErrorType.GET_UPLOAD_PRESIGNED_URL_ERROR);
+        }
     }
-
 }
