@@ -26,60 +26,18 @@ import org.springframework.web.multipart.MultipartFile;
 public class OcrService {
     private final OcrConfig ocrConfig;
 
+    // 대학명 OCR
     public OcrUnivResponse ocrUniv(MultipartFile file) throws IOException {
         // OCR 설정파일로부터 URL, Secret Key 가져옴
         String apiUrl = ocrConfig.getUnivUrl();
         String apiKey = ocrConfig.getUnivUrlKey();
 
-        // 네이버 OCR API 요청 헤더 설정
-        URL url = new URL(apiUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setUseCaches(false);
-        con.setDoInput(true);
-        con.setDoOutput(true);
-        con.setReadTimeout(30000);
-        con.setRequestMethod("POST");
-        String boundary = "----" + UUID.randomUUID().toString().replaceAll("-", "");
-        con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        con.setRequestProperty("X-OCR-SECRET", apiKey);
-
-        // 네이버 OCR API 요청 바디 설정
-        JSONObject json = new JSONObject();
-        json.put("version", "V2");
-        json.put("requestId", UUID.randomUUID().toString());
-        json.put("timestamp", System.currentTimeMillis());
-        JSONObject image = new JSONObject();
-        image.put("format", "jpg");
-        image.put("name", "demo");
-        JSONArray images = new JSONArray();
-        images.put(image);
-        json.put("images", images);
-        String postParams = json.toString();
-
-        // 네이버 OCR API 요청 날림
-        con.connect();
-        try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-            writeMultiPart(wr, postParams, file, boundary);
-            wr.flush();
-        }
-
-        int responseCode = con.getResponseCode();
-        BufferedReader br;
-        if (responseCode == 200) {
-            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        } else {
-            br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-        }
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-        while ((inputLine = br.readLine()) != null) {
-            response.append(inputLine);
-        }
-        br.close();
-
-        return OcrUnivResponse.of(extractUnivText(response.toString()));
+        // 대학교 OCR 응답 문자열로 받아옴
+        String response = requestNaverOcr(apiUrl, apiKey, file);
+        return OcrUnivResponse.of(extractUnivText(response));
     }
 
+    // 명함 OCR
     public OcrBusinessResponse ocrBusiness(MultipartFile file) throws IOException {
         // OCR 설정파일로부터 URL, Secret Key 가져옴
         String apiUrl = ocrConfig.getBusinessUrl();
@@ -88,7 +46,7 @@ public class OcrService {
         //회사명, 휴대전화번호 JSON 응답에서 파싱
         String company = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "company");
         String phoneNumber = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "mobile");
-        return OcrBusinessResponse.of(company, phoneNumber);
+        return OcrBusinessResponse.of(company, "010" + lastEightNumber);
     }
 
     // 네이버 OCR API 요청 구성
