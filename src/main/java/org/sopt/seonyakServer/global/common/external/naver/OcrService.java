@@ -46,6 +46,9 @@ public class OcrService {
         //회사명, 휴대전화번호 JSON 응답에서 파싱
         String company = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "company");
         String phoneNumber = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "mobile");
+        String cleanedNumber = phoneNumber.replaceAll("[^\\d]", "");
+        String lastEightNumber =
+                cleanedNumber.length() > 8 ? cleanedNumber.substring(cleanedNumber.length() - 8) : cleanedNumber;
         return OcrBusinessResponse.of(company, "010" + lastEightNumber);
     }
 
