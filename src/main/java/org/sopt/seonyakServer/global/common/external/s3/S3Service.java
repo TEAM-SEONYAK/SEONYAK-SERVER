@@ -24,7 +24,7 @@ public class S3Service {
 
     // PreSigned URL 만료시간 60분
     private static final Long PRE_SIGNED_URL_EXPIRE_MINUTE = 60L;
-    private final static String imagePath = "/profiles";
+    private final static String imagePath = "profiles/";
 
     public PreSignedUrlResponse getUploadPreSignedUrl() {
         // UUID 파일명 생성
