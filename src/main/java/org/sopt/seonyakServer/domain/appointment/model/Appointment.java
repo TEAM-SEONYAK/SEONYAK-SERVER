@@ -61,6 +61,9 @@ public class Appointment {
     @Column(name = "reject_reason")
     private String rejectReason;
 
+    @Column(name = "reject_detail")
+    private String rejectDetail;
+
     @Builder(access = AccessLevel.PRIVATE)
     private Appointment(
             Member member,
