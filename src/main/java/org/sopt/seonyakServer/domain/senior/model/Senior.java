@@ -45,7 +45,7 @@ public class Senior {
     private String detailPosition;
 
     @Column(name = "level", nullable = false)
-    private Integer level;
+    private int level;
 
     @Column(name = "catchphrase", length = 255)
     private String catchphrase;
@@ -68,7 +68,7 @@ public class Senior {
             Member member,
             String businessCard,
             String detailPosition,
-            Integer level
+            int level,
     ) {
         this.member = member;
         this.businessCard = businessCard;
@@ -80,7 +80,7 @@ public class Senior {
             Member member,
             String businessCard,
             String detailPosition,
-            Integer level
+            int level,
     ) {
         return Senior.builder()
                 .member(member)

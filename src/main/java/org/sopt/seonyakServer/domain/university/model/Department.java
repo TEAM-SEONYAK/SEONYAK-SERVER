@@ -33,13 +33,13 @@ public class Department {
     private String deptName;
 
     @Column(name = "is_closed", nullable = false)
-    private Boolean isClosed;
+    private boolean isClosed;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Department(
             final University university,
             final String deptName,
-            final Boolean isClosed
+            final boolean isClosed
     ) {
         this.university = university;
         this.deptName = deptName;
@@ -49,7 +49,7 @@ public class Department {
     public static Department createDepartment(
             final University university,
             final String deptName,
-            final Boolean isClosed
+            final boolean isClosed
     ) {
         return Department.builder()
                 .university(university)
