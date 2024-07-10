@@ -22,6 +22,6 @@ public class MemberManagementService {
                 memberInfoResponse.email()
         );
 
-        return memberRepository.save(member).getMemberId();
+        return memberRepository.save(member).getId();
     }
 }

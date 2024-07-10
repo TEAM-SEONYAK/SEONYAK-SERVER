@@ -25,11 +25,11 @@ public class Senior {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "senior_id")
-    private Long seniorId;
+    @Column(name = "id")
+    private Long id;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "member_id", referencedColumnName = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
     private Member member;
 
     @Column(name = "business_card", nullable = false, length = 255)

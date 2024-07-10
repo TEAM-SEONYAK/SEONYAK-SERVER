@@ -25,8 +25,8 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long memberId;
+    @Column(name = "id")
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "social_type", nullable = false)

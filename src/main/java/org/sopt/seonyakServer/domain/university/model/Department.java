@@ -22,11 +22,11 @@ public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dept_id")
-    private Long deptId;
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "univ_id", referencedColumnName = "univ_id", nullable = false)
+    @JoinColumn(name = "univ_id", referencedColumnName = "id", nullable = false)
     private University university;
 
     @Column(name = "dept_name", nullable = false, length = 20)
