@@ -1,7 +1,10 @@
 package org.sopt.seonyakServer.domain.member.service;
 
+import static org.sopt.seonyakServer.global.common.RegularExpression.NICKNAME_PATTERN;
+
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
+import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.member.model.SocialType;
 import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
@@ -86,5 +89,16 @@ public class MemberService {
         MemberAuthentication memberAuthentication = new MemberAuthentication(id, null, null);
 
         return LoginSuccessResponse.of(jwtTokenProvider.issueAccessToken(memberAuthentication));
+    }
+
+    // 닉네임 유효성 검증
+    public void validNickname(final NicknameRequest nicknameRequest) {
+        if (!nicknameRequest.nickname().matches(NICKNAME_PATTERN)) { // 형식 체크
+            throw new CustomException(ErrorType.INVALID_NICKNAME_ERROR);
+        }
+
+        if (memberRepository.existsByNickname(nicknameRequest.nickname())) { // 중복 체크
+            throw new CustomException(ErrorType.NICKNAME_DUP_ERROR);
+        }
     }
 }
