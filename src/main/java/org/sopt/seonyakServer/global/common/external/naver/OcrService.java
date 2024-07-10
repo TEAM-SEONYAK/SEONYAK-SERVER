@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.sopt.seonyakServer.global.common.external.naver.dto.OcrBusinessResponse;
 import org.sopt.seonyakServer.global.common.external.naver.dto.OcrUnivResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,10 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class OcrService {
     private final OcrConfig ocrConfig;
 
-    public OcrUnivResponse ocrText(MultipartFile file) throws IOException {
+    public OcrUnivResponse ocrUniv(MultipartFile file) throws IOException {
         // OCR 설정파일로부터 URL, Secret Key 가져옴
-        String apiUrl = ocrConfig.getApiUrl();
-        String apiKey = ocrConfig.getApiKey();
+        String apiUrl = ocrConfig.getUnivUrl();
+        String apiKey = ocrConfig.getUnivUrlKey();
 
         // 네이버 OCR API 요청 헤더 설정
         URL url = new URL(apiUrl);
@@ -79,6 +80,66 @@ public class OcrService {
         return OcrUnivResponse.of(extractUnivText(response.toString()));
     }
 
+    public OcrBusinessResponse ocrBusiness(MultipartFile file) throws IOException {
+        // OCR 설정파일로부터 URL, Secret Key 가져옴
+        String apiUrl = ocrConfig.getBusinessUrl();
+        String apiKey = ocrConfig.getBusinessKey();
+
+        //회사명, 휴대전화번호 JSON 응답에서 파싱
+        String company = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "company");
+        String phoneNumber = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "mobile");
+        return OcrBusinessResponse.of(company, phoneNumber);
+    }
+
+    // 네이버 OCR API 요청 구성
+    public static String requestNaverOcr(String apiUrl, String apiKey, MultipartFile file)
+            throws IOException {
+        String boundary = "----" + UUID.randomUUID().toString().replaceAll("-", "");
+        URL url = new URL(apiUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setUseCaches(false);
+        con.setDoInput(true);
+        con.setDoOutput(true);
+        con.setReadTimeout(30000);
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+        con.setRequestProperty("X-OCR-SECRET", apiKey);
+
+        // 네이버 OCR API 요청 바디 설정
+        JSONObject json = new JSONObject();
+        json.put("version", "V2");
+        json.put("requestId", UUID.randomUUID().toString());
+        json.put("timestamp", System.currentTimeMillis());
+        JSONObject image = new JSONObject();
+        image.put("format", "jpg");
+        image.put("name", "demo");
+        JSONArray images = new JSONArray();
+        images.put(image);
+        json.put("images", images);
+        String postParams = json.toString();
+
+        // 네이버 OCR API 요청 날림
+        con.connect();
+        try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+            writeMultiPart(wr, postParams, file, boundary);
+            wr.flush();
+        }
+
+        int responseCode = con.getResponseCode();
+        BufferedReader br;
+        if (responseCode == 200) {
+            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        } else {
+            br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+        }
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = br.readLine()) != null) {
+            response.append(inputLine);
+        }
+        br.close();
+        return response.toString();
+    }
 
     // 네이버 공식문서 대로 OCR 요청 보내는 함수
     private static void writeMultiPart(OutputStream out, String jsonMessage, MultipartFile file, String boundary)
@@ -139,5 +200,26 @@ public class OcrService {
                     return inferText;
                 })
                 .collect(Collectors.joining(","));
+    }
+
+    // 명함 OCR 응답에서 keyword에 해당하는 필드값을 추출하는 함수
+    private String extractTextByKey(String jsonResponse, String key) {
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        JSONArray imagesArray = jsonObject.getJSONArray("images");
+
+        return IntStream.range(0, imagesArray.length())
+                .mapToObj(imagesArray::getJSONObject)
+                .filter(imageObject -> imageObject.has("nameCard"))
+                .map(imageObject -> imageObject.getJSONObject("nameCard"))
+                .filter(nameCard -> nameCard.has("result"))
+                .map(nameCard -> nameCard.getJSONObject("result"))
+                .filter(result -> result.has(key))
+                .flatMap(result -> {
+                    JSONArray textArray = result.getJSONArray(key);
+                    return IntStream.range(0, textArray.length())
+                            .mapToObj(textArray::getJSONObject);
+                })
+                .map(textObject -> textObject.getString("text"))
+                .collect(Collectors.joining(", "));
     }
 }
