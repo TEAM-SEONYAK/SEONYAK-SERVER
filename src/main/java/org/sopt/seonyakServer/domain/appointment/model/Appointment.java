@@ -41,10 +41,6 @@ public class Appointment {
     @JoinColumn(name = "senior_id", referencedColumnName = "id", nullable = false)
     private Senior senior;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "appointment_status", nullable = false)
-    private AppointmentStatus appointmentStatus;
-
     @Column(name = "time_list", columnDefinition = "jsonb", nullable = false)
     @Convert(converter = JsonConverter.class)
     private Map<String, Object> timeList;
@@ -55,12 +51,16 @@ public class Appointment {
     @Column(name = "personal_topic", length = 255)
     private String personalTopic;
 
-    @Column(name = "reject_reason", length = 255)
-    private String rejectReason;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "appointment_status", nullable = false)
+    private AppointmentStatus appointmentStatus;
 
     @Column(name = "google_meet_link", length = 255)
     private String googleMeetLink;
 
+    @Column(name = "reject_reason", length = 255)
+    private String rejectReason;
+    
     @Builder(access = AccessLevel.PRIVATE)
     private Appointment(
             Member member,

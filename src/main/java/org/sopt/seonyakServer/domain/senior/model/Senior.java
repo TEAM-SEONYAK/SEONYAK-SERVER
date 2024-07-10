@@ -59,9 +59,12 @@ public class Senior {
     @Column(name = "story", length = 255)
     private String story;
 
-    @Column(name = "preffered_time_list", columnDefinition = "jsonb")
+    @Column(name = "is_day_of_week", nullable = false)
+    private Boolean isDayOfWeek;
+
+    @Column(name = "preferred_time_list", columnDefinition = "jsonb")
     @Convert(converter = JsonConverter.class)
-    private Map<String, Object> prefferedTimeList;
+    private Map<String, Object> preferredTimeList;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Senior(
@@ -69,11 +72,15 @@ public class Senior {
             String businessCard,
             String detailPosition,
             int level,
+            Boolean isDayOfWeek,
+            Map<String, Object> preferredTimeList
     ) {
         this.member = member;
         this.businessCard = businessCard;
         this.detailPosition = detailPosition;
         this.level = level;
+        this.isDayOfWeek = isDayOfWeek;
+        this.preferredTimeList = preferredTimeList;
     }
 
     public static Senior createSenior(
@@ -81,12 +88,16 @@ public class Senior {
             String businessCard,
             String detailPosition,
             int level,
+            Boolean isDayOfWeek,
+            Map<String, Object> preferredTimeList
     ) {
         return Senior.builder()
                 .member(member)
                 .businessCard(businessCard)
                 .detailPosition(detailPosition)
                 .level(level)
+                .isDayOfWeek(isDayOfWeek)
+                .preferredTimeList(preferredTimeList)
                 .build();
     }
 }
