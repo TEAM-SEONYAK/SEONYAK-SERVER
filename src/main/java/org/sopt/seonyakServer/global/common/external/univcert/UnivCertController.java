@@ -3,6 +3,7 @@ package org.sopt.seonyakServer.global.common.external.univcert;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.global.common.external.univcert.dto.UnivCertRequest;
 import org.sopt.seonyakServer.global.common.external.univcert.dto.UnivCertResponse;
+import org.sopt.seonyakServer.global.common.external.univcert.dto.UnivCertVerifyRequest;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,16 @@ public class UnivCertController {
             return ResponseEntity.ok(null);
         }
         throw new CustomException(ErrorType.INVALID_UNIV_NAME_ERROR);
+    }
+
+    @PostMapping("/univ/certifycode")
+    public ResponseEntity<Void> univCertVerify(
+            @RequestBody UnivCertVerifyRequest univCertVerifyRequest
+    ) {
+        UnivCertResponse univCertResponse = univCertService.univCertVerify(univCertVerifyRequest);
+        if (univCertResponse.success().equals("true")) {
+            return ResponseEntity.ok(null);
+        }
+        throw new CustomException(ErrorType.UNIV_CERT_INVALID_VERIFY_ERROR);
     }
 }
