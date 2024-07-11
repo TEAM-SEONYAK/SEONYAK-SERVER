@@ -1,7 +1,5 @@
 package org.sopt.seonyakServer.domain.member.service;
 
-import static org.sopt.seonyakServer.global.common.RegularExpression.NICKNAME_PATTERN;
-
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
 import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
@@ -26,6 +24,8 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final GoogleSocialService googleSocialService;
     private final MemberManagementService memberManagementService;
+
+    public static final String NICKNAME_PATTERN = "^[a-zA-Z0-9가-힣]{2,8}$";
 
     // JWT Access Token 생성
     public LoginSuccessResponse create(
