@@ -2,6 +2,7 @@ package org.sopt.seonyakServer.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
+import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.member.model.SocialType;
 import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
@@ -23,6 +24,8 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final GoogleSocialService googleSocialService;
     private final MemberManagementService memberManagementService;
+
+    public static final String NICKNAME_PATTERN = "^[a-zA-Z0-9가-힣]{2,8}$";
 
     // JWT Access Token 생성
     public LoginSuccessResponse create(
@@ -86,5 +89,16 @@ public class MemberService {
         MemberAuthentication memberAuthentication = new MemberAuthentication(id, null, null);
 
         return LoginSuccessResponse.of(jwtTokenProvider.issueAccessToken(memberAuthentication));
+    }
+
+    // 닉네임 유효성 검증
+    public void validNickname(final NicknameRequest nicknameRequest) {
+        if (!nicknameRequest.nickname().matches(NICKNAME_PATTERN)) { // 형식 체크
+            throw new CustomException(ErrorType.INVALID_NICKNAME_ERROR);
+        }
+
+        if (memberRepository.existsByNickname(nicknameRequest.nickname())) { // 중복 체크
+            throw new CustomException(ErrorType.NICKNAME_DUP_ERROR);
+        }
     }
 }
