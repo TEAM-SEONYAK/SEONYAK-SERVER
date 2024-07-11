@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
 import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
 import org.sopt.seonyakServer.domain.member.service.MemberService;
-import org.sopt.seonyakServer.global.common.dto.ResponseDto;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,11 +29,11 @@ public class MemberController {
     }
 
     @PostMapping("/nickname")
-    public ResponseDto<?> validNickname(
+    public ResponseEntity<Void> validNickname(
             @RequestBody final NicknameRequest nicknameRequest
     ) {
         memberService.validNickname(nicknameRequest);
 
-        return ResponseDto.success(null);
+        return ResponseEntity.ok().build();
     }
 }
