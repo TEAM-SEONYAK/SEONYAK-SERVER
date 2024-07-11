@@ -1,12 +1,11 @@
 package org.sopt.seonyakServer.global.common.external.client.google;
 
 import org.sopt.seonyakServer.global.common.external.client.dto.GoogleAccessTokenResponse;
-import org.sopt.seonyakServer.global.config.FeignClientConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "googleAccessTokenClient", url = "https://oauth2.googleapis.com", configuration = FeignClientConfig.class)
+@FeignClient(name = "googleAccessTokenClient", url = "https://oauth2.googleapis.com")
 public interface GoogleAccessTokenClient {
 
     @PostMapping("/token")
