@@ -16,12 +16,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.util.JsonConverter;
+import org.sopt.seonyakServer.global.common.model.BaseTimeEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "senior")
-public class Senior {
+public class Senior extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
