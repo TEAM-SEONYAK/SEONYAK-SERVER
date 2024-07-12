@@ -29,7 +29,7 @@ public class CodeService {
 
     public String findCodeByPhoneNumber(final String phoneNumber) {
         Code code = codeRepository.findByPhoneNumber(phoneNumber).orElseThrow(
-                () -> new CustomException(ErrorType.NO_CERTIFICATION_REQUEST_HISTORY)
+                () -> new CustomException(ErrorType.NO_VERIFICATION_REQUEST_HISTORY)
         );
 
         return code.getCertificationCode();
@@ -38,7 +38,7 @@ public class CodeService {
     @Transactional
     public void deleteCertificationCode(final String phoneNumber) {
         Code code = codeRepository.findByPhoneNumber(phoneNumber).orElseThrow(
-                () -> new CustomException(ErrorType.NO_CERTIFICATION_REQUEST_HISTORY)
+                () -> new CustomException(ErrorType.NO_VERIFICATION_REQUEST_HISTORY)
         );
 
         codeRepository.delete(code);

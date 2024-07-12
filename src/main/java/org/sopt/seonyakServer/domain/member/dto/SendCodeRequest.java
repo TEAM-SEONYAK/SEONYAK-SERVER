@@ -1,6 +1,6 @@
 package org.sopt.seonyakServer.domain.member.dto;
 
-public record SendMessageRequest(
+public record SendCodeRequest(
         String phoneNumber
 ) {
 }
