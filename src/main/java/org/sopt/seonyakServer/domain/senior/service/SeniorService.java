@@ -20,7 +20,7 @@ public class SeniorService {
 
     public void patchSeniorProfile(SeniorProfileRequest seniorProfileRequest) {
         Senior senior = seniorRepository.findSeniorByMemberId(principalHandler.getUserIdFromPrincipal())
-                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR));
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_SENIOR_BY_MEMBER));
 
         senior.updateSenior(
                 seniorProfileRequest.catchphrase(),
