@@ -61,6 +61,7 @@ public enum ErrorType {
      * 409 CONFLICT
      */
     NICKNAME_DUP_ERROR(HttpStatus.CONFLICT, "40901", "이미 사용 중인 닉네임입니다."),
+    PHONE_NUMBER_DUP_ERROR(HttpStatus.CONFLICT, "40902", "이미 사용 중인 휴대전화 번호입니다."),
 
     /**
      * 500 INTERNAL SERVER ERROR

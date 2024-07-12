@@ -9,6 +9,7 @@ import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.sopt.seonyakServer.domain.member.dto.SendCodeRequest;
 import org.sopt.seonyakServer.domain.member.dto.VerifyCodeRequest;
+import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
 import org.sopt.seonyakServer.global.auth.redis.service.CodeService;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
@@ -28,8 +29,11 @@ public class MessageService {
     @Value("${coolsms.fromNumber}")
     private String fromNumber;
 
+    private final MemberRepository memberRepository;
     private DefaultMessageService defaultMessageService;
     private final CodeService codeService;
+
+    private static final String PHONE_NUMBER_PATTERN = "^010\\d{8}$";
 
     @PostConstruct
     public void init() {
@@ -41,6 +45,10 @@ public class MessageService {
 
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 함.
         String toNumber = sendCodeRequest.phoneNumber().replaceAll("-", "");
+
+        if (!toNumber.matches(PHONE_NUMBER_PATTERN)) {
+            throw new CustomException(ErrorType.INVALID_PHONE_NUMBER_ERROR);
+        }
 
         message.setFrom(fromNumber);
         message.setTo(toNumber);
@@ -68,6 +76,12 @@ public class MessageService {
             codeService.deleteCertificationCode(verifyCodeRequest.phoneNumber());
         } else {
             throw new CustomException(ErrorType.INVALID_VERIFICATION_CODE_ERROR);
+        }
+    }
+
+    public void validPhoneNumberDuplication(VerifyCodeRequest verifyCodeRequest) {
+        if (memberRepository.existsByPhoneNumber(verifyCodeRequest.phoneNumber())) {
+            throw new CustomException(ErrorType.PHONE_NUMBER_DUP_ERROR);
         }
     }
 }
