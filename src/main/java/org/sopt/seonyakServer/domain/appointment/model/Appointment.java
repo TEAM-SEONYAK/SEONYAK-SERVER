@@ -1,7 +1,6 @@
 package org.sopt.seonyakServer.domain.appointment.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,9 +16,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.senior.model.Senior;
-import org.sopt.seonyakServer.domain.util.JsonConverter;
 
 
 @Entity
@@ -42,7 +42,7 @@ public class Appointment {
     private Senior senior;
 
     @Column(name = "time_list", columnDefinition = "jsonb", nullable = false)
-    @Convert(converter = JsonConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> timeList;
 
     @Column(name = "topic")
