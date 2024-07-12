@@ -23,8 +23,13 @@ public enum ErrorType {
     INVALID_SOCIAL_TYPE_ERROR(HttpStatus.BAD_REQUEST, "40008", "유효하지 않은 Social Type입니다."),
     BEARER_LOST_ERROR(HttpStatus.BAD_REQUEST, "40009", "요청한 토큰이 Bearer 토큰이 아닙니다."),
     INVALID_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, "40010", "닉네임이 조건을 만족하지 않습니다."),
+    UNIV_CERT_INVALID_VERIFY_ERROR(HttpStatus.BAD_REQUEST, "40013", "일치하지 않는 인증코드입니다."),
+    UNIV_CERT_VERIFY_ERROR(HttpStatus.BAD_REQUEST, "40013", "인증 요청 이력이 존재하지 않습니다."),
+    INVALID_EMAIL_DOMAIN_ERROR(HttpStatus.BAD_REQUEST, "40014", "대학과 일치하지 않는 메일 도메인입니다."),
+    INVALID_UNIV_NAME_ERROR(HttpStatus.BAD_REQUEST, "40015", "서버에 존재하지 않는 대학명입니다."),
     MAP_TO_JSON_ERROR(HttpStatus.BAD_REQUEST, "40016", "Map을 JSON 문자열로 변환하는 중 오류가 발생했습니다."),
     JSON_TO_MAP_ERROR(HttpStatus.BAD_REQUEST, "40017", "JSON 문자열을 Map으로 변환하는 중 오류가 발생했습니다."),
+    UNIV_CERT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40018", "이미 인증이 완료 이메일입니다."),
 
     // S3 관련 오류
     IMAGE_EXTENSION_ERROR(HttpStatus.BAD_REQUEST, "40051", "이미지 확장자는 jpg, png, webp만 가능합니다."),
@@ -65,7 +70,8 @@ public enum ErrorType {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50001", "알 수 없는 서버 에러가 발생했습니다."),
     GET_UPLOAD_PRESIGNED_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50002", "업로드를 위한 Presigned URL 획득에 실패했습니다."),
     GET_GOOGLE_MEET_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50003", "구글미트 URL 획득에 실패했습니다."),
-    GET_GOOGLE_AUTHORIZER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50004", "구글 인증유저 획득에 실패했습니다.");
+    GET_GOOGLE_AUTHORIZER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50004", "구글 인증유저 획득에 실패했습니다."),
+    INTERNAL_FEIGN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "50005", "FEIGN 에러가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
