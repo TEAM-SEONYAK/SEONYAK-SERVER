@@ -38,6 +38,6 @@ public class UnivCertController {
         if (univCertResponse.success().equals("true")) {
             return ResponseEntity.ok().build();
         }
-        throw new CustomException(ErrorType.UNIV_CERT_INVALID_VERIFY_ERROR);
+        throw new CustomException(ErrorType.INVALID_VERIFICATION_CODE_ERROR);
     }
 }
