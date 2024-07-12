@@ -33,7 +33,7 @@ public class FeignErrorDecoder implements ErrorDecoder {
                     throw new CustomException(ErrorType.UNIV_CERT_REQUEST_ERROR);
                 }
                 if (message.equals("인증 요청 이력이 존재하지 않습니다.")) {
-                    throw new CustomException(ErrorType.UNIV_CERT_VERIFY_ERROR);
+                    throw new CustomException(ErrorType.NO_VERIFICATION_REQUEST_HISTORY);
                 }
                 throw new CustomException(ErrorType.INTERNAL_SERVER_ERROR);
             } catch (IOException e) {
