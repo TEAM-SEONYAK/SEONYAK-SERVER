@@ -78,6 +78,15 @@ dependencies {
     // S3
     implementation 'software.amazon.awssdk:s3:2.17.0'
     implementation 'com.h2database:h2'
+
+    // coolsms
+    implementation 'net.nurigo:sdk:4.2.7'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.1'
+
+    // Redisson
+    implementation "org.redisson:redisson:3.29.0"
 }
 
 ext {

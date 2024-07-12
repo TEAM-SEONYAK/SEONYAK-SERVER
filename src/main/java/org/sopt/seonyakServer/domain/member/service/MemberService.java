@@ -25,7 +25,7 @@ public class MemberService {
     private final GoogleSocialService googleSocialService;
     private final MemberManagementService memberManagementService;
 
-    public static final String NICKNAME_PATTERN = "^[a-zA-Z0-9가-힣]{2,8}$";
+    private static final String NICKNAME_PATTERN = "^[a-zA-Z0-9가-힣]{2,8}$";
 
     // JWT Access Token 생성
     public LoginSuccessResponse create(

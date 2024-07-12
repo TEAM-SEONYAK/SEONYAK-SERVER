@@ -4,7 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
 import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
+import org.sopt.seonyakServer.domain.member.dto.SendCodeRequest;
+import org.sopt.seonyakServer.domain.member.dto.VerifyCodeRequest;
 import org.sopt.seonyakServer.domain.member.service.MemberService;
+import org.sopt.seonyakServer.domain.member.service.MessageService;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MessageService messageService;
 
     @PostMapping("/auth/login")
     public ResponseEntity<LoginSuccessResponse> login(
@@ -30,9 +34,28 @@ public class MemberController {
 
     @PostMapping("/nickname")
     public ResponseEntity<Void> validNickname(
-            @RequestBody final NicknameRequest nicknameRequest
+            @Valid @RequestBody final NicknameRequest nicknameRequest
     ) {
         memberService.validNickname(nicknameRequest);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/phone/verify")
+    public ResponseEntity<Void> sendCode(
+            @RequestBody final SendCodeRequest sendCodeRequest
+    ) {
+        messageService.sendMessage(sendCodeRequest);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/phone/verifycode")
+    public ResponseEntity<Void> verifyCode(
+            @RequestBody final VerifyCodeRequest verifyCodeRequest
+    ) {
+        messageService.verifyCode(verifyCodeRequest);
+        messageService.validPhoneNumberDuplication(verifyCodeRequest);
 
         return ResponseEntity.ok().build();
     }

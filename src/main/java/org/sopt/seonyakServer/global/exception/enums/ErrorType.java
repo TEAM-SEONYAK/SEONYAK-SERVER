@@ -23,8 +23,9 @@ public enum ErrorType {
     INVALID_SOCIAL_TYPE_ERROR(HttpStatus.BAD_REQUEST, "40008", "유효하지 않은 Social Type입니다."),
     BEARER_LOST_ERROR(HttpStatus.BAD_REQUEST, "40009", "요청한 토큰이 Bearer 토큰이 아닙니다."),
     INVALID_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, "40010", "닉네임이 조건을 만족하지 않습니다."),
-    UNIV_CERT_INVALID_VERIFY_ERROR(HttpStatus.BAD_REQUEST, "40013", "일치하지 않는 인증코드입니다."),
-    UNIV_CERT_VERIFY_ERROR(HttpStatus.BAD_REQUEST, "40013", "인증 요청 이력이 존재하지 않습니다."),
+    INVALID_PHONE_NUMBER_ERROR(HttpStatus.BAD_REQUEST, "40011", "잘못된 휴대전화 번호 양식입니다."),
+    INVALID_VERIFICATION_CODE_ERROR(HttpStatus.BAD_REQUEST, "40012", "인증번호가 올바르지 않습니다."),
+    NO_VERIFICATION_REQUEST_HISTORY(HttpStatus.BAD_REQUEST, "40013", "인증 요청 이력이 존재하지 않습니다."),
     INVALID_EMAIL_DOMAIN_ERROR(HttpStatus.BAD_REQUEST, "40014", "대학과 일치하지 않는 메일 도메인입니다."),
     INVALID_UNIV_NAME_ERROR(HttpStatus.BAD_REQUEST, "40015", "서버에 존재하지 않는 대학명입니다."),
     MAP_TO_JSON_ERROR(HttpStatus.BAD_REQUEST, "40016", "Map을 JSON 문자열로 변환하는 중 오류가 발생했습니다."),
@@ -64,6 +65,7 @@ public enum ErrorType {
      * 409 CONFLICT
      */
     NICKNAME_DUP_ERROR(HttpStatus.CONFLICT, "40901", "이미 사용 중인 닉네임입니다."),
+    PHONE_NUMBER_DUP_ERROR(HttpStatus.CONFLICT, "40902", "이미 사용 중인 휴대전화 번호입니다."),
 
     /**
      * 500 INTERNAL SERVER ERROR
