@@ -5,11 +5,4 @@ public record UnivCertVerifyRequest(
         String univName,
         int code
 ) {
-    public static UnivCertVerifyRequest of(
-            String email,
-            String univName,
-            int code
-    ) {
-        return new UnivCertVerifyRequest(email, univName, code);
-    }
 }

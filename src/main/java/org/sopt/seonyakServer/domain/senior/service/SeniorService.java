@@ -2,6 +2,7 @@ package org.sopt.seonyakServer.domain.senior.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
+import org.sopt.seonyakServer.domain.senior.model.PreferredTimeList;
 import org.sopt.seonyakServer.domain.senior.model.Senior;
 import org.sopt.seonyakServer.domain.senior.repository.SeniorRepository;
 import org.sopt.seonyakServer.global.auth.PrincipalHandler;
@@ -30,5 +31,10 @@ public class SeniorService {
                 seniorProfileRequest.preferredTimeList()
         );
         seniorRepository.save(senior);
+    }
+
+    public PreferredTimeList getSeniorPreferredTime(Long seniorId) {
+        Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
+        return senior.getPreferredTimeList();
     }
 }
