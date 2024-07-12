@@ -45,7 +45,7 @@ public class Senior {
     private String detailPosition;
 
     @Column(name = "level", nullable = false)
-    private int level;
+    private String level;
 
     @Column(name = "catchphrase")
     private String catchphrase;
@@ -71,7 +71,7 @@ public class Senior {
             Member member,
             String businessCard,
             String detailPosition,
-            int level,
+            String level,
             Boolean isDayOfWeek,
             Map<String, Object> preferredTimeList
     ) {
@@ -87,7 +87,7 @@ public class Senior {
             Member member,
             String businessCard,
             String detailPosition,
-            int level,
+            String level,
             Boolean isDayOfWeek,
             Map<String, Object> preferredTimeList
     ) {
