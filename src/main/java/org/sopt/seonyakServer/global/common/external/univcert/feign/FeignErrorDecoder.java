@@ -25,7 +25,6 @@ public class FeignErrorDecoder implements ErrorDecoder {
                 // 응답결과 JSON 파싱
                 JSONObject jsonObject = new JSONObject(body);
                 String message = jsonObject.getString("message");
-                System.out.println(body);
                 // 응답 메시지를 기준으로 분기처리
                 if (message.equals("대학과 일치하지 않는 메일 도메인입니다.")) {
                     throw new CustomException(ErrorType.INVALID_EMAIL_DOMAIN_ERROR);
