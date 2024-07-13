@@ -6,12 +6,12 @@ import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SeniorRepository extends JpaRepository<Senior, Long> {
+public interface SeniorRepository extends JpaRepository<Senior, Long>, SeniorRepositoryCustom {
 
     Optional<Senior> findSeniorById(Long id);
 
     Optional<Senior> findSeniorByMemberId(Long id);
-    
+
     default Senior findSeniorByIdOrThrow(Long id) {
         return findSeniorById(id)
                 .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR));
