@@ -27,6 +27,7 @@ public class CodeService {
         );
     }
 
+    @Transactional(readOnly = true)
     public String findCodeByPhoneNumber(final String phoneNumber) {
         Code code = codeRepository.findByPhoneNumber(phoneNumber).orElseThrow(
                 () -> new CustomException(ErrorType.NO_VERIFICATION_REQUEST_HISTORY)
