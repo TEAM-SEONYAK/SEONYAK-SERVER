@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.Map;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,10 +43,11 @@ public class Appointment {
 
     @Column(name = "time_list", columnDefinition = "jsonb", nullable = false)
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> timeList;
+    private List<DataTimeRange> timeList;
 
     @Column(name = "topic")
-    private String topic;
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> topic;
 
     @Column(name = "personal_topic")
     private String personalTopic;
@@ -69,25 +70,33 @@ public class Appointment {
             Member member,
             Senior senior,
             AppointmentStatus appointmentStatus,
-            Map<String, Object> timeList
+            List<DataTimeRange> timeList,
+            List<String> topic,
+            String personalTopic
     ) {
         this.member = member;
         this.senior = senior;
         this.appointmentStatus = appointmentStatus;
         this.timeList = timeList;
+        this.topic = topic;
+        this.personalTopic = personalTopic;
     }
 
     public static Appointment createAppointment(
             Member member,
             Senior senior,
             AppointmentStatus appointmentStatus,
-            Map<String, Object> timeList
+            List<DataTimeRange> timeList,
+            List<String> topic,
+            String personalTopic
     ) {
         return Appointment.builder()
                 .member(member)
                 .senior(senior)
                 .appointmentStatus(appointmentStatus)
                 .timeList(timeList)
+                .topic(topic)
+                .personalTopic(personalTopic)
                 .build();
     }
 }
