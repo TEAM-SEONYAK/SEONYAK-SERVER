@@ -60,6 +60,7 @@ public enum ErrorType {
     NOT_FOUND_REFRESH_TOKEN_ERROR(HttpStatus.NOT_FOUND, "40402", "존재하지 않는 리프레시 토큰입니다."),
     NOT_FOUND_CREDENTIALS_JSON_ERROR(HttpStatus.NOT_FOUND, "40403", "구글미트 Credentials Json 파일을 찾을 수 없습니다."),
     NOT_FOUND_SENIOR_BY_MEMBER(HttpStatus.NOT_FOUND, "40404", "해당 ID를 가진 멤버와 매핑된 선배를 찾을 수 없습니다."),
+    NOT_FOUND_SENIOR_ERROR(HttpStatus.NOT_FOUND, "40405", "존재하지 않는 선배입니다."),
 
     /**
      * 409 CONFLICT

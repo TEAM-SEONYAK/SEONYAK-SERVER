@@ -11,9 +11,9 @@ public interface SeniorRepository extends JpaRepository<Senior, Long> {
     Optional<Senior> findSeniorById(Long id);
 
     Optional<Senior> findSeniorByMemberId(Long id);
-    
+
     default Senior findSeniorByIdOrThrow(Long id) {
         return findSeniorById(id)
-                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR));
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_SENIOR_ERROR));
     }
 }
