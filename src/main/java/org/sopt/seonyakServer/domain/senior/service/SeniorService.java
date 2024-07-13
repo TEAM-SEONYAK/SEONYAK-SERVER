@@ -19,6 +19,7 @@ public class SeniorService {
     private final SeniorRepository seniorRepository;
     private final PrincipalHandler principalHandler;
 
+    @Transactional
     public void patchSeniorProfile(SeniorProfileRequest seniorProfileRequest) {
         Senior senior = seniorRepository.findSeniorByMemberId(principalHandler.getUserIdFromPrincipal())
                 .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_SENIOR_BY_MEMBER));
@@ -33,6 +34,7 @@ public class SeniorService {
         seniorRepository.save(senior);
     }
 
+    @Transactional(readOnly = true)
     public PreferredTimeList getSeniorPreferredTime(Long seniorId) {
         Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
         return senior.getPreferredTimeList();
