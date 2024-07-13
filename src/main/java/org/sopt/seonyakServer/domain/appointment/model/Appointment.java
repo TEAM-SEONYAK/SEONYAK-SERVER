@@ -99,4 +99,20 @@ public class Appointment {
                 .personalTopic(personalTopic)
                 .build();
     }
+
+    public void acceptAppointment(
+            List<DataTimeRange> timeList,
+            String googleMeetLink
+    ) {
+        this.timeList = timeList;
+        this.googleMeetLink = googleMeetLink;
+    }
+
+    public void rejectAppointment(
+            String rejectReason,
+            String rejectDetail
+    ) {
+        this.rejectReason = rejectReason;
+        this.rejectDetail = rejectDetail;
+    }
 }
