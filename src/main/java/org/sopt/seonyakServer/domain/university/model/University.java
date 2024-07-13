@@ -40,7 +40,7 @@ public class University extends BaseTimeEntity {
         this.univName = univName;
     }
 
-    public static University createUniversity(
+    public static University create(
             final String univName
     ) {
         return University.builder()

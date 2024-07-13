@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash(value = "Code", timeToLive = 5 * 60L) // TTL 5분
+@RedisHash(value = "VerificationCode", timeToLive = 5 * 60L) // TTL 5분
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Code {
@@ -15,24 +15,24 @@ public class Code {
     @Id
     private String phoneNumber;
 
-    private String certificationCode;
+    private String verificationCode;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Code(
             final String phoneNumber,
-            final String certificationCode
+            final String verificationCode
     ) {
         this.phoneNumber = phoneNumber;
-        this.certificationCode = certificationCode;
+        this.verificationCode = verificationCode;
     }
 
     public static Code createCode(
             final String phoneNumber,
-            final String certificationCode
+            final String verificationCode
     ) {
         return Code.builder()
                 .phoneNumber(phoneNumber)
-                .certificationCode(certificationCode)
+                .verificationCode(verificationCode)
                 .build();
     }
 }

@@ -77,7 +77,7 @@ public class Appointment {
         this.timeList = timeList;
     }
 
-    public static Appointment createAppointment(
+    public static Appointment create(
             Member member,
             Senior senior,
             AppointmentStatus appointmentStatus,
