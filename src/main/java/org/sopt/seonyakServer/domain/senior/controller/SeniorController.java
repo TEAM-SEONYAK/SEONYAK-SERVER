@@ -1,6 +1,8 @@
 package org.sopt.seonyakServer.domain.senior.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.model.PreferredTimeList;
 import org.sopt.seonyakServer.domain.senior.service.SeniorService;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,5 +35,13 @@ public class SeniorController {
             @PathVariable final Long seniorId
     ) {
         return ResponseEntity.ok(seniorService.getSeniorPreferredTime(seniorId));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SeniorListResponse>> searchFieldPosition(
+            @RequestParam(required = false) final List<String> field,
+            @RequestParam(required = false) final List<String> position
+    ) {
+        return ResponseEntity.ok(seniorService.searchSeniorFieldPosition(field, position));
     }
 }
