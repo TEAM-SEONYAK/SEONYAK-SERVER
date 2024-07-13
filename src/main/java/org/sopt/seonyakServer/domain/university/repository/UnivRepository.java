@@ -13,4 +13,6 @@ public interface UnivRepository extends JpaRepository<University, Long> {
             + "WHERE u.univName "
             + "LIKE %:univNamePart%")
     List<String> findByUnivNameContaining(@Param("univNamePart") String univNamePart);
+
+    boolean existsByUnivName(String UnivName);
 }

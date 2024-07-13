@@ -8,6 +8,8 @@ import org.sopt.seonyakServer.domain.university.dto.SearchUnivResponse;
 import org.sopt.seonyakServer.domain.university.model.Department;
 import org.sopt.seonyakServer.domain.university.repository.DeptRepository;
 import org.sopt.seonyakServer.domain.university.repository.UnivRepository;
+import org.sopt.seonyakServer.global.exception.enums.ErrorType;
+import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +31,10 @@ public class UnivService {
             final String univName,
             final String deptName
     ) {
+        if (!univRepository.existsByUnivName(univName)) {
+            throw new CustomException(ErrorType.INVALID_UNIV_NAME_ERROR);
+        }
+
         List<Department> departments = deptRepository.findByUnivIdAndDeptNameContaining(univName, deptName);
 
         return departments.stream()
