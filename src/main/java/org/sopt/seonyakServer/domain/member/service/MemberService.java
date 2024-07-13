@@ -2,11 +2,15 @@ package org.sopt.seonyakServer.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
+import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
+import org.sopt.seonyakServer.domain.member.dto.MemberJoinResponse;
 import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.member.model.SocialType;
 import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
+import org.sopt.seonyakServer.domain.senior.service.SeniorService;
 import org.sopt.seonyakServer.global.auth.MemberAuthentication;
+import org.sopt.seonyakServer.global.auth.PrincipalHandler;
 import org.sopt.seonyakServer.global.auth.jwt.JwtTokenProvider;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberInfoResponse;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
@@ -15,6 +19,7 @@ import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +27,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PrincipalHandler principalHandler;
     private final GoogleSocialService googleSocialService;
     private final MemberManagementService memberManagementService;
+    private final SeniorService seniorService;
 
     private static final String NICKNAME_PATTERN = "^[a-zA-Z0-9가-힣]{2,8}$";
 
@@ -100,5 +107,30 @@ public class MemberService {
         if (memberRepository.existsByNickname(nicknameRequest.nickname())) { // 중복 체크
             throw new CustomException(ErrorType.NICKNAME_DUP_ERROR);
         }
+    }
+
+    @Transactional
+    public MemberJoinResponse patchMemberJoin(MemberJoinRequest memberJoinRequest) {
+        Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
+
+        System.out.println("Department List: " + memberJoinRequest.departmentList()); // 로그 추가
+
+        member.updateMember(
+                memberJoinRequest.isSubscribed(),
+                memberJoinRequest.nickname(),
+                memberJoinRequest.image(),
+                memberJoinRequest.phoneNumber(),
+                memberJoinRequest.univName(),
+                memberJoinRequest.field(),
+                memberJoinRequest.departmentList()
+        );
+
+        memberRepository.save(member);
+
+        if (memberJoinRequest.role().equals("SENIOR")) {
+            return MemberJoinResponse.of(seniorService.createSenior(memberJoinRequest, member));
+        }
+
+        return MemberJoinResponse.of(memberJoinRequest.role());
     }
 }
