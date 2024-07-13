@@ -1,6 +1,8 @@
 package org.sopt.seonyakServer.domain.university.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sopt.seonyakServer.domain.university.dto.SearchDeptResponse;
 import org.sopt.seonyakServer.domain.university.dto.SearchUnivResponse;
 import org.sopt.seonyakServer.domain.university.service.UnivService;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,18 @@ public class UnivController {
 
     private final UnivService univService;
 
-    @GetMapping("/search")
+    @GetMapping("/search/univ")
     public ResponseEntity<SearchUnivResponse> searchUniv(
             @RequestParam final String univName
     ) {
         return ResponseEntity.ok(univService.searchUniv(univName));
+    }
+
+    @GetMapping("/search/dept")
+    public ResponseEntity<List<SearchDeptResponse>> searchDept(
+            @RequestParam final String univName,
+            @RequestParam final String deptName
+    ) {
+        return ResponseEntity.ok(univService.searchDept(univName, deptName));
     }
 }
