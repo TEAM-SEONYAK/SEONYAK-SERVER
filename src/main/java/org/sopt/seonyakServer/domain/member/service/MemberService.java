@@ -113,8 +113,6 @@ public class MemberService {
     public MemberJoinResponse patchMemberJoin(MemberJoinRequest memberJoinRequest) {
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
-        System.out.println("Department List: " + memberJoinRequest.departmentList()); // 로그 추가
-
         member.updateMember(
                 memberJoinRequest.isSubscribed(),
                 memberJoinRequest.nickname(),
