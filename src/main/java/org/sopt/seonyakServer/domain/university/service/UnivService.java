@@ -18,6 +18,10 @@ public class UnivService {
     private final DeptRepository deptRepository;
 
     public SearchUnivResponse searchUniv(final String univNamePart) {
+        if (univNamePart == null || univNamePart.trim().isEmpty()) {
+            return SearchUnivResponse.of(List.of());
+        }
+
         return SearchUnivResponse.of(univRepository.findByUnivNameContaining(univNamePart));
     }
 

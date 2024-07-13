@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/search")
 public class UnivController {
 
     private final UnivService univService;
 
-    @GetMapping("/search/univ")
+    @GetMapping("/univ")
     public ResponseEntity<SearchUnivResponse> searchUniv(
             @RequestParam final String univName
     ) {
         return ResponseEntity.ok(univService.searchUniv(univName));
     }
 
-    @GetMapping("/search/dept")
+    @GetMapping("/dept")
     public ResponseEntity<List<SearchDeptResponse>> searchDept(
             @RequestParam final String univName,
             @RequestParam final String deptName
