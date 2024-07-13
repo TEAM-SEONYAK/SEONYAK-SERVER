@@ -27,7 +27,7 @@ public class MemberController {
     @PostMapping("/auth/login")
     public ResponseEntity<LoginSuccessResponse> login(
             @RequestParam final String authorizationCode,
-            @RequestBody @Valid final MemberLoginRequest loginRequest
+            @Valid @RequestBody final MemberLoginRequest loginRequest
     ) {
         return ResponseEntity.ok(memberService.create(authorizationCode, loginRequest));
     }
@@ -43,7 +43,7 @@ public class MemberController {
 
     @PostMapping("/phone/verify")
     public ResponseEntity<Void> sendCode(
-            @RequestBody final SendCodeRequest sendCodeRequest
+            @Valid @RequestBody final SendCodeRequest sendCodeRequest
     ) {
         messageService.sendMessage(sendCodeRequest);
 
@@ -52,7 +52,7 @@ public class MemberController {
 
     @PostMapping("/phone/verifycode")
     public ResponseEntity<Void> verifyCode(
-            @RequestBody final VerifyCodeRequest verifyCodeRequest
+            @Valid @RequestBody final VerifyCodeRequest verifyCodeRequest
     ) {
         messageService.verifyCode(verifyCodeRequest);
         messageService.validPhoneNumberDuplication(verifyCodeRequest);
