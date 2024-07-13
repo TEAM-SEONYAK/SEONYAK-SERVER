@@ -41,7 +41,7 @@ public class SeniorService {
         return senior.getPreferredTimeList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<SeniorListResponse> searchSeniorFieldPosition(List<String> field, List<String> position) {
         return seniorRepository.searchSeniorFieldPosition(field, position);
     }
