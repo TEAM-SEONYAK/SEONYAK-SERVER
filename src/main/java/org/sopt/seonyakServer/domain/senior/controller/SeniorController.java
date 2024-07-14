@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
 import org.sopt.seonyakServer.domain.senior.model.PreferredTimeList;
 import org.sopt.seonyakServer.domain.senior.service.SeniorService;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,12 @@ public class SeniorController {
             @RequestParam(required = false) final List<String> position
     ) {
         return ResponseEntity.ok(seniorService.searchSeniorFieldPosition(field, position));
+    }
+
+    @GetMapping("/{seniorId}")
+    public ResponseEntity<SeniorProfileResponse> getSeniorProfile(
+            @PathVariable final Long seniorId
+    ) {
+        return ResponseEntity.ok(seniorService.getSeniorProfile(seniorId));
     }
 }
