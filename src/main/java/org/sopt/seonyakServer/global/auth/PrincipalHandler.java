@@ -20,7 +20,7 @@ public class PrincipalHandler {
             final Object principal
     ) {
         if (principal.toString().equals(ANONYMOUS_USER)) {
-            throw new CustomException(ErrorType.EMPTY_PRINCIPLE_ERROR);
+            throw new CustomException(ErrorType.EMPTY_PRINCIPAL_ERROR);
         }
     }
 }
