@@ -56,8 +56,6 @@ public class AppointmentService {
         Long memberId = appointmentRepository.findMemberIdById(appointmentDetailRequest.appointmentId());
         Long seniorId = appointmentRepository.findSeniorIdById(appointmentDetailRequest.appointmentId());
 
-        log.warn(userId + " " + memberId + " " + seniorId);
-
         if (!userId.equals(memberId) && !userId.equals(seniorId)) {
             throw new CustomException(ErrorType.NOT_MEMBERS_APPOINTMENT_ERROR);
         }
