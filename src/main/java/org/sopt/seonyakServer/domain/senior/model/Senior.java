@@ -80,7 +80,7 @@ public class Senior extends BaseTimeEntity {
         this.level = level;
     }
 
-    public static Senior createSenior(
+    public static Senior create(
             Member member,
             String businessCard,
             String detailPosition,

@@ -3,6 +3,8 @@ package org.sopt.seonyakServer.domain.member.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.LoginSuccessResponse;
+import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
+import org.sopt.seonyakServer.domain.member.dto.MemberJoinResponse;
 import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
 import org.sopt.seonyakServer.domain.member.dto.SendCodeRequest;
 import org.sopt.seonyakServer.domain.member.dto.VerifyCodeRequest;
@@ -10,6 +12,7 @@ import org.sopt.seonyakServer.domain.member.service.MemberService;
 import org.sopt.seonyakServer.domain.member.service.MessageService;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +30,16 @@ public class MemberController {
     @PostMapping("/auth/login")
     public ResponseEntity<LoginSuccessResponse> login(
             @RequestParam final String authorizationCode,
-            @RequestBody @Valid final MemberLoginRequest loginRequest
+            @Valid @RequestBody final MemberLoginRequest loginRequest
     ) {
         return ResponseEntity.ok(memberService.create(authorizationCode, loginRequest));
+    }
+
+    @PatchMapping("/auth/join")
+    public ResponseEntity<MemberJoinResponse> join(
+            @RequestBody final MemberJoinRequest memberJoinRequest
+    ) {
+        return ResponseEntity.ok(memberService.patchMemberJoin(memberJoinRequest));
     }
 
     @PostMapping("/nickname")
@@ -43,7 +53,7 @@ public class MemberController {
 
     @PostMapping("/phone/verify")
     public ResponseEntity<Void> sendCode(
-            @RequestBody final SendCodeRequest sendCodeRequest
+            @Valid @RequestBody final SendCodeRequest sendCodeRequest
     ) {
         messageService.sendMessage(sendCodeRequest);
 
@@ -52,7 +62,7 @@ public class MemberController {
 
     @PostMapping("/phone/verifycode")
     public ResponseEntity<Void> verifyCode(
-            @RequestBody final VerifyCodeRequest verifyCodeRequest
+            @Valid @RequestBody final VerifyCodeRequest verifyCodeRequest
     ) {
         messageService.verifyCode(verifyCodeRequest);
         messageService.validPhoneNumberDuplication(verifyCodeRequest);

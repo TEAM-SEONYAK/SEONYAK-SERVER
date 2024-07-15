@@ -16,7 +16,7 @@ public class MemberManagementService {
 
     @Transactional
     public Long createMember(final MemberInfoResponse memberInfoResponse) {
-        Member member = Member.createMember(
+        Member member = Member.create(
                 memberInfoResponse.socialType(),
                 memberInfoResponse.socialId(),
                 memberInfoResponse.email()

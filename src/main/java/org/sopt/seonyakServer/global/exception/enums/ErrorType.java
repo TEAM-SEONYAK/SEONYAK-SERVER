@@ -30,7 +30,7 @@ public enum ErrorType {
     INVALID_UNIV_NAME_ERROR(HttpStatus.BAD_REQUEST, "40015", "서버에 존재하지 않는 대학명입니다."),
     MAP_TO_JSON_ERROR(HttpStatus.BAD_REQUEST, "40016", "Map을 JSON 문자열로 변환하는 중 오류가 발생했습니다."),
     JSON_TO_MAP_ERROR(HttpStatus.BAD_REQUEST, "40017", "JSON 문자열을 Map으로 변환하는 중 오류가 발생했습니다."),
-    UNIV_CERT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40018", "이미 인증이 완료 이메일입니다."),
+    UNIV_CERT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40018", "이미 인증이 완료된 이메일입니다."),
     SAME_MEMBER_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40019", "자기 자신에게는 약속을 신청할 수 없습니다."),
     NOT_MEMBERS_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40020", "해당 회원의 약속이 아닙니다"),
 
@@ -55,6 +55,8 @@ public enum ErrorType {
     INVALID_SOCIAL_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "40107", "유효하지 않은 소셜 액세스 토큰입니다."),
     EXPIRED_AUTHENTICATION_CODE(HttpStatus.UNAUTHORIZED, "40108", "인가 코드가 만료되었습니다."),
     UN_LOGIN_ERROR(HttpStatus.UNAUTHORIZED, "40109", "로그인 후 진행해주세요."),
+    NOT_AUTHORIZATION_ACCEPT(HttpStatus.UNAUTHORIZED, "40110", "약속을 수락할 권한이 없습니다."),
+    NOT_AUTHORIZATION_REJECT(HttpStatus.UNAUTHORIZED, "40111", "약속을 거절할 권한이 없습니다."),
 
     /**
      * 404 NOT FOUND
@@ -64,6 +66,7 @@ public enum ErrorType {
     NOT_FOUND_CREDENTIALS_JSON_ERROR(HttpStatus.NOT_FOUND, "40403", "구글미트 Credentials Json 파일을 찾을 수 없습니다."),
     NOT_FOUND_SENIOR_BY_MEMBER(HttpStatus.NOT_FOUND, "40404", "해당 ID를 가진 멤버와 매핑된 선배를 찾을 수 없습니다."),
     NOT_FOUND_SENIOR_ERROR(HttpStatus.NOT_FOUND, "40405", "존재하지 않는 선배입니다."),
+    NOT_FOUND_APPOINTMENT_ERROR(HttpStatus.NOT_FOUND, "40406", "존재하지 않는 약속입니다."),
     NOT_FOUND_GOOGLE_MEET_LINK_ERROR(HttpStatus.NOT_FOUND, "40407", "구글 미트 링크가 존재하지 않는 약속입니다."),
 
     /**

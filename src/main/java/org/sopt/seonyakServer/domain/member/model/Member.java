@@ -11,10 +11,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.sopt.seonyakServer.domain.senior.model.Senior;
 import org.sopt.seonyakServer.global.common.model.BaseTimeEntity;
 
@@ -57,8 +60,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "field")
     private String field;
 
-    @Column(name = "department")
-    private String department;
+    @Column(name = "departmentList", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> departmentList;
 
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Senior senior;
@@ -74,7 +78,7 @@ public class Member extends BaseTimeEntity {
         this.email = email;
     }
 
-    public static Member createMember(
+    public static Member create(
             final SocialType socialType,
             final String socialId,
             final String email
@@ -84,5 +88,37 @@ public class Member extends BaseTimeEntity {
                 .socialId(socialId)
                 .email(email)
                 .build();
+    }
+
+    public void updateMember(
+            Boolean isSubscribed,
+            String nickname,
+            String image,
+            String phoneNumber,
+            String univName,
+            String field,
+            List<String> department
+    ) {
+        if (isSubscribed != null) {
+            this.isSubscribed = isSubscribed;
+        }
+        if (nickname != null) {
+            this.nickname = nickname;
+        }
+        if (image != null) {
+            this.image = image;
+        }
+        if (phoneNumber != null) {
+            this.phoneNumber = phoneNumber;
+        }
+        if (univName != null) {
+            this.univName = univName;
+        }
+        if (field != null) {
+            this.field = field;
+        }
+        if (department != null) {
+            this.departmentList = department;
+        }
     }
 }
