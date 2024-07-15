@@ -9,7 +9,6 @@ import org.sopt.seonyakServer.domain.member.dto.NicknameRequest;
 import org.sopt.seonyakServer.domain.member.dto.SendCodeRequest;
 import org.sopt.seonyakServer.domain.member.dto.VerifyCodeRequest;
 import org.sopt.seonyakServer.domain.member.service.MemberService;
-import org.sopt.seonyakServer.domain.member.service.MessageService;
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MessageService messageService;
 
     @PostMapping("/auth/login")
     public ResponseEntity<LoginSuccessResponse> login(
@@ -55,7 +53,7 @@ public class MemberController {
     public ResponseEntity<Void> sendCode(
             @Valid @RequestBody final SendCodeRequest sendCodeRequest
     ) {
-        messageService.sendMessage(sendCodeRequest);
+        memberService.sendMessage(sendCodeRequest);
 
         return ResponseEntity.ok().build();
     }
@@ -64,8 +62,7 @@ public class MemberController {
     public ResponseEntity<Void> verifyCode(
             @Valid @RequestBody final VerifyCodeRequest verifyCodeRequest
     ) {
-        messageService.verifyCode(verifyCodeRequest);
-        messageService.validPhoneNumberDuplication(verifyCodeRequest);
+        memberService.verifyCode(verifyCodeRequest);
 
         return ResponseEntity.ok().build();
     }
