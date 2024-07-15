@@ -3,6 +3,7 @@ package org.sopt.seonyakServer.domain.appointment.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
+import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.GoogleMeetLinkResponse;
@@ -31,7 +32,7 @@ public class AppointmentController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/accept")
+    @PatchMapping("/appointment/accept")
     public ResponseEntity<Void> acceptAppointment(
             @RequestBody final AppointmentAcceptRequest appointmentAcceptRequest
     ) {
@@ -39,7 +40,7 @@ public class AppointmentController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/reject")
+    @PatchMapping("/appointment/reject")
     public ResponseEntity<Void> rejectAppointment(
             @RequestBody final AppointmentRejectRequest appointmentRejectRequest
     ) {
@@ -52,5 +53,12 @@ public class AppointmentController {
             @PathVariable final Long appointmentId
     ) {
         return ResponseEntity.ok(appointmentService.getGoogleMeetLink(appointmentId));
+    }
+
+    @GetMapping("/appointment/{appointmentId}")
+    public ResponseEntity<AppointmentDetailResponse> getAppointmentDetail(
+            @PathVariable final Long appointmentId
+    ) {
+        return ResponseEntity.ok(appointmentService.getAppointmentDetail(appointmentId));
     }
 }

@@ -2,12 +2,16 @@ package org.sopt.seonyakServer.domain.appointment.service;
 
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
+import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.GoogleMeetLinkResponse;
 import org.sopt.seonyakServer.domain.appointment.model.Appointment;
 import org.sopt.seonyakServer.domain.appointment.model.AppointmentStatus;
+import org.sopt.seonyakServer.domain.appointment.model.JuniorInfo;
+import org.sopt.seonyakServer.domain.appointment.model.SeniorInfo;
 import org.sopt.seonyakServer.domain.appointment.repository.AppointmentRepository;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
@@ -19,6 +23,7 @@ import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
@@ -88,9 +93,9 @@ public class AppointmentService {
 
     @Transactional(readOnly = true)
     public GoogleMeetLinkResponse getGoogleMeetLink(Long appointmentId) {
-        Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
-
         Long userId = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getId();
+
+        Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
         Long memberId = appointment.getMember().getId();
         Long seniorMemberId = appointment.getSenior().getMember().getId();
 
@@ -105,5 +110,46 @@ public class AppointmentService {
         }
 
         return GoogleMeetLinkResponse.of(googleMeetLink);
+    }
+
+    @Transactional(readOnly = true)
+    public AppointmentDetailResponse getAppointmentDetail(
+            final Long appointmentId
+    ) {
+        Long userId = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getId();
+
+        Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
+        Long memberId = appointment.getMember().getId();
+        Long seniorMemberId = appointment.getSenior().getMember().getId();
+
+        if (!userId.equals(memberId) && !userId.equals(seniorMemberId)) {
+            throw new CustomException(ErrorType.NOT_MEMBERS_APPOINTMENT_ERROR);
+        }
+
+        JuniorInfo juniorInfo = JuniorInfo.create(
+                appointment.getMember().getNickname(),
+                appointment.getMember().getUnivName(),
+                appointment.getMember().getField(),
+                appointment.getMember().getDepartmentList().get(0)
+        );
+
+        SeniorInfo seniorInfo = SeniorInfo.create(
+                appointment.getSenior().getMember().getNickname(),
+                appointment.getSenior().getMember().getImage(),
+                appointment.getSenior().getCompany(),
+                appointment.getSenior().getMember().getField(),
+                appointment.getSenior().getPosition(),
+                appointment.getSenior().getDetailPosition(),
+                appointment.getSenior().getLevel()
+        );
+
+        return new AppointmentDetailResponse(
+                appointment.getAppointmentStatus(),
+                juniorInfo,
+                seniorInfo,
+                appointment.getTopic(),
+                appointment.getPersonalTopic(),
+                appointment.getTimeList()
+        );
     }
 }

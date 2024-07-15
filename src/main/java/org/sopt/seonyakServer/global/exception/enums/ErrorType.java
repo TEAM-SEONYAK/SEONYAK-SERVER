@@ -32,8 +32,7 @@ public enum ErrorType {
     JSON_TO_MAP_ERROR(HttpStatus.BAD_REQUEST, "40017", "JSON 문자열을 Map으로 변환하는 중 오류가 발생했습니다."),
     UNIV_CERT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40018", "이미 인증이 완료된 이메일입니다."),
     SAME_MEMBER_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40019", "자기 자신에게는 약속을 신청할 수 없습니다."),
-    NOT_MEMBERS_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40020", "해당 회원의 약속이 아닙니다"),
-
+    NOT_MEMBERS_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40020", "해당 회원의 약속이 아닙니다."),
 
     // S3 관련 오류
     IMAGE_EXTENSION_ERROR(HttpStatus.BAD_REQUEST, "40051", "이미지 확장자는 jpg, png, webp만 가능합니다."),
