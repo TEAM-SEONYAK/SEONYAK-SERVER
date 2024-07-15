@@ -2,6 +2,7 @@ package org.sopt.seonyakServer.domain.senior.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorCardProfileResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
@@ -51,5 +52,12 @@ public class SeniorController {
             @PathVariable final Long seniorId
     ) {
         return ResponseEntity.ok(seniorService.getSeniorProfile(seniorId));
+    }
+
+    @GetMapping("/card/{seniorId}")
+    public ResponseEntity<SeniorCardProfileResponse> getSeniorCardProfile(
+            @PathVariable final Long seniorId
+    ) {
+        return ResponseEntity.ok(seniorService.getSeniorCardProfile(seniorId));
     }
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
+import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorCardProfileResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
@@ -20,11 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SeniorService {
 
+    private final MemberRepository memberRepository;
     private final SeniorRepository seniorRepository;
     private final PrincipalHandler principalHandler;
 
     @Transactional
-    public String createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
+    public Senior createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
 
         Senior senior = Senior.create(
                 member,
@@ -35,9 +38,7 @@ public class SeniorService {
                 memberJoinRequest.level()
         );
 
-        seniorRepository.save(senior);
-
-        return memberJoinRequest.role();
+        return seniorRepository.save(senior);
     }
 
     @Transactional
@@ -76,6 +77,20 @@ public class SeniorService {
                 senior.getAward(),
                 senior.getCatchphrase(),
                 senior.getStory()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public SeniorCardProfileResponse getSeniorCardProfile(final Long seniorId) {
+        Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
+
+        return SeniorCardProfileResponse.of(
+                senior.getMember().getNickname(),
+                senior.getCompany(),
+                senior.getMember().getField(),
+                senior.getPosition(),
+                senior.getDetailPosition(),
+                senior.getLevel()
         );
     }
 }
