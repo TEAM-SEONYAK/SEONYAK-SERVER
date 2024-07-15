@@ -153,10 +153,13 @@ public class MemberService {
         memberRepository.save(member);
 
         if (memberJoinRequest.role().equals("SENIOR")) {
-            return MemberJoinResponse.of(seniorService.createSenior(memberJoinRequest, member));
+            seniorService.createSenior(memberJoinRequest, member);
         }
 
-        return MemberJoinResponse.of(memberJoinRequest.role());
+        return MemberJoinResponse.of(
+                member.getId(),
+                memberJoinRequest.role()
+        );
     }
 
     public void sendMessage(SendCodeRequest sendCodeRequest) {
