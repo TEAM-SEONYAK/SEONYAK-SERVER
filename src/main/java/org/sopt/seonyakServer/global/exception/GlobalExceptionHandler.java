@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,5 +18,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(e.getErrorType().getHttpStatus())
                 .body(e.getErrorType());
+    }
+
+
+    // valid에서 발생한 예외
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorType> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("GlobalExceptionHandler catch MethodArgumentNotValidException : {}", e.getMessage());
+        return ResponseEntity
+                .status(e.getStatusCode())
+                .body(ErrorType.INVALID_HTTP_REQUEST_ERROR);
     }
 }
