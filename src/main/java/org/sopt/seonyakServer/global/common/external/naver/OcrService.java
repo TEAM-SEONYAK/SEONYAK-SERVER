@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sopt.seonyakServer.global.common.external.naver.dto.OcrBusinessResponse;
@@ -27,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class OcrService {
     private final OcrConfig ocrConfig;
 
@@ -37,8 +35,7 @@ public class OcrService {
         String apiUrl = ocrConfig.getUnivUrl();
         String apiKey = ocrConfig.getUnivUrlKey();
 
-        // 대학교 OCR 응답 문자열로 받아옴
-        String response = requestNaverOcr(apiUrl, apiKey, file);
+        String response = getOcrResponse(apiUrl, apiKey, file);
 
         // 네이버 OCR 실패 응답 처리
         String responseResult = extractInferResult(response);
@@ -50,16 +47,12 @@ public class OcrService {
 
     // 명함 OCR
     public OcrBusinessResponse ocrBusiness(MultipartFile file) throws IOException {
+
         // OCR 설정파일로부터 URL, Secret Key 가져옴
         String apiUrl = ocrConfig.getBusinessUrl();
         String apiKey = ocrConfig.getBusinessKey();
 
-        String response = requestNaverOcr(apiUrl, apiKey, file);
-        // 네이버 OCR 실패 응답 처리
-        String responseResult = extractInferResult(response);
-        if (responseResult.equals("FAILURE")) {
-            throw new CustomException(ErrorType.NOT_VALID_OCR_IMAGE);
-        }
+        String response = getOcrResponse(apiUrl, apiKey, file);
 
         //회사명, 휴대전화번호 JSON 응답에서 파싱
         String company = extractTextByKey(response, "company");
@@ -208,5 +201,17 @@ public class OcrService {
                 .mapToObj(images::getJSONObject)
                 .map(image -> image.getString("inferResult"))
                 .collect(Collectors.joining(","));
+    }
+
+    private String getOcrResponse(String apiUrl, String apiKey, MultipartFile file) throws IOException {
+
+        String response = requestNaverOcr(apiUrl, apiKey, file);
+        // 네이버 OCR 실패 응답 처리
+        String responseResult = extractInferResult(response);
+        if (responseResult.equals("FAILURE")) {
+            throw new CustomException(ErrorType.NOT_VALID_OCR_IMAGE);
+        }
+
+        return response;
     }
 }
