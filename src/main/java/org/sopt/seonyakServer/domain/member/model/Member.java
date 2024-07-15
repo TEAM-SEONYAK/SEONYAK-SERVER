@@ -74,7 +74,7 @@ public class Member extends BaseTimeEntity {
         this.email = email;
     }
 
-    public static Member createMember(
+    public static Member create(
             final SocialType socialType,
             final String socialId,
             final String email

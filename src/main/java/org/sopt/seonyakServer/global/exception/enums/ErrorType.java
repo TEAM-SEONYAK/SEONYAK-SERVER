@@ -30,7 +30,7 @@ public enum ErrorType {
     INVALID_UNIV_NAME_ERROR(HttpStatus.BAD_REQUEST, "40015", "서버에 존재하지 않는 대학명입니다."),
     MAP_TO_JSON_ERROR(HttpStatus.BAD_REQUEST, "40016", "Map을 JSON 문자열로 변환하는 중 오류가 발생했습니다."),
     JSON_TO_MAP_ERROR(HttpStatus.BAD_REQUEST, "40017", "JSON 문자열을 Map으로 변환하는 중 오류가 발생했습니다."),
-    UNIV_CERT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40018", "이미 인증이 완료 이메일입니다."),
+    UNIV_CERT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40018", "이미 인증이 완료된 이메일입니다."),
     SAME_MEMBER_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40019", "자기 자신에게는 약속을 신청할 수 없습니다."),
 
     // S3 관련 오류

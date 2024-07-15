@@ -8,6 +8,7 @@ import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
     Optional<Member> findBySocialTypeAndSocialId(SocialType socialType, String socialId);
 
     Optional<Member> findMemberById(Long id);
