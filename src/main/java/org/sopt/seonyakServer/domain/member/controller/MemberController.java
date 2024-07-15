@@ -63,7 +63,6 @@ public class MemberController {
             @Valid @RequestBody final VerifyCodeRequest verifyCodeRequest
     ) {
         memberService.verifyCode(verifyCodeRequest);
-        memberService.validPhoneNumberDuplication(verifyCodeRequest);
 
         return ResponseEntity.ok().build();
     }

@@ -194,13 +194,16 @@ public class MemberService {
         if (verifyCodeRequest.verificationCode().equals(
                 codeService.findCodeByPhoneNumber(number))) {
             codeService.deleteVerificationCode(number);
+
+            // 휴대전화 중복 체크
+            validPhoneNumberDuplication(number);
         } else {
             throw new CustomException(ErrorType.INVALID_VERIFICATION_CODE_ERROR);
         }
     }
 
-    public void validPhoneNumberDuplication(VerifyCodeRequest verifyCodeRequest) {
-        if (memberRepository.existsByPhoneNumber(verifyCodeRequest.phoneNumber())) {
+    private void validPhoneNumberDuplication(String phoneNumber) {
+        if (memberRepository.existsByPhoneNumber(phoneNumber)) {
             throw new CustomException(ErrorType.PHONE_NUMBER_DUP_ERROR);
         }
     }
