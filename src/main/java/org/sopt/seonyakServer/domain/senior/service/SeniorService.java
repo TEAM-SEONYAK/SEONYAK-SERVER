@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorCardProfileResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
@@ -76,6 +77,20 @@ public class SeniorService {
                 senior.getAward(),
                 senior.getCatchphrase(),
                 senior.getStory()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public SeniorCardProfileResponse getSeniorCardProfile(final Long seniorId) {
+        Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
+
+        return SeniorCardProfileResponse.of(
+                senior.getMember().getNickname(),
+                senior.getCompany(),
+                senior.getMember().getField(),
+                senior.getPosition(),
+                senior.getDetailPosition(),
+                senior.getLevel()
         );
     }
 }
