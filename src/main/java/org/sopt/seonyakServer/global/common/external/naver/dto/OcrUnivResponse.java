@@ -1,9 +1,11 @@
 package org.sopt.seonyakServer.global.common.external.naver.dto;
 
+import java.util.List;
+
 public record OcrUnivResponse(
-        String univName
+        List<String> univName
 ) {
-    public static OcrUnivResponse of(String univName) {
+    public static OcrUnivResponse of(List<String> univName) {
         return new OcrUnivResponse(univName);
     }
 }

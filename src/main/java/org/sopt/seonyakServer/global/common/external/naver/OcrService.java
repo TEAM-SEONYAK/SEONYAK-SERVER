@@ -8,21 +8,26 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sopt.seonyakServer.global.common.external.naver.dto.OcrBusinessResponse;
 import org.sopt.seonyakServer.global.common.external.naver.dto.OcrUnivResponse;
+import org.sopt.seonyakServer.global.exception.enums.ErrorType;
+import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OcrService {
     private final OcrConfig ocrConfig;
 
@@ -34,6 +39,12 @@ public class OcrService {
 
         // 대학교 OCR 응답 문자열로 받아옴
         String response = requestNaverOcr(apiUrl, apiKey, file);
+
+        // 네이버 OCR 실패 응답 처리
+        String responseResult = extractInferResult(response);
+        if (responseResult.equals("FAILURE")) {
+            throw new CustomException(ErrorType.NOT_VALID_OCR_IMAGE);
+        }
         return OcrUnivResponse.of(extractUnivText(response));
     }
 
@@ -43,9 +54,16 @@ public class OcrService {
         String apiUrl = ocrConfig.getBusinessUrl();
         String apiKey = ocrConfig.getBusinessKey();
 
+        String response = requestNaverOcr(apiUrl, apiKey, file);
+        // 네이버 OCR 실패 응답 처리
+        String responseResult = extractInferResult(response);
+        if (responseResult.equals("FAILURE")) {
+            throw new CustomException(ErrorType.NOT_VALID_OCR_IMAGE);
+        }
+
         //회사명, 휴대전화번호 JSON 응답에서 파싱
-        String company = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "company");
-        String phoneNumber = extractTextByKey(requestNaverOcr(apiUrl, apiKey, file), "mobile");
+        String company = extractTextByKey(response, "company");
+        String phoneNumber = extractTextByKey(response, "mobile");
         String cleanedNumber = phoneNumber.replaceAll("[^\\d]", "");
         String lastEightNumber =
                 cleanedNumber.length() > 8 ? cleanedNumber.substring(cleanedNumber.length() - 8) : cleanedNumber;
@@ -138,12 +156,10 @@ public class OcrService {
     }
 
     // OCR 응답 JSON에서 "대학교"가 포함된 inferText만 추출하는 함수
-    private String extractUnivText(String jsonResponse) {
+    private List<String> extractUnivText(String jsonResponse) {
         JSONObject responseJson = new JSONObject(jsonResponse);
         JSONArray images = responseJson.getJSONArray("images");
-
         Pattern pattern = Pattern.compile(".*?대학교");
-
         return IntStream.range(0, images.length())
                 .mapToObj(images::getJSONObject)
                 .flatMap(image -> {
@@ -160,7 +176,7 @@ public class OcrService {
                     }
                     return inferText;
                 })
-                .collect(Collectors.joining(","));
+                .collect(Collectors.toList());
     }
 
     // 명함 OCR 응답에서 keyword에 해당하는 필드값을 추출하는 함수
@@ -182,5 +198,15 @@ public class OcrService {
                 })
                 .map(textObject -> textObject.getString("text"))
                 .collect(Collectors.joining(", "));
+    }
+
+    private String extractInferResult(String jsonResponse) {
+        JSONObject responseJson = new JSONObject(jsonResponse);
+        JSONArray images = responseJson.getJSONArray("images");
+
+        return IntStream.range(0, images.length())
+                .mapToObj(images::getJSONObject)
+                .map(image -> image.getString("inferResult"))
+                .collect(Collectors.joining(","));
     }
 }
