@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRequest;
+import org.sopt.seonyakServer.domain.appointment.dto.GoogleMeetLinkResponse;
 import org.sopt.seonyakServer.domain.appointment.model.Appointment;
 import org.sopt.seonyakServer.domain.appointment.model.AppointmentStatus;
 import org.sopt.seonyakServer.domain.appointment.repository.AppointmentRepository;
@@ -34,7 +35,7 @@ public class AppointmentService {
         if (member.getId().equals(senior.getId())) {
             throw new CustomException(ErrorType.SAME_MEMBER_APPOINTMENT_ERROR);
         }
-        Appointment appointment = Appointment.createAppointment(
+        Appointment appointment = Appointment.create(
                 member,
                 senior,
                 AppointmentStatus.PENDING,
@@ -48,10 +49,11 @@ public class AppointmentService {
     @Transactional
     public void acceptAppointment(AppointmentAcceptRequest appointmentAcceptRequest) {
         Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(
-                appointmentAcceptRequest.appointmentId());
+                appointmentAcceptRequest.appointmentId()
+        );
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
-        // 약속의 선배ID와 토크ID가 일치하지 않는 경우
+        // 약속의 선배 Id와 토큰 Id가 일치하지 않는 경우
         if (!Objects.equals(member.getId(), appointment.getSenior().getId())) {
             throw new CustomException(ErrorType.NOT_AUTHORIZATION_ACCEPT);
         }
@@ -67,10 +69,11 @@ public class AppointmentService {
     @Transactional
     public void rejectAppointment(AppointmentRejectRequest appointmentRejectRequest) {
         Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(
-                appointmentRejectRequest.appointmentId());
+                appointmentRejectRequest.appointmentId()
+        );
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
-        // 약속의 선배ID와 토크ID가 일치하지 않는 경우
+        // 약속의 선배 Id와 토큰 Id가 일치하지 않는 경우
         if (!Objects.equals(member.getId(), appointment.getSenior().getId())) {
             throw new CustomException(ErrorType.NOT_AUTHORIZATION_REJECT);
         }
@@ -81,5 +84,26 @@ public class AppointmentService {
                 AppointmentStatus.REJECTED
         );
         appointmentRepository.save(appointment);
+    }
+
+    @Transactional(readOnly = true)
+    public GoogleMeetLinkResponse getGoogleMeetLink(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
+
+        Long userId = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getId();
+        Long memberId = appointment.getMember().getId();
+        Long seniorMemberId = appointment.getSenior().getMember().getId();
+
+        if (!userId.equals(memberId) && !userId.equals(seniorMemberId)) {
+            throw new CustomException(ErrorType.NOT_MEMBERS_APPOINTMENT_ERROR);
+        }
+
+        String googleMeetLink = appointment.getGoogleMeetLink();
+
+        if (googleMeetLink == null || googleMeetLink.isEmpty()) {
+            throw new CustomException(ErrorType.NOT_FOUND_GOOGLE_MEET_LINK_ERROR);
+        }
+
+        return GoogleMeetLinkResponse.of(googleMeetLink);
     }
 }

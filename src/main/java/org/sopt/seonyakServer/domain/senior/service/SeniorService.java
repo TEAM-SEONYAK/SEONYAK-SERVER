@@ -25,7 +25,7 @@ public class SeniorService {
     @Transactional
     public String createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
 
-        Senior senior = Senior.createSenior(
+        Senior senior = Senior.create(
                 member,
                 memberJoinRequest.businessCard(),
                 memberJoinRequest.detailPosition(),
