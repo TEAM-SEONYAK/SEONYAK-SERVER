@@ -30,7 +30,7 @@ public class AppointmentController {
 
     @PatchMapping("/accept")
     public ResponseEntity<Void> acceptAppointment(
-            @RequestBody AppointmentAcceptRequest appointmentAcceptRequest
+            @RequestBody final AppointmentAcceptRequest appointmentAcceptRequest
     ) {
         appointmentService.acceptAppointment(appointmentAcceptRequest);
         return ResponseEntity.ok().build();
@@ -38,7 +38,7 @@ public class AppointmentController {
 
     @PatchMapping("/reject")
     public ResponseEntity<Void> rejectAppointment(
-            @RequestBody AppointmentRejectRequest appointmentRejectRequest
+            @RequestBody final AppointmentRejectRequest appointmentRejectRequest
     ) {
         appointmentService.rejectAppointment(appointmentRejectRequest);
         return ResponseEntity.ok().build();
