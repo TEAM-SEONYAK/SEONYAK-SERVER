@@ -2,6 +2,8 @@ package org.sopt.seonyakServer.domain.senior.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
+import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.model.PreferredTimeList;
@@ -19,6 +21,23 @@ public class SeniorService {
 
     private final SeniorRepository seniorRepository;
     private final PrincipalHandler principalHandler;
+
+    @Transactional
+    public String createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
+
+        Senior senior = Senior.createSenior(
+                member,
+                memberJoinRequest.businessCard(),
+                memberJoinRequest.detailPosition(),
+                memberJoinRequest.company(),
+                memberJoinRequest.position(),
+                memberJoinRequest.level()
+        );
+
+        seniorRepository.save(senior);
+
+        return memberJoinRequest.role();
+    }
 
     @Transactional
     public void patchSeniorProfile(SeniorProfileRequest seniorProfileRequest) {
