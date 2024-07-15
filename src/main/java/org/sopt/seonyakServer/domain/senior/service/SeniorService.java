@@ -25,7 +25,7 @@ public class SeniorService {
     private final PrincipalHandler principalHandler;
 
     @Transactional
-    public String createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
+    public void createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
 
         Senior senior = Senior.create(
                 member,
@@ -37,8 +37,6 @@ public class SeniorService {
         );
 
         seniorRepository.save(senior);
-
-        return memberJoinRequest.role();
     }
 
     @Transactional
