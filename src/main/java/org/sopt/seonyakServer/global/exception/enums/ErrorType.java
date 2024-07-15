@@ -53,6 +53,8 @@ public enum ErrorType {
     INVALID_SOCIAL_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "40107", "유효하지 않은 소셜 엑세스 토큰입니다."),
     EXPIRED_AUTHENTICATION_CODE(HttpStatus.UNAUTHORIZED, "40108", "인가 코드가 만료되었습니다."),
     UN_LOGIN_ERROR(HttpStatus.UNAUTHORIZED, "40109", "로그인 후 진행해주세요."),
+    NOT_AUTHORIZATION_ACCEPT(HttpStatus.UNAUTHORIZED, "40110", "약속을 수락할 권한이 없습니다."),
+    NOT_AUTHORIZATION_REJECT(HttpStatus.UNAUTHORIZED, "40111", "약속을 거절할 권한이 없습니다."),
 
     /**
      * 404 NOT FOUND
@@ -62,6 +64,7 @@ public enum ErrorType {
     NOT_FOUND_CREDENTIALS_JSON_ERROR(HttpStatus.NOT_FOUND, "40403", "구글미트 Credentials Json 파일을 찾을 수 없습니다."),
     NOT_FOUND_SENIOR_BY_MEMBER(HttpStatus.NOT_FOUND, "40404", "해당 ID를 가진 멤버와 매핑된 선배를 찾을 수 없습니다."),
     NOT_FOUND_SENIOR_ERROR(HttpStatus.NOT_FOUND, "40405", "존재하지 않는 선배입니다."),
+    NOT_FOUND_APPOINTMENT_ERROR(HttpStatus.NOT_FOUND, "40406", "존재하지 않는 약속입니다."),
 
     /**
      * 409 CONFLICT
