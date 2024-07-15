@@ -57,7 +57,7 @@ public class MessageService {
         message.setText("[선약] 인증번호는 [" + verificationCode + "] 입니다.");
 
         this.defaultMessageService.sendOne(new SingleMessageSendingRequest(message));
-        codeService.saveCertificationCode(toNumber, verificationCode);
+        codeService.saveVerificationCode(toNumber, verificationCode);
     }
 
     // 인증번호를 위한 랜덤 숫자 생성
@@ -73,7 +73,7 @@ public class MessageService {
     public void verifyCode(VerifyCodeRequest verifyCodeRequest) {
         if (verifyCodeRequest.verificationCode().equals(
                 codeService.findCodeByPhoneNumber(verifyCodeRequest.phoneNumber()))) {
-            codeService.deleteCertificationCode(verifyCodeRequest.phoneNumber());
+            codeService.deleteVerificationCode(verifyCodeRequest.phoneNumber());
         } else {
             throw new CustomException(ErrorType.INVALID_VERIFICATION_CODE_ERROR);
         }

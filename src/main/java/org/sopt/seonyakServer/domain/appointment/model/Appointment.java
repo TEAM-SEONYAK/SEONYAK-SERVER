@@ -82,7 +82,7 @@ public class Appointment {
         this.personalTopic = personalTopic;
     }
 
-    public static Appointment createAppointment(
+    public static Appointment create(
             Member member,
             Senior senior,
             AppointmentStatus appointmentStatus,
@@ -98,5 +98,25 @@ public class Appointment {
                 .topic(topic)
                 .personalTopic(personalTopic)
                 .build();
+    }
+
+    public void acceptAppointment(
+            List<DataTimeRange> timeList,
+            String googleMeetLink,
+            AppointmentStatus appointmentStatus
+    ) {
+        this.timeList = timeList;
+        this.googleMeetLink = googleMeetLink;
+        this.appointmentStatus = appointmentStatus;
+    }
+
+    public void rejectAppointment(
+            String rejectReason,
+            String rejectDetail,
+            AppointmentStatus appointmentStatus
+    ) {
+        this.rejectReason = rejectReason;
+        this.rejectDetail = rejectDetail;
+        this.appointmentStatus = appointmentStatus;
     }
 }

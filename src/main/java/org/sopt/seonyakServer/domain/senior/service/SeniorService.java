@@ -2,8 +2,11 @@ package org.sopt.seonyakServer.domain.senior.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
+import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
 import org.sopt.seonyakServer.domain.senior.model.PreferredTimeList;
 import org.sopt.seonyakServer.domain.senior.model.Senior;
 import org.sopt.seonyakServer.domain.senior.repository.SeniorRepository;
@@ -19,6 +22,23 @@ public class SeniorService {
 
     private final SeniorRepository seniorRepository;
     private final PrincipalHandler principalHandler;
+
+    @Transactional
+    public String createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
+
+        Senior senior = Senior.create(
+                member,
+                memberJoinRequest.businessCard(),
+                memberJoinRequest.detailPosition(),
+                memberJoinRequest.company(),
+                memberJoinRequest.position(),
+                memberJoinRequest.level()
+        );
+
+        seniorRepository.save(senior);
+
+        return memberJoinRequest.role();
+    }
 
     @Transactional
     public void patchSeniorProfile(SeniorProfileRequest seniorProfileRequest) {
@@ -44,5 +64,18 @@ public class SeniorService {
     @Transactional(readOnly = true)
     public List<SeniorListResponse> searchSeniorFieldPosition(List<String> field, List<String> position) {
         return seniorRepository.searchSeniorFieldPosition(field, position);
+    }
+
+    @Transactional(readOnly = true)
+    public SeniorProfileResponse getSeniorProfile(final Long seniorId) {
+        Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
+
+        return SeniorProfileResponse.of(
+                senior.getLevel(),
+                senior.getCareer(),
+                senior.getAward(),
+                senior.getCatchphrase(),
+                senior.getStory()
+        );
     }
 }

@@ -47,7 +47,7 @@ public class Department extends BaseTimeEntity {
         this.isClosed = isClosed;
     }
 
-    public static Department createDepartment(
+    public static Department create(
             final University university,
             final String deptName,
             final boolean isClosed

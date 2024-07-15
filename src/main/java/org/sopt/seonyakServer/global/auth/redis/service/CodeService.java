@@ -15,28 +15,29 @@ public class CodeService {
     private final CodeRepository codeRepository;
 
     @Transactional
-    public void saveCertificationCode(
+    public void saveVerificationCode(
             final String phoneNumber,
-            final String certificationCode
+            final String verificationCode
     ) {
         codeRepository.save(
                 Code.createCode(
                         phoneNumber,
-                        certificationCode
+                        verificationCode
                 )
         );
     }
 
+    @Transactional(readOnly = true)
     public String findCodeByPhoneNumber(final String phoneNumber) {
         Code code = codeRepository.findByPhoneNumber(phoneNumber).orElseThrow(
                 () -> new CustomException(ErrorType.NO_VERIFICATION_REQUEST_HISTORY)
         );
 
-        return code.getCertificationCode();
+        return code.getVerificationCode();
     }
 
     @Transactional
-    public void deleteCertificationCode(final String phoneNumber) {
+    public void deleteVerificationCode(final String phoneNumber) {
         Code code = codeRepository.findByPhoneNumber(phoneNumber).orElseThrow(
                 () -> new CustomException(ErrorType.NO_VERIFICATION_REQUEST_HISTORY)
         );
