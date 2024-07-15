@@ -144,6 +144,7 @@ public class AppointmentService {
         );
 
         return new AppointmentDetailResponse(
+                appointment.getAppointmentStatus(),
                 juniorInfo,
                 seniorInfo,
                 appointment.getTopic(),
