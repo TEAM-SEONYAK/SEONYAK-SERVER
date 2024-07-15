@@ -5,5 +5,4 @@ public record AppointmentRejectRequest(
         String rejectReason,
         String rejectDetail
 ) {
-
 }

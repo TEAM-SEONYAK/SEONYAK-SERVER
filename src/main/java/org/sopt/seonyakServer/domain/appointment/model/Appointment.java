@@ -102,17 +102,21 @@ public class Appointment {
 
     public void acceptAppointment(
             List<DataTimeRange> timeList,
-            String googleMeetLink
+            String googleMeetLink,
+            AppointmentStatus appointmentStatus
     ) {
         this.timeList = timeList;
         this.googleMeetLink = googleMeetLink;
+        this.appointmentStatus = appointmentStatus;
     }
 
     public void rejectAppointment(
             String rejectReason,
-            String rejectDetail
+            String rejectDetail,
+            AppointmentStatus appointmentStatus
     ) {
         this.rejectReason = rejectReason;
         this.rejectDetail = rejectDetail;
+        this.appointmentStatus = appointmentStatus;
     }
 }

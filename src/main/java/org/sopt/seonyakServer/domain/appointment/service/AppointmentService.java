@@ -58,7 +58,8 @@ public class AppointmentService {
 
         appointment.acceptAppointment(
                 appointmentAcceptRequest.timeList(),
-                appointmentAcceptRequest.googleMeetLink()
+                appointmentAcceptRequest.googleMeetLink(),
+                AppointmentStatus.SCHEDULED
         );
         appointmentRepository.save(appointment);
     }
@@ -76,7 +77,8 @@ public class AppointmentService {
 
         appointment.rejectAppointment(
                 appointmentRejectRequest.rejectReason(),
-                appointmentRejectRequest.rejectDetail()
+                appointmentRejectRequest.rejectDetail(),
+                AppointmentStatus.REJECTED
         );
         appointmentRepository.save(appointment);
     }
