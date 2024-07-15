@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
+import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorCardProfileResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
@@ -21,11 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SeniorService {
 
+    private final MemberRepository memberRepository;
     private final SeniorRepository seniorRepository;
     private final PrincipalHandler principalHandler;
 
     @Transactional
-    public void createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
+    public Senior createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
 
         Senior senior = Senior.create(
                 member,
@@ -36,7 +38,7 @@ public class SeniorService {
                 memberJoinRequest.level()
         );
 
-        seniorRepository.save(senior);
+        return seniorRepository.save(senior);
     }
 
     @Transactional

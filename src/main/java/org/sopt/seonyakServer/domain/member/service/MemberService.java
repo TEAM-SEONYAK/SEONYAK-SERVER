@@ -3,6 +3,7 @@ package org.sopt.seonyakServer.domain.member.service;
 import jakarta.annotation.PostConstruct;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -33,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -152,12 +154,13 @@ public class MemberService {
 
         memberRepository.save(member);
 
+        Long seniorId = null;
         if (memberJoinRequest.role().equals("SENIOR")) {
-            seniorService.createSenior(memberJoinRequest, member);
+            member.addSenior(seniorService.createSenior(memberJoinRequest, member));
+            seniorId = member.getSenior().getId();
         }
-
         return MemberJoinResponse.of(
-                member.getId(),
+                seniorId,
                 memberJoinRequest.role()
         );
     }

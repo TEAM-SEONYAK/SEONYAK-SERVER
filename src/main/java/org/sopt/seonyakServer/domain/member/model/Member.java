@@ -121,4 +121,8 @@ public class Member extends BaseTimeEntity {
             this.departmentList = department;
         }
     }
+
+    public void addSenior(Senior senior) {
+        this.senior = senior;
+    }
 }
