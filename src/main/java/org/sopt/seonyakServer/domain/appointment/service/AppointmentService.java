@@ -1,5 +1,6 @@
 package org.sopt.seonyakServer.domain.appointment.service;
 
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,9 +8,13 @@ import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRequest;
+import org.sopt.seonyakServer.domain.appointment.dto.AppointmentResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.GoogleMeetLinkResponse;
 import org.sopt.seonyakServer.domain.appointment.model.Appointment;
+import org.sopt.seonyakServer.domain.appointment.model.AppointmentCard;
+import org.sopt.seonyakServer.domain.appointment.model.AppointmentCardList;
 import org.sopt.seonyakServer.domain.appointment.model.AppointmentStatus;
+import org.sopt.seonyakServer.domain.appointment.model.DateTimeRange;
 import org.sopt.seonyakServer.domain.appointment.model.JuniorInfo;
 import org.sopt.seonyakServer.domain.appointment.model.SeniorInfo;
 import org.sopt.seonyakServer.domain.appointment.repository.AppointmentRepository;
@@ -110,6 +115,83 @@ public class AppointmentService {
         }
 
         return GoogleMeetLinkResponse.of(googleMeetLink);
+    }
+
+    @Transactional(readOnly = true)
+    public AppointmentResponse getAppointment() {
+        Member user = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
+        AppointmentCardList appointmentCardList = new AppointmentCardList();
+
+        // User의 약속 리스트를 가져옴
+        List<Appointment> appointmentList = appointmentRepository.findAllAppointmentByMember(user);
+
+        for (Appointment appointment : appointmentList) {
+            appointmentCardList.putAppointmentCardList(
+                    appointment.getAppointmentStatus(),
+                    createAppointmentCard(user, appointment)
+            );
+        }
+
+        return AppointmentResponse.of(user.getNickname(), appointmentCardList);
+    }
+
+    private AppointmentCard createAppointmentCard(Member user, Appointment appointment) {
+        // init
+        String nickname, image, field, department = null;
+        List<String> topic = null;
+        String personalTopic = null;
+        String company = null, position = null, detailPosition = null, level = null;
+        String date = null, startTime = null, endTime = null;
+
+        Member member = appointment.getMember();
+        Senior senior = appointment.getSenior();
+        Member seniorMember = senior.getMember();
+        DateTimeRange dateTimeRange = appointment.getTimeList().get(0);
+
+        // 선배/후배에 따른 분기 처리
+        if (user.getSenior() == null) {
+            nickname = seniorMember.getNickname();
+            image = seniorMember.getImage();
+            field = seniorMember.getField();
+            company = senior.getCompany();
+            position = senior.getPosition();
+            detailPosition = senior.getDetailPosition();
+            level = senior.getLevel();
+        } else {
+            nickname = member.getNickname();
+            image = member.getImage();
+            field = member.getField();
+            department = member.getDepartmentList().get(0);
+            topic = appointment.getTopic();
+            personalTopic = appointment.getPersonalTopic();
+        }
+
+        // 약속 상태에 따른 분기 처리
+        if (appointment.getAppointmentStatus() == AppointmentStatus.SCHEDULED
+                || appointment.getAppointmentStatus() == AppointmentStatus.PAST) {
+            date = dateTimeRange.getDate();
+            startTime = dateTimeRange.getStartTime();
+            endTime = dateTimeRange.getEndTime();
+        }
+
+        // Appointment에서 필요한 필드들을 매핑
+        return AppointmentCard.create(
+                appointment.getId(),
+                appointment.getAppointmentStatus(),
+                nickname,
+                image,
+                field,
+                department,
+                topic,
+                personalTopic,
+                company,
+                position,
+                detailPosition,
+                level,
+                date,
+                startTime,
+                endTime
+        );
     }
 
     @Transactional(readOnly = true)
