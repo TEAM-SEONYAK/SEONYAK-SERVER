@@ -128,9 +128,14 @@ public class AppointmentService {
     public AppointmentResponse getAppointment() {
         Member user = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
         AppointmentCardList appointmentCardList = new AppointmentCardList();
+        List<Appointment> appointmentList;
 
         // User의 약속 리스트를 가져옴
-        List<Appointment> appointmentList = appointmentRepository.findAllAppointmentByMember(user);
+        if (user.getSenior() == null) {
+            appointmentList = appointmentRepository.findAllAppointmentByMember(user);
+        } else {
+            appointmentList = appointmentRepository.findAllAppointmentBySenior(user.getSenior());
+        }
 
         for (Appointment appointment : appointmentList) {
             appointmentCardList.putAppointmentCardList(

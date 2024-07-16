@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.sopt.seonyakServer.domain.appointment.model.Appointment;
 import org.sopt.seonyakServer.domain.appointment.model.AppointmentStatus;
 import org.sopt.seonyakServer.domain.member.model.Member;
+import org.sopt.seonyakServer.domain.senior.model.Senior;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     }
 
     List<Appointment> findAllAppointmentByMember(Member member);
+
+    List<Appointment> findAllAppointmentBySenior(Senior senior);
 }
