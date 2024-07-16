@@ -28,21 +28,21 @@ public class MemberController {
     @PostMapping("/auth/login")
     public ResponseEntity<LoginSuccessResponse> login(
             @RequestParam final String authorizationCode,
-            @Valid @RequestBody final MemberLoginRequest loginRequest
+            @Valid @RequestBody MemberLoginRequest loginRequest
     ) {
         return ResponseEntity.ok(memberService.create(authorizationCode, loginRequest));
     }
 
     @PatchMapping("/auth/join")
     public ResponseEntity<MemberJoinResponse> join(
-            @RequestBody final MemberJoinRequest memberJoinRequest
+            @RequestBody MemberJoinRequest memberJoinRequest
     ) {
         return ResponseEntity.ok(memberService.patchMemberJoin(memberJoinRequest));
     }
 
     @PostMapping("/nickname")
     public ResponseEntity<Void> validNickname(
-            @Valid @RequestBody final NicknameRequest nicknameRequest
+            @Valid @RequestBody NicknameRequest nicknameRequest
     ) {
         memberService.validNickname(nicknameRequest);
 
@@ -51,7 +51,7 @@ public class MemberController {
 
     @PostMapping("/phone/verify")
     public ResponseEntity<Void> sendCode(
-            @Valid @RequestBody final SendCodeRequest sendCodeRequest
+            @Valid @RequestBody SendCodeRequest sendCodeRequest
     ) {
         memberService.sendMessage(sendCodeRequest);
 
@@ -60,7 +60,7 @@ public class MemberController {
 
     @PostMapping("/phone/verifycode")
     public ResponseEntity<Void> verifyCode(
-            @Valid @RequestBody final VerifyCodeRequest verifyCodeRequest
+            @Valid @RequestBody VerifyCodeRequest verifyCodeRequest
     ) {
         memberService.verifyCode(verifyCodeRequest);
 

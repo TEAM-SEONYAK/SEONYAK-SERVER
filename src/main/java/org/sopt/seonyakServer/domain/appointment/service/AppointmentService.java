@@ -1,8 +1,8 @@
 package org.sopt.seonyakServer.domain.appointment.service;
 
+import java.util.Arrays;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
@@ -23,7 +23,6 @@ import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
@@ -37,9 +36,17 @@ public class AppointmentService {
     public void postAppointment(AppointmentRequest appointmentRequest) {
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
         Senior senior = seniorRepository.findSeniorByIdOrThrow(appointmentRequest.seniorId());
-        if (member.getId().equals(senior.getId())) {
+
+        // 자기 자신에게 약속을 신청하는 경우
+        if (member.getId().equals(senior.getMember().getId())) {
             throw new CustomException(ErrorType.SAME_MEMBER_APPOINTMENT_ERROR);
         }
+
+        // 이미 약속을 신청한 선배일 경우
+        if (isExistingAppointment(member.getId(), senior.getId())) {
+            throw new CustomException(ErrorType.INVALID_SAME_SENIOR);
+        }
+
         Appointment appointment = Appointment.create(
                 member,
                 senior,
@@ -151,5 +158,15 @@ public class AppointmentService {
                 appointment.getPersonalTopic(),
                 appointment.getTimeList()
         );
+    }
+
+    // 멤버와 선배 ID로 PENDING, SCHEDULED 인 약속이 이미 존재하는지 확인
+    @Transactional(readOnly = true)
+    public boolean isExistingAppointment(
+            final Long memberId,
+            final Long seniorId
+    ) {
+        return appointmentRepository.findAppointmentByMemberIdAndSeniorIdAndAppointmentStatusIn(memberId,
+                seniorId, Arrays.asList(AppointmentStatus.PENDING, AppointmentStatus.SCHEDULED)).isPresent();
     }
 }

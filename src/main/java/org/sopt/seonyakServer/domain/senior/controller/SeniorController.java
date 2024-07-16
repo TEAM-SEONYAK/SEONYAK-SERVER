@@ -26,7 +26,7 @@ public class SeniorController {
 
     @PatchMapping("/profile")
     public ResponseEntity<Void> patchProfile(
-            @RequestBody final SeniorProfileRequest seniorProfileRequest
+            @RequestBody SeniorProfileRequest seniorProfileRequest
     ) {
         seniorService.patchSeniorProfile(seniorProfileRequest);
         return ResponseEntity.ok().build();
