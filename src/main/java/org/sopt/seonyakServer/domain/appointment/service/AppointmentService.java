@@ -1,7 +1,6 @@
 package org.sopt.seonyakServer.domain.appointment.service;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
@@ -32,10 +31,6 @@ public class AppointmentService {
     private final SeniorRepository seniorRepository;
     private final MemberRepository memberRepository;
     private final PrincipalHandler principalHandler;
-
-    // 검색 조건으로 사용될 약속 상태들
-    private final List<AppointmentStatus> appointmentStatuses = Arrays.asList(AppointmentStatus.PENDING,
-            AppointmentStatus.SCHEDULED);
 
     @Transactional
     public void postAppointment(AppointmentRequest appointmentRequest) {
@@ -172,6 +167,6 @@ public class AppointmentService {
             final Long seniorId
     ) {
         return appointmentRepository.findAppointmentByMemberIdAndSeniorIdAndAppointmentStatusIn(memberId,
-                seniorId, appointmentStatuses).isPresent();
+                seniorId, Arrays.asList(AppointmentStatus.PENDING, AppointmentStatus.SCHEDULED)).isPresent();
     }
 }
