@@ -39,7 +39,6 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PrincipalHandler principalHandler;
     private final GoogleSocialService googleSocialService;
-    private final MemberManagementService memberManagementService;
     private final SeniorService seniorService;
     private DefaultMessageService defaultMessageService;
     private final CodeService codeService;
@@ -90,9 +89,13 @@ public class MemberService {
                         getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
                 );
             } else {
-                Long id = memberManagementService.createMember(memberInfoResponse);
+                Member member = Member.create(
+                        memberInfoResponse.socialType(),
+                        memberInfoResponse.socialId(),
+                        memberInfoResponse.email()
+                );
 
-                return getTokenByMemberId(id);
+                return getTokenByMemberId(memberRepository.save(member).getId());
             }
         } catch (DataIntegrityViolationException e) { // DB 무결성 제약 조건 위반 예외
             return getTokenByMemberId(
@@ -152,11 +155,15 @@ public class MemberService {
 
         memberRepository.save(member);
 
+        Long seniorId = null;
         if (memberJoinRequest.role().equals("SENIOR")) {
-            return MemberJoinResponse.of(seniorService.createSenior(memberJoinRequest, member));
+            member.addSenior(seniorService.createSenior(memberJoinRequest, member));
+            seniorId = member.getSenior().getId();
         }
-
-        return MemberJoinResponse.of(memberJoinRequest.role());
+        return MemberJoinResponse.of(
+                seniorId,
+                memberJoinRequest.role()
+        );
     }
 
     public void sendMessage(SendCodeRequest sendCodeRequest) {

@@ -2,8 +2,11 @@ package org.sopt.seonyakServer.domain.senior.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sopt.seonyakServer.domain.appointment.service.AppointmentService;
 import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
+import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorCardProfileResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
@@ -20,11 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SeniorService {
 
+    private final MemberRepository memberRepository;
     private final SeniorRepository seniorRepository;
+    private final AppointmentService appointmentService;
     private final PrincipalHandler principalHandler;
 
     @Transactional
-    public String createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
+    public Senior createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
 
         Senior senior = Senior.create(
                 member,
@@ -35,9 +40,7 @@ public class SeniorService {
                 memberJoinRequest.level()
         );
 
-        seniorRepository.save(senior);
-
-        return memberJoinRequest.role();
+        return seniorRepository.save(senior);
     }
 
     @Transactional
@@ -68,14 +71,33 @@ public class SeniorService {
 
     @Transactional(readOnly = true)
     public SeniorProfileResponse getSeniorProfile(final Long seniorId) {
+        Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
         Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
 
+        // 해당 선배와 PENDING, SCHEDULED인 약속이 있다면 불가능하게
+        boolean isAvailable = !appointmentService.isExistingAppointment(member.getId(), seniorId);
+
         return SeniorProfileResponse.of(
+                isAvailable,
                 senior.getLevel(),
                 senior.getCareer(),
                 senior.getAward(),
                 senior.getCatchphrase(),
                 senior.getStory()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public SeniorCardProfileResponse getSeniorCardProfile(final Long seniorId) {
+        Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
+
+        return SeniorCardProfileResponse.of(
+                senior.getMember().getNickname(),
+                senior.getCompany(),
+                senior.getMember().getField(),
+                senior.getPosition(),
+                senior.getDetailPosition(),
+                senior.getLevel()
         );
     }
 }

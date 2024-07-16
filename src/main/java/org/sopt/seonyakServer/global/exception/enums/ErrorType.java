@@ -33,6 +33,8 @@ public enum ErrorType {
     UNIV_CERT_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40018", "이미 인증이 완료된 이메일입니다."),
     SAME_MEMBER_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40019", "자기 자신에게는 약속을 신청할 수 없습니다."),
     NOT_MEMBERS_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40020", "해당 회원의 약속이 아닙니다."),
+    NOT_VALID_OCR_IMAGE(HttpStatus.BAD_REQUEST, "40021", "이미지 인식에 실패했습니다."),
+    INVALID_SAME_SENIOR(HttpStatus.BAD_REQUEST, "40022", "이미 약속을 신청한 선배입니다."),
 
     // S3 관련 오류
     IMAGE_EXTENSION_ERROR(HttpStatus.BAD_REQUEST, "40051", "이미지 확장자는 jpg, png, webp만 가능합니다."),

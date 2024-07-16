@@ -27,7 +27,7 @@ public class AppointmentController {
 
     @PostMapping("/appointment")
     public ResponseEntity<Void> postAppointment(
-            @RequestBody final AppointmentRequest appointmentRequest
+            @RequestBody AppointmentRequest appointmentRequest
     ) {
         appointmentService.postAppointment(appointmentRequest);
         return ResponseEntity.ok().build();
@@ -35,7 +35,7 @@ public class AppointmentController {
 
     @PatchMapping("/appointment/accept")
     public ResponseEntity<Void> acceptAppointment(
-            @RequestBody final AppointmentAcceptRequest appointmentAcceptRequest
+            @RequestBody AppointmentAcceptRequest appointmentAcceptRequest
     ) {
         appointmentService.acceptAppointment(appointmentAcceptRequest);
         return ResponseEntity.ok().build();
@@ -43,7 +43,7 @@ public class AppointmentController {
 
     @PatchMapping("/appointment/reject")
     public ResponseEntity<Void> rejectAppointment(
-            @RequestBody final AppointmentRejectRequest appointmentRejectRequest
+            @RequestBody AppointmentRejectRequest appointmentRejectRequest
     ) {
         appointmentService.rejectAppointment(appointmentRejectRequest);
         return ResponseEntity.ok().build();
