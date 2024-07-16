@@ -201,28 +201,29 @@ public class AppointmentService {
         Long userId = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getId();
 
         Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
-        Long memberId = appointment.getMember().getId();
-        Long seniorMemberId = appointment.getSenior().getMember().getId();
 
-        if (!userId.equals(memberId) && !userId.equals(seniorMemberId)) {
+        Member member = appointment.getMember();
+        Senior senior = appointment.getSenior();
+
+        if (!userId.equals(member.getId()) && !userId.equals(senior.getMember().getId())) {
             throw new CustomException(ErrorType.NOT_MEMBERS_APPOINTMENT_ERROR);
         }
 
         JuniorInfo juniorInfo = JuniorInfo.create(
-                appointment.getMember().getNickname(),
-                appointment.getMember().getUnivName(),
-                appointment.getMember().getField(),
-                appointment.getMember().getDepartmentList().get(0)
+                member.getNickname(),
+                member.getUnivName(),
+                member.getField(),
+                member.getDepartmentList().get(0)
         );
 
         SeniorInfo seniorInfo = SeniorInfo.create(
-                appointment.getSenior().getMember().getNickname(),
-                appointment.getSenior().getMember().getImage(),
-                appointment.getSenior().getCompany(),
-                appointment.getSenior().getMember().getField(),
-                appointment.getSenior().getPosition(),
-                appointment.getSenior().getDetailPosition(),
-                appointment.getSenior().getLevel()
+                senior.getMember().getNickname(),
+                senior.getMember().getImage(),
+                senior.getCompany(),
+                senior.getMember().getField(),
+                senior.getPosition(),
+                senior.getDetailPosition(),
+                senior.getLevel()
         );
 
         return new AppointmentDetailResponse(
