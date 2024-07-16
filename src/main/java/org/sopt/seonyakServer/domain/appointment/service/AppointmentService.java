@@ -179,11 +179,15 @@ public class AppointmentService {
         }
 
         // 약속 상태에 따른 분기 처리
-        if (appointment.getAppointmentStatus() == AppointmentStatus.SCHEDULED
-                || appointment.getAppointmentStatus() == AppointmentStatus.PAST) {
+        if (appointment.getAppointmentStatus().isScheduledOrPast()) {
             date = dateTimeRange.getDate();
             startTime = dateTimeRange.getStartTime();
             endTime = dateTimeRange.getEndTime();
+        }
+
+        if (appointment.getAppointmentStatus().isPastOrRejected()) {
+            topic = null;
+            personalTopic = null;
         }
 
         // Appointment에서 필요한 필드들을 매핑
