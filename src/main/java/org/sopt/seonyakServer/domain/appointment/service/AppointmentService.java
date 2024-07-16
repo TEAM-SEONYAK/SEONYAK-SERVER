@@ -206,7 +206,9 @@ public class AppointmentService {
                 level,
                 date,
                 startTime,
-                endTime
+                endTime,
+                appointment.getCreatedAt(),
+                appointment.getUpdatedAt()
         );
     }
 

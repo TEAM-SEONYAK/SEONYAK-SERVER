@@ -1,7 +1,7 @@
 package org.sopt.seonyakServer.domain.appointment.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,9 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AppointmentCardList {
 
-    private final Map<AppointmentStatus, AppointmentCard> appointmentCardList = new HashMap<>();
+    private final List<AppointmentCard> pending = new ArrayList<>();
+    private final List<AppointmentCard> scheduled = new ArrayList<>();
+    private final List<AppointmentCard> past = new ArrayList<>();
 
     public void putAppointmentCardList(AppointmentStatus appointmentStatus, AppointmentCard appointmentCard) {
-        appointmentCardList.put(appointmentStatus, appointmentCard);
+        switch (appointmentStatus) {
+            case PENDING -> pending.add(appointmentCard);
+            case SCHEDULED -> scheduled.add(appointmentCard);
+            case PAST, REJECTED -> past.add(appointmentCard);
+        }
     }
 }

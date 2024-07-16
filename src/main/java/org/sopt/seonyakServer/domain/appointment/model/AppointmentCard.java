@@ -1,6 +1,8 @@
 package org.sopt.seonyakServer.domain.appointment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AppointmentCard {
+public class AppointmentCard implements Comparable<AppointmentCard> {
 
     private Long appointmentId;
     private AppointmentStatus appointmentStatus;
@@ -28,6 +30,10 @@ public class AppointmentCard {
     private String startTime;
     private String endTime;
 
+    @JsonIgnore
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @Builder(access = AccessLevel.PRIVATE)
     private AppointmentCard(
             Long appointmentId,
@@ -44,7 +50,9 @@ public class AppointmentCard {
             String level,
             String date,
             String startTime,
-            String endTime
+            String endTime,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {
         this.appointmentId = appointmentId;
         this.appointmentStatus = appointmentStatus;
@@ -61,6 +69,29 @@ public class AppointmentCard {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public int compareTo(AppointmentCard other) {
+        // 날짜(date)를 기준으로 비교
+        int dateComparison = this.date.compareTo(other.date);
+
+        // 날짜가 같으면 시작시간(startTime)을 기준으로 비교
+        if (dateComparison == 0) {
+            int startTimeComparison = this.startTime.compareTo(other.startTime);
+
+            // 날짜와 시작시간이 모두 같으면 appointmentId를 기준으로 비교
+            if (startTimeComparison == 0) {
+                return this.appointmentId.compareTo(other.appointmentId);
+            }
+
+            return startTimeComparison;
+        }
+
+        // 날짜가 다르면 날짜를 기준으로 비교 결과 반환
+        return dateComparison;
     }
 
     public static AppointmentCard create(
@@ -78,7 +109,9 @@ public class AppointmentCard {
             String level,
             String date,
             String startTime,
-            String endTime
+            String endTime,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {
         return AppointmentCard.builder()
                 .appointmentId(appointmentId)
@@ -96,6 +129,8 @@ public class AppointmentCard {
                 .date(date)
                 .startTime(startTime)
                 .endTime(endTime)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
                 .build();
     }
 }
