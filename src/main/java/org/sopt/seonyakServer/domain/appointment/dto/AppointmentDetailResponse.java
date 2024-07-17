@@ -3,7 +3,7 @@ package org.sopt.seonyakServer.domain.appointment.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import org.sopt.seonyakServer.domain.appointment.model.AppointmentStatus;
-import org.sopt.seonyakServer.domain.appointment.model.DataTimeRange;
+import org.sopt.seonyakServer.domain.appointment.model.DateTimeRange;
 import org.sopt.seonyakServer.domain.appointment.model.JuniorInfo;
 import org.sopt.seonyakServer.domain.appointment.model.SeniorInfo;
 
@@ -14,7 +14,7 @@ public record AppointmentDetailResponse(
         SeniorInfo seniorInfo,
         List<String> topic,
         String personalTopic,
-        List<DataTimeRange> timeList
+        List<DateTimeRange> timeList
 ) {
     public static AppointmentDetailResponse of(
             AppointmentStatus appointmentStatus,
@@ -22,7 +22,7 @@ public record AppointmentDetailResponse(
             SeniorInfo seniorInfo,
             List<String> topic,
             String personalTopic,
-            List<DataTimeRange> timeList
+            List<DateTimeRange> timeList
     ) {
         return new AppointmentDetailResponse(
                 appointmentStatus,

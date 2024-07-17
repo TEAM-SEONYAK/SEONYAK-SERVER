@@ -1,15 +1,20 @@
 package org.sopt.seonyakServer.domain.appointment.service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRequest;
+import org.sopt.seonyakServer.domain.appointment.dto.AppointmentResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.GoogleMeetLinkResponse;
 import org.sopt.seonyakServer.domain.appointment.model.Appointment;
+import org.sopt.seonyakServer.domain.appointment.model.AppointmentCard;
+import org.sopt.seonyakServer.domain.appointment.model.AppointmentCardList;
 import org.sopt.seonyakServer.domain.appointment.model.AppointmentStatus;
+import org.sopt.seonyakServer.domain.appointment.model.DateTimeRange;
 import org.sopt.seonyakServer.domain.appointment.model.JuniorInfo;
 import org.sopt.seonyakServer.domain.appointment.model.SeniorInfo;
 import org.sopt.seonyakServer.domain.appointment.repository.AppointmentRepository;
@@ -120,34 +125,123 @@ public class AppointmentService {
     }
 
     @Transactional(readOnly = true)
+    public AppointmentResponse getAppointment() {
+        Member user = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
+        AppointmentCardList appointmentCardList = new AppointmentCardList();
+        List<Appointment> appointmentList;
+
+        // User의 약속 리스트를 가져옴
+        if (user.getSenior() == null) {
+            appointmentList = appointmentRepository.findAllAppointmentByMember(user);
+        } else {
+            appointmentList = appointmentRepository.findAllAppointmentBySenior(user.getSenior());
+        }
+
+        for (Appointment appointment : appointmentList) {
+            appointmentCardList.putAppointmentCardList(
+                    appointment.getAppointmentStatus(),
+                    createAppointmentCard(user, appointment)
+            );
+        }
+
+        return AppointmentResponse.of(user.getNickname(), appointmentCardList);
+    }
+
+    private AppointmentCard createAppointmentCard(Member user, Appointment appointment) {
+        // init
+        String nickname, image, field, department = null;
+        List<String> topic = null;
+        String personalTopic = null;
+        String company = null, position = null, detailPosition = null, level = null;
+        String date = null, startTime = null, endTime = null;
+
+        DateTimeRange dateTimeRange = appointment.getTimeList().get(0);
+
+        // 선배/후배에 따른 분기 처리
+        if (user.getSenior() == null) {
+            Senior senior = appointment.getSenior();
+            Member seniorMember = senior.getMember();
+            nickname = seniorMember.getNickname();
+            image = seniorMember.getImage();
+            field = seniorMember.getField();
+            company = senior.getCompany();
+            position = senior.getPosition();
+            detailPosition = senior.getDetailPosition();
+            level = senior.getLevel();
+        } else {
+            Member member = appointment.getMember();
+            nickname = member.getNickname();
+            image = member.getImage();
+            field = member.getField();
+            department = member.getDepartmentList().get(0);
+            topic = appointment.getTopic();
+            personalTopic = appointment.getPersonalTopic();
+        }
+
+        // 약속 상태에 따른 분기 처리
+        if (appointment.getAppointmentStatus().isScheduledOrPast()) {
+            date = dateTimeRange.getDate();
+            startTime = dateTimeRange.getStartTime();
+            endTime = dateTimeRange.getEndTime();
+        }
+
+        if (appointment.getAppointmentStatus().isPastOrRejected()) {
+            topic = null;
+            personalTopic = null;
+        }
+
+        // Appointment에서 필요한 필드들을 매핑
+        return AppointmentCard.create(
+                appointment.getId(),
+                appointment.getAppointmentStatus(),
+                nickname,
+                image,
+                field,
+                department,
+                topic,
+                personalTopic,
+                company,
+                position,
+                detailPosition,
+                level,
+                date,
+                startTime,
+                endTime,
+                appointment.getCreatedAt(),
+                appointment.getUpdatedAt()
+        );
+    }
+
+    @Transactional(readOnly = true)
     public AppointmentDetailResponse getAppointmentDetail(
             final Long appointmentId
     ) {
         Long userId = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getId();
 
         Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
-        Long memberId = appointment.getMember().getId();
-        Long seniorMemberId = appointment.getSenior().getMember().getId();
 
-        if (!userId.equals(memberId) && !userId.equals(seniorMemberId)) {
+        Member member = appointment.getMember();
+        Senior senior = appointment.getSenior();
+
+        if (!userId.equals(member.getId()) && !userId.equals(senior.getMember().getId())) {
             throw new CustomException(ErrorType.NOT_MEMBERS_APPOINTMENT_ERROR);
         }
 
         JuniorInfo juniorInfo = JuniorInfo.create(
-                appointment.getMember().getNickname(),
-                appointment.getMember().getUnivName(),
-                appointment.getMember().getField(),
-                appointment.getMember().getDepartmentList().get(0)
+                member.getNickname(),
+                member.getUnivName(),
+                member.getField(),
+                member.getDepartmentList().get(0)
         );
 
         SeniorInfo seniorInfo = SeniorInfo.create(
-                appointment.getSenior().getMember().getNickname(),
-                appointment.getSenior().getMember().getImage(),
-                appointment.getSenior().getCompany(),
-                appointment.getSenior().getMember().getField(),
-                appointment.getSenior().getPosition(),
-                appointment.getSenior().getDetailPosition(),
-                appointment.getSenior().getLevel()
+                senior.getMember().getNickname(),
+                senior.getMember().getImage(),
+                senior.getCompany(),
+                senior.getMember().getField(),
+                senior.getPosition(),
+                senior.getDetailPosition(),
+                senior.getLevel()
         );
 
         return new AppointmentDetailResponse(

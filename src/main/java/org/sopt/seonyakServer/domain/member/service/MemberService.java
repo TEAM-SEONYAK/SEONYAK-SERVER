@@ -198,8 +198,8 @@ public class MemberService {
     // 인증번호 일치 여부 확인
     public void verifyCode(VerifyCodeRequest verifyCodeRequest) {
         String number = verifyCodeRequest.phoneNumber().replaceAll("-", "");
-        if (verifyCodeRequest.verificationCode().equals(
-                codeService.findCodeByPhoneNumber(number))) {
+
+        if (verifyCodeRequest.verificationCode().equals(codeService.findCodeByPhoneNumber(number))) {
             codeService.deleteVerificationCode(number);
 
             // 휴대전화 중복 체크
