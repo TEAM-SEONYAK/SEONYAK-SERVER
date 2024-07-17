@@ -1,6 +1,7 @@
 package org.sopt.seonyakServer.domain.member.service;
 
 import jakarta.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
@@ -28,6 +29,7 @@ import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -213,5 +215,12 @@ public class MemberService {
         if (memberRepository.existsByPhoneNumber(phoneNumber)) {
             throw new CustomException(ErrorType.PHONE_NUMBER_DUP_ERROR);
         }
+    }
+
+    @Scheduled(fixedRate = 43200000) // 12시간마다 실행 (43200000 밀리초)
+    @Transactional
+    public void deleteMembersWithNullPhoneNumber() {
+        LocalDateTime oneHourAgo = LocalDateTime.now().minusMinutes(60);
+        memberRepository.deleteByPhoneNumberIsNullAndUpdatedAtBefore(oneHourAgo);
     }
 }
