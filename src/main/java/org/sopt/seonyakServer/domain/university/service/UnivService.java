@@ -1,6 +1,8 @@
 package org.sopt.seonyakServer.domain.university.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.university.dto.SearchDeptResponse;
@@ -36,8 +38,10 @@ public class UnivService {
         }
 
         List<Department> departments = deptRepository.findByUnivIdAndDeptNameContaining(univName, deptName);
+        Set<String> uniqueDeptNames = new HashSet<>();
 
         return departments.stream()
+                .filter(department -> uniqueDeptNames.add(department.getDeptName()))
                 .map(department -> SearchDeptResponse.of(
                         department.getDeptName(),
                         department.isClosed())
