@@ -155,13 +155,12 @@ public class AppointmentService {
         String company = null, position = null, detailPosition = null, level = null;
         String date = null, startTime = null, endTime = null;
 
-        Member member = appointment.getMember();
-        Senior senior = appointment.getSenior();
-        Member seniorMember = senior.getMember();
         DateTimeRange dateTimeRange = appointment.getTimeList().get(0);
 
         // 선배/후배에 따른 분기 처리
         if (user.getSenior() == null) {
+            Senior senior = appointment.getSenior();
+            Member seniorMember = senior.getMember();
             nickname = seniorMember.getNickname();
             image = seniorMember.getImage();
             field = seniorMember.getField();
@@ -170,6 +169,7 @@ public class AppointmentService {
             detailPosition = senior.getDetailPosition();
             level = senior.getLevel();
         } else {
+            Member member = appointment.getMember();
             nickname = member.getNickname();
             image = member.getImage();
             field = member.getField();
