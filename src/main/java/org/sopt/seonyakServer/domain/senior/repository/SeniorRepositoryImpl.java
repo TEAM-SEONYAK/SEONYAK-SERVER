@@ -24,6 +24,7 @@ public class SeniorRepositoryImpl implements SeniorRepositoryCustom {
                 .select(Projections.fields(SeniorListResponse.class,
                         senior.id.as("seniorId"),
                         senior.company,
+                        senior.member.image,
                         senior.position,
                         senior.detailPosition,
                         senior.member.nickname,
