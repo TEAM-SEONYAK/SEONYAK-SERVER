@@ -3,7 +3,7 @@ package org.sopt.seonyakServer.domain.senior.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorCardProfileResponse;
-import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponseWrapper;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
 import org.sopt.seonyakServer.domain.senior.model.PreferredTimeList;
@@ -40,11 +40,14 @@ public class SeniorController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<SeniorListResponse>> searchFieldPosition(
+    public ResponseEntity<SeniorListResponseWrapper> searchFieldPosition(
             @RequestParam(required = false) final List<String> field,
             @RequestParam(required = false) final List<String> position
     ) {
-        return ResponseEntity.ok(seniorService.searchSeniorFieldPosition(field, position));
+        SeniorListResponseWrapper seniorListResponseWrapper = new SeniorListResponseWrapper(
+                seniorService.searchSeniorFieldPosition(field, position)
+        );
+        return ResponseEntity.ok(seniorListResponseWrapper);
     }
 
     @GetMapping("/{seniorId}")
