@@ -1,9 +1,14 @@
 package org.sopt.seonyakServer.domain.appointment.service;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
@@ -25,6 +30,7 @@ import org.sopt.seonyakServer.domain.senior.repository.SeniorRepository;
 import org.sopt.seonyakServer.global.auth.PrincipalHandler;
 import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +42,22 @@ public class AppointmentService {
     private final SeniorRepository seniorRepository;
     private final MemberRepository memberRepository;
     private final PrincipalHandler principalHandler;
+
+    private DefaultMessageService defaultMessageService;
+
+    @Value("${coolsms.api.key}")
+    private String apiKey;
+
+    @Value("${coolsms.api.secret}")
+    private String apiSecret;
+
+    @Value("${coolsms.fromNumber}")
+    private String fromNumber;
+
+    @PostConstruct
+    public void init() {
+        this.defaultMessageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
+    }
 
     @Transactional
     public void postAppointment(AppointmentRequest appointmentRequest) {
@@ -70,8 +92,13 @@ public class AppointmentService {
         );
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
+        // 확정 대기 상태의 약속이 아닌 경우
+        if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING) {
+            throw new CustomException(ErrorType.NOT_PENDING_APPOINTMENT_ERROR);
+        }
+
         // 약속의 선배 Id와 토큰 Id가 일치하지 않는 경우
-        if (!Objects.equals(member.getId(), appointment.getSenior().getId())) {
+        if (!Objects.equals(member.getId(), appointment.getSenior().getMember().getId())) {
             throw new CustomException(ErrorType.NOT_AUTHORIZATION_ACCEPT);
         }
 
@@ -81,6 +108,11 @@ public class AppointmentService {
                 AppointmentStatus.SCHEDULED
         );
         appointmentRepository.save(appointment);
+
+        sendNoticeMessage(
+                appointment.getMember(),
+                " 후배님의 약속 신청이 수락되었습니다.\n나의 약속에서 자세한 정보를 확인해 주세요."
+        );
     }
 
     @Transactional
@@ -90,8 +122,13 @@ public class AppointmentService {
         );
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
+        // 확정 대기 상태의 약속이 아닌 경우
+        if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING) {
+            throw new CustomException(ErrorType.NOT_PENDING_APPOINTMENT_ERROR);
+        }
+        
         // 약속의 선배 Id와 토큰 Id가 일치하지 않는 경우
-        if (!Objects.equals(member.getId(), appointment.getSenior().getId())) {
+        if (!Objects.equals(member.getId(), appointment.getSenior().getMember().getId())) {
             throw new CustomException(ErrorType.NOT_AUTHORIZATION_REJECT);
         }
 
@@ -101,6 +138,21 @@ public class AppointmentService {
                 AppointmentStatus.REJECTED
         );
         appointmentRepository.save(appointment);
+
+        sendNoticeMessage(
+                appointment.getMember(),
+                " 후배님의 약속 신청이 다음 사유로 인해 거절되었습니다.\n거절 사유: " + appointment.getRejectReason()
+        );
+    }
+
+    public void sendNoticeMessage(Member member, String messageDetail) {
+        Message message = new Message();
+
+        message.setFrom(fromNumber);
+        message.setTo(member.getPhoneNumber());
+        message.setText("[선약] " + member.getNickname() + messageDetail);
+
+        this.defaultMessageService.sendOne(new SingleMessageSendingRequest(message));
     }
 
     @Transactional(readOnly = true)

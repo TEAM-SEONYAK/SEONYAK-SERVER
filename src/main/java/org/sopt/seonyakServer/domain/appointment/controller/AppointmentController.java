@@ -1,6 +1,7 @@
 package org.sopt.seonyakServer.domain.appointment.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
@@ -35,7 +36,7 @@ public class AppointmentController {
 
     @PatchMapping("/appointment/accept")
     public ResponseEntity<Void> acceptAppointment(
-            @RequestBody AppointmentAcceptRequest appointmentAcceptRequest
+            @Valid @RequestBody AppointmentAcceptRequest appointmentAcceptRequest
     ) {
         appointmentService.acceptAppointment(appointmentAcceptRequest);
         return ResponseEntity.ok().build();
@@ -43,7 +44,7 @@ public class AppointmentController {
 
     @PatchMapping("/appointment/reject")
     public ResponseEntity<Void> rejectAppointment(
-            @RequestBody AppointmentRejectRequest appointmentRejectRequest
+            @Valid @RequestBody AppointmentRejectRequest appointmentRejectRequest
     ) {
         appointmentService.rejectAppointment(appointmentRejectRequest);
         return ResponseEntity.ok().build();
