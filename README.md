@@ -1,6 +1,7 @@
 # ☀️💊 SEONYAK (선약)
 
-![Main_Image_Seonyak](https://github.com/TEAM-SEONYAK/SEONYAK-SERVER/assets/81475587/b6c2d246-3281-4a5f-9134-3c15915e69a0)
+<img width="1920" alt="SeonyakThumbnail" src="https://github.com/user-attachments/assets/dae4d7c4-8973-401e-9cda-7b505d9443d6">
+
 
 ```
 " 더 큰 세상에서 걸음마를 뗄 후배들이 선배의 손을 잡고 뛸 수 있도록 "
@@ -221,3 +222,9 @@ ex) 코드 리뷰 간 참고사항, 질문 등 -->
 │
 └── SeonyakServerApplication.java
 ```
+
+<br/>
+
+## 3. **Architecture**
+
+![제목 없는 다이어그램 drawio](https://github.com/user-attachments/assets/6b03d4e2-2d1b-4503-a26e-0a2fe8ebd1d1)
