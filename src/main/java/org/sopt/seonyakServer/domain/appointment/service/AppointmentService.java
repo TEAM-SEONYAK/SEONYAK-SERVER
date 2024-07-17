@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -36,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -107,7 +109,6 @@ public class AppointmentService {
                 appointmentAcceptRequest.googleMeetLink(),
                 AppointmentStatus.SCHEDULED
         );
-        appointmentRepository.save(appointment);
 
         sendNoticeMessage(
                 appointment.getMember(),
@@ -126,7 +127,7 @@ public class AppointmentService {
         if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING) {
             throw new CustomException(ErrorType.NOT_PENDING_APPOINTMENT_ERROR);
         }
-        
+
         // 약속의 선배 Id와 토큰 Id가 일치하지 않는 경우
         if (!Objects.equals(member.getId(), appointment.getSenior().getMember().getId())) {
             throw new CustomException(ErrorType.NOT_AUTHORIZATION_REJECT);
@@ -137,7 +138,6 @@ public class AppointmentService {
                 appointmentRejectRequest.rejectDetail(),
                 AppointmentStatus.REJECTED
         );
-        appointmentRepository.save(appointment);
 
         sendNoticeMessage(
                 appointment.getMember(),
@@ -155,8 +155,9 @@ public class AppointmentService {
         this.defaultMessageService.sendOne(new SingleMessageSendingRequest(message));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public GoogleMeetLinkResponse getGoogleMeetLink(Long appointmentId) {
+        log.info(principalHandler.getUserIdFromPrincipal().toString());
         Long userId = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getId();
 
         Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
@@ -173,11 +174,13 @@ public class AppointmentService {
             throw new CustomException(ErrorType.NOT_FOUND_GOOGLE_MEET_LINK_ERROR);
         }
 
+        appointment.pastAppointment();
         return GoogleMeetLinkResponse.of(googleMeetLink);
     }
 
     @Transactional(readOnly = true)
     public AppointmentResponse getAppointment() {
+
         Member user = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
         AppointmentCardList appointmentCardList = new AppointmentCardList();
         List<Appointment> appointmentList;
