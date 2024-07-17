@@ -44,7 +44,7 @@ public class Appointment extends BaseTimeEntity {
 
     @Column(name = "time_list", columnDefinition = "jsonb", nullable = false)
     @JdbcTypeCode(SqlTypes.JSON)
-    private List<DataTimeRange> timeList;
+    private List<DateTimeRange> timeList;
 
     @Column(name = "topic")
     @JdbcTypeCode(SqlTypes.JSON)
@@ -71,7 +71,7 @@ public class Appointment extends BaseTimeEntity {
             Member member,
             Senior senior,
             AppointmentStatus appointmentStatus,
-            List<DataTimeRange> timeList,
+            List<DateTimeRange> timeList,
             List<String> topic,
             String personalTopic
     ) {
@@ -87,7 +87,7 @@ public class Appointment extends BaseTimeEntity {
             Member member,
             Senior senior,
             AppointmentStatus appointmentStatus,
-            List<DataTimeRange> timeList,
+            List<DateTimeRange> timeList,
             List<String> topic,
             String personalTopic
     ) {
@@ -102,7 +102,7 @@ public class Appointment extends BaseTimeEntity {
     }
 
     public void acceptAppointment(
-            List<DataTimeRange> timeList,
+            List<DateTimeRange> timeList,
             String googleMeetLink,
             AppointmentStatus appointmentStatus
     ) {

@@ -14,4 +14,12 @@ public enum AppointmentStatus {
     REJECTED("REJECTED");
 
     private final String appointmentStatus;
+
+    public boolean isScheduledOrPast() {
+        return this == SCHEDULED || this == PAST;
+    }
+
+    public boolean isPastOrRejected() {
+        return this == PAST || this == REJECTED;
+    }
 }

@@ -7,6 +7,7 @@ import org.sopt.seonyakServer.domain.appointment.dto.AppointmentAcceptRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentDetailResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRejectRequest;
 import org.sopt.seonyakServer.domain.appointment.dto.AppointmentRequest;
+import org.sopt.seonyakServer.domain.appointment.dto.AppointmentResponse;
 import org.sopt.seonyakServer.domain.appointment.dto.GoogleMeetLinkResponse;
 import org.sopt.seonyakServer.domain.appointment.service.AppointmentService;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,11 @@ public class AppointmentController {
             @PathVariable final Long appointmentId
     ) {
         return ResponseEntity.ok(appointmentService.getGoogleMeetLink(appointmentId));
+    }
+
+    @GetMapping("/appointment")
+    public ResponseEntity<AppointmentResponse> getAppointment() {
+        return ResponseEntity.ok(appointmentService.getAppointment());
     }
 
     @GetMapping("/appointment/{appointmentId}")
