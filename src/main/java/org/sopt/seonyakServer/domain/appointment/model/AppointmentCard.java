@@ -32,6 +32,8 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
 
     @JsonIgnore
     private LocalDateTime createdAt;
+
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
     @Builder(access = AccessLevel.PRIVATE)
