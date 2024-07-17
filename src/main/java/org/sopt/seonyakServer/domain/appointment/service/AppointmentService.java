@@ -87,6 +87,11 @@ public class AppointmentService {
         );
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
+        // 확정 대기 상태의 약속이 아닌 경우
+        if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING) {
+            throw new CustomException(ErrorType.NOT_PENDING_APPOINTMENT_ERROR);
+        }
+
         // 약속의 선배 Id와 토큰 Id가 일치하지 않는 경우
         if (!Objects.equals(member.getId(), appointment.getSenior().getMember().getId())) {
             throw new CustomException(ErrorType.NOT_AUTHORIZATION_ACCEPT);
@@ -112,6 +117,11 @@ public class AppointmentService {
         );
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
+        // 확정 대기 상태의 약속이 아닌 경우
+        if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING) {
+            throw new CustomException(ErrorType.NOT_PENDING_APPOINTMENT_ERROR);
+        }
+        
         // 약속의 선배 Id와 토큰 Id가 일치하지 않는 경우
         if (!Objects.equals(member.getId(), appointment.getSenior().getMember().getId())) {
             throw new CustomException(ErrorType.NOT_AUTHORIZATION_REJECT);
