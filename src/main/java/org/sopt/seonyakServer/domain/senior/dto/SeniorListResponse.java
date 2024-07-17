@@ -12,6 +12,7 @@ public class SeniorListResponse {
     private Long seniorId;
     private String nickname;
     private String company;
+    private String image;
     private String position;
     private String detailPosition;
     private String field;
@@ -21,6 +22,7 @@ public class SeniorListResponse {
             final Long seniorId,
             final String nickname,
             final String company,
+            final String image,
             final String position,
             final String detailPosition,
             final String field,
@@ -29,6 +31,7 @@ public class SeniorListResponse {
                 seniorId,
                 nickname,
                 company,
+                image,
                 position,
                 detailPosition,
                 field,
