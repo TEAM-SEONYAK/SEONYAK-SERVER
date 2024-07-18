@@ -1,6 +1,7 @@
 package org.sopt.seonyakServer.domain.member.service;
 
 import jakarta.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
@@ -28,6 +29,7 @@ import org.sopt.seonyakServer.global.exception.enums.ErrorType;
 import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +63,7 @@ public class MemberService {
     }
 
     // JWT Access Token 생성
+    @Transactional
     public LoginSuccessResponse create(
             final String authorizationCode,
             final MemberLoginRequest loginRequest
@@ -71,7 +74,7 @@ public class MemberService {
     }
 
     // 소셜 플랫폼으로부터 해당 유저 정보를 받아옴
-    public MemberInfoResponse getMemberInfoResponse(
+    private MemberInfoResponse getMemberInfoResponse(
             final String authorizationCode,
             final MemberLoginRequest loginRequest
     ) {
@@ -104,14 +107,14 @@ public class MemberService {
         }
     }
 
-    public boolean isExistingMember(
+    private boolean isExistingMember(
             final SocialType socialType,
             final String socialId
     ) {
         return memberRepository.findBySocialTypeAndSocialId(socialType, socialId).isPresent();
     }
 
-    public Long getMemberIdBySocialId(
+    private Long getMemberIdBySocialId(
             final SocialType socialType,
             final String socialId
     ) {
@@ -122,13 +125,14 @@ public class MemberService {
         return member.getId();
     }
 
-    public LoginSuccessResponse getTokenByMemberId(final Long id) {
+    private LoginSuccessResponse getTokenByMemberId(final Long id) {
         MemberAuthentication memberAuthentication = new MemberAuthentication(id, null, null);
 
         return LoginSuccessResponse.of(jwtTokenProvider.issueAccessToken(memberAuthentication));
     }
 
     // 닉네임 유효성 검증
+    @Transactional(readOnly = true)
     public void validNickname(final NicknameRequest nicknameRequest) {
         if (!nicknameRequest.nickname().matches(NICKNAME_PATTERN)) { // 형식 체크
             throw new CustomException(ErrorType.INVALID_NICKNAME_ERROR);
@@ -166,6 +170,7 @@ public class MemberService {
         );
     }
 
+    @Transactional
     public void sendMessage(SendCodeRequest sendCodeRequest) {
         Message message = new Message();
 
@@ -196,6 +201,7 @@ public class MemberService {
     }
 
     // 인증번호 일치 여부 확인
+    @Transactional
     public void verifyCode(VerifyCodeRequest verifyCodeRequest) {
         String number = verifyCodeRequest.phoneNumber().replaceAll("-", "");
 
@@ -213,5 +219,12 @@ public class MemberService {
         if (memberRepository.existsByPhoneNumber(phoneNumber)) {
             throw new CustomException(ErrorType.PHONE_NUMBER_DUP_ERROR);
         }
+    }
+
+    @Scheduled(fixedRate = 43200000) // 12시간마다 실행 (43200000 밀리초)
+    @Transactional
+    public void deleteMembersWithNullPhoneNumber() {
+        LocalDateTime oneHourAgo = LocalDateTime.now().minusMinutes(60);
+        memberRepository.deleteByPhoneNumberIsNullAndUpdatedAtBefore(oneHourAgo);
     }
 }
