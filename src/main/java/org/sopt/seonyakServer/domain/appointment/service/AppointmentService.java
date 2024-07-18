@@ -171,7 +171,7 @@ public class AppointmentService {
             throw new CustomException(ErrorType.NOT_FOUND_GOOGLE_MEET_LINK_ERROR);
         }
 
-        appointment.pastAppointment();
+        appointment.setAppointmentPast();
         return GoogleMeetLinkResponse.of(googleMeetLink);
     }
 
