@@ -120,4 +120,8 @@ public class Appointment extends BaseTimeEntity {
         this.rejectDetail = rejectDetail;
         this.appointmentStatus = appointmentStatus;
     }
+
+    public void setAppointmentPast() {
+        this.appointmentStatus = AppointmentStatus.PAST;
+    }
 }
