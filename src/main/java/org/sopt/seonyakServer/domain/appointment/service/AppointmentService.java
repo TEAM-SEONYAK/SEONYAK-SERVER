@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -37,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -157,7 +155,6 @@ public class AppointmentService {
 
     @Transactional
     public GoogleMeetLinkResponse getGoogleMeetLink(Long appointmentId) {
-        log.info(principalHandler.getUserIdFromPrincipal().toString());
         Long userId = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getId();
 
         Appointment appointment = appointmentRepository.findAppointmentByIdOrThrow(appointmentId);
@@ -191,7 +188,6 @@ public class AppointmentService {
         } else {
             appointmentList = appointmentRepository.findAllAppointmentBySenior(user.getSenior());
         }
-
         for (Appointment appointment : appointmentList) {
             appointmentCardList.putAppointmentCardList(
                     appointment.getAppointmentStatus(),
