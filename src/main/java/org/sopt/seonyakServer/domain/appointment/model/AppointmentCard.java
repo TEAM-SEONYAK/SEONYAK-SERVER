@@ -16,6 +16,7 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
 
     private Long appointmentId;
     private AppointmentStatus appointmentStatus;
+    private Long seniorId;
     private String nickname;
     private String image;
     private String field;
@@ -40,6 +41,7 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
     private AppointmentCard(
             Long appointmentId,
             AppointmentStatus appointmentStatus,
+            Long seniorId,
             String nickname,
             String image,
             String field,
@@ -58,6 +60,7 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
     ) {
         this.appointmentId = appointmentId;
         this.appointmentStatus = appointmentStatus;
+        this.seniorId = seniorId;
         this.nickname = nickname;
         this.image = image;
         this.field = field;
@@ -99,6 +102,7 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
     public static AppointmentCard create(
             Long appointmentId,
             AppointmentStatus appointmentStatus,
+            Long seniorId,
             String nickname,
             String image,
             String field,
@@ -118,6 +122,7 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
         return AppointmentCard.builder()
                 .appointmentId(appointmentId)
                 .appointmentStatus(appointmentStatus)
+                .seniorId(seniorId)
                 .nickname(nickname)
                 .image(image)
                 .field(field)
