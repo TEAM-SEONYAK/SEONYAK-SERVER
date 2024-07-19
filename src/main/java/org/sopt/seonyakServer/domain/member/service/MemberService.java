@@ -184,7 +184,7 @@ public class MemberService {
         memberRepository.save(member);
 
         Long seniorId = null;
-        if (memberJoinRequest.role().equals("SENIOR")) {
+        if ("SENIOR".equals(memberJoinRequest.role())) {
             member.addSenior(seniorService.createSenior(memberJoinRequest, member));
             seniorId = member.getSenior().getId();
         }
