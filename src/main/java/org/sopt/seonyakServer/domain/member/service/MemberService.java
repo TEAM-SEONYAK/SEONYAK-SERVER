@@ -184,13 +184,13 @@ public class MemberService {
         memberRepository.save(member);
 
         Long seniorId = null;
-        if ("SENIOR".equals(memberJoinRequest.role())) {
+        if ("SENIOR".equals(memberJoinRequest.userType())) {
             member.addSenior(seniorService.createSenior(memberJoinRequest, member));
             seniorId = member.getSenior().getId();
         }
         return MemberJoinResponse.of(
                 seniorId,
-                memberJoinRequest.role()
+                memberJoinRequest.userType()
         );
     }
 
