@@ -9,8 +9,6 @@ import org.sopt.seonyakServer.global.common.external.client.dto.MemberInfoRespon
 import org.sopt.seonyakServer.global.common.external.client.dto.MemberLoginRequest;
 import org.sopt.seonyakServer.global.common.external.client.google.GoogleAccessTokenClient;
 import org.sopt.seonyakServer.global.common.external.client.google.GoogleUserClient;
-import org.sopt.seonyakServer.global.exception.enums.ErrorType;
-import org.sopt.seonyakServer.global.exception.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +61,7 @@ public class GoogleSocialService implements SocialService {
                 authorizationCode,
                 clientId,
                 clientSecret,
-                redirectUri,
+                "postmessage",
                 GRANT_TYPE
         ).accessToken();
     }

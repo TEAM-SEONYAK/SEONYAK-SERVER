@@ -172,6 +172,8 @@ public class MemberService {
     @Transactional
     public MemberJoinResponse patchMemberJoin(MemberJoinRequest memberJoinRequest) {
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
+        log.info("handler id: " + principalHandler.getUserIdFromPrincipal());
+        log.info("member id: " + member.getId());
         member.updateMember(
                 memberJoinRequest.isSubscribed(),
                 memberJoinRequest.nickname(),
@@ -181,8 +183,6 @@ public class MemberService {
                 memberJoinRequest.field(),
                 memberJoinRequest.departmentList()
         );
-
-        memberRepository.save(member);
 
         Long seniorId = null;
         String role = null;
