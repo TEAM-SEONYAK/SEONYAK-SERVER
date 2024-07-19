@@ -66,14 +66,12 @@ public class Senior extends BaseTimeEntity {
     @Builder(access = AccessLevel.PRIVATE)
     private Senior(
             Member member,
-            String businessCard,
             String detailPosition,
             String company,
             String position,
             String level
     ) {
         this.member = member;
-        this.businessCard = businessCard;
         this.detailPosition = detailPosition;
         this.company = company;
         this.position = position;
@@ -82,7 +80,6 @@ public class Senior extends BaseTimeEntity {
 
     public static Senior create(
             Member member,
-            String businessCard,
             String detailPosition,
             String company,
             String position,
@@ -90,7 +87,6 @@ public class Senior extends BaseTimeEntity {
     ) {
         return Senior.builder()
                 .member(member)
-                .businessCard(businessCard)
                 .detailPosition(detailPosition)
                 .company(company)
                 .position(position)
@@ -110,5 +106,11 @@ public class Senior extends BaseTimeEntity {
         this.award = award;
         this.story = story;
         this.preferredTimeList = preferredTimeList;
+    }
+
+    public void addBusinessCard(
+            String businessCard
+    ) {
+        this.businessCard = businessCard;
     }
 }
