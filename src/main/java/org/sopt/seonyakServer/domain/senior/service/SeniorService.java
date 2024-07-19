@@ -33,9 +33,10 @@ public class SeniorService {
 
         Senior senior = Senior.create(
                 member,
-                memberJoinRequest.detailPosition(),
+                memberJoinRequest.businessCard(),
                 memberJoinRequest.company(),
                 memberJoinRequest.position(),
+                memberJoinRequest.detailPosition(),
                 memberJoinRequest.level()
         );
 

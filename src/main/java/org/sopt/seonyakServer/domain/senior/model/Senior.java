@@ -32,7 +32,7 @@ public class Senior extends BaseTimeEntity {
     @JoinColumn(name = "member_id", referencedColumnName = "id", nullable = false)
     private Member member;
 
-    @Column(name = "business_card", nullable = false)
+    @Column(name = "business_card", nullable = false) // nullable을 true로 바꾸고 ddl create로 한 번 밀어야 함
     private String businessCard;
 
     @Column(name = "company")
@@ -66,30 +66,34 @@ public class Senior extends BaseTimeEntity {
     @Builder(access = AccessLevel.PRIVATE)
     private Senior(
             Member member,
-            String detailPosition,
+            String businessCard,
             String company,
             String position,
+            String detailPosition,
             String level
     ) {
         this.member = member;
-        this.detailPosition = detailPosition;
+        this.businessCard = businessCard;
         this.company = company;
         this.position = position;
+        this.detailPosition = detailPosition;
         this.level = level;
     }
 
     public static Senior create(
             Member member,
-            String detailPosition,
+            String businessCard,
             String company,
             String position,
+            String detailPosition,
             String level
     ) {
         return Senior.builder()
                 .member(member)
-                .detailPosition(detailPosition)
+                .businessCard(businessCard)
                 .company(company)
                 .position(position)
+                .detailPosition(detailPosition)
                 .level(level)
                 .build();
     }

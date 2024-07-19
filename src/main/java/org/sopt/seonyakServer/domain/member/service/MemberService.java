@@ -174,6 +174,7 @@ public class MemberService {
         member.updateMember(
                 memberJoinRequest.isSubscribed(),
                 memberJoinRequest.nickname(),
+                memberJoinRequest.image(),
                 memberJoinRequest.phoneNumber(),
                 memberJoinRequest.univName(),
                 memberJoinRequest.field(),

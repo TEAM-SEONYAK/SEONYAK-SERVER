@@ -93,6 +93,7 @@ public class Member extends BaseTimeEntity {
     public void updateMember(
             Boolean isSubscribed,
             String nickname,
+            String image,
             String phoneNumber,
             String univName,
             String field,
@@ -103,6 +104,9 @@ public class Member extends BaseTimeEntity {
         }
         if (nickname != null) {
             this.nickname = nickname;
+        }
+        if (image != null) {
+            this.image = image;
         }
         if (phoneNumber != null) {
             this.phoneNumber = phoneNumber;
