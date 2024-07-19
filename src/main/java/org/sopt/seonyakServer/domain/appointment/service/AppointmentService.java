@@ -200,6 +200,7 @@ public class AppointmentService {
 
     private AppointmentCard createAppointmentCard(Member user, Appointment appointment) {
         // init
+        Long seniorId = null;
         String nickname, image, field, department = null;
         List<String> topic = null;
         String personalTopic = null;
@@ -212,6 +213,7 @@ public class AppointmentService {
         if (user.getSenior() == null) {
             Senior senior = appointment.getSenior();
             Member seniorMember = senior.getMember();
+            seniorId = senior.getId();
             nickname = seniorMember.getNickname();
             image = seniorMember.getImage();
             field = seniorMember.getField();
@@ -245,6 +247,7 @@ public class AppointmentService {
         return AppointmentCard.create(
                 appointment.getId(),
                 appointment.getAppointmentStatus(),
+                seniorId,
                 nickname,
                 image,
                 field,
