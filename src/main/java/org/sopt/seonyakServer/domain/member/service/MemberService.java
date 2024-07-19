@@ -170,7 +170,6 @@ public class MemberService {
     @Transactional
     public MemberJoinResponse patchMemberJoin(MemberJoinRequest memberJoinRequest) {
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
-
         member.updateMember(
                 memberJoinRequest.isSubscribed(),
                 memberJoinRequest.nickname(),
@@ -184,13 +183,19 @@ public class MemberService {
         memberRepository.save(member);
 
         Long seniorId = null;
-        if ("SENIOR".equals(memberJoinRequest.userType())) {
+        String role = null;
+        if (memberJoinRequest.userType() == 1) {
+            role = "SENIOR";
+        } else {
+            role = "JUNIOR";
+        }
+        if ("SENIOR".equals(role)) {
             member.addSenior(seniorService.createSenior(memberJoinRequest, member));
             seniorId = member.getSenior().getId();
         }
         return MemberJoinResponse.of(
                 seniorId,
-                memberJoinRequest.userType()
+                role
         );
     }
 
