@@ -88,8 +88,24 @@ public class MemberService {
     private LoginSuccessResponse getTokenDto(final MemberInfoResponse memberInfoResponse) {
         try {
             if (isExistingMember(memberInfoResponse.socialType(), memberInfoResponse.socialId())) {
+                Member member = memberRepository.findBySocialTypeAndSocialIdOrThrow(
+                        memberInfoResponse.socialType(),
+                        memberInfoResponse.socialId()
+                );
+
+                String role = null;
+
+                if (member.getSenior() == null) {
+                    if (member.getCreatedAt() != member.getUpdatedAt()) { // update 내역이 있을 경우 이미 가입한 사용자로 판단
+                        role = "JUNIOR";
+                    }
+                } else {
+                    role = "SENIOR";
+                }
+
                 return getTokenByMemberId(
-                        getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
+                        role,
+                        member.getId()
                 );
             } else {
                 Member member = Member.create(
@@ -98,11 +114,27 @@ public class MemberService {
                         memberInfoResponse.email()
                 );
 
-                return getTokenByMemberId(memberRepository.save(member).getId());
+                return getTokenByMemberId(null, memberRepository.save(member).getId());
             }
         } catch (DataIntegrityViolationException e) { // DB 무결성 제약 조건 위반 예외
+            Member member = memberRepository.findBySocialTypeAndSocialIdOrThrow(
+                    memberInfoResponse.socialType(),
+                    memberInfoResponse.socialId()
+            );
+
+            String role = null;
+
+            if (member.getSenior() == null) {
+                if (member.getCreatedAt() != member.getUpdatedAt()) { // update 내역이 있을 경우 이미 가입한 사용자로 판단
+                    role = "JUNIOR";
+                }
+            } else {
+                role = "SENIOR";
+            }
+
             return getTokenByMemberId(
-                    getMemberIdBySocialId(memberInfoResponse.socialType(), memberInfoResponse.socialId())
+                    role,
+                    member.getId()
             );
         }
     }
@@ -114,21 +146,13 @@ public class MemberService {
         return memberRepository.findBySocialTypeAndSocialId(socialType, socialId).isPresent();
     }
 
-    private Long getMemberIdBySocialId(
-            final SocialType socialType,
-            final String socialId
+    public LoginSuccessResponse getTokenByMemberId(
+            final String role,
+            final Long id
     ) {
-        Member member = memberRepository.findBySocialTypeAndSocialId(socialType, socialId).orElseThrow(
-                () -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR)
-        );
-
-        return member.getId();
-    }
-
-    private LoginSuccessResponse getTokenByMemberId(final Long id) {
         MemberAuthentication memberAuthentication = new MemberAuthentication(id, null, null);
 
-        return LoginSuccessResponse.of(jwtTokenProvider.issueAccessToken(memberAuthentication));
+        return LoginSuccessResponse.of(role, jwtTokenProvider.issueAccessToken(memberAuthentication));
     }
 
     // 닉네임 유효성 검증

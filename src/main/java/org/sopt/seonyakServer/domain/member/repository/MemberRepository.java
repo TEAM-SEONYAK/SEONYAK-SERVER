@@ -18,6 +18,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByPhoneNumber(String phoneNumber);
 
+    default Member findBySocialTypeAndSocialIdOrThrow(SocialType socialType, String socialId) {
+        return findBySocialTypeAndSocialId(socialType, socialId)
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR));
+    }
+
     default Member findMemberByIdOrThrow(Long id) {
         return findMemberById(id)
                 .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_MEMBER_ERROR));
