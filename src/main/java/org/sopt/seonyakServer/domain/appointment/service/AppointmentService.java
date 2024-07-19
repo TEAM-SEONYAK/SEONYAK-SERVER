@@ -115,7 +115,7 @@ public class AppointmentService {
 
         sendNoticeMessage(
                 appointment.getMember(),
-                " 후배님의 약속 신청이 수락되었습니다.\n나의 약속에서 자세한 정보를 확인해 주세요."
+                "' 선배님이 약속을 수락하셨습니다."
         );
     }
 
@@ -144,7 +144,7 @@ public class AppointmentService {
 
         sendNoticeMessage(
                 appointment.getMember(),
-                " 후배님의 약속 신청이 다음 사유로 인해 거절되었습니다.\n거절 사유: " + appointment.getRejectReason()
+                "' 선배님이 약속을 거절하셨습니다."
         );
     }
 
