@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -35,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -184,6 +186,7 @@ public class MemberService {
 
         Long seniorId = null;
         String role = null;
+        log.info("userType: " + memberJoinRequest.userType());
         if (memberJoinRequest.userType() == 1) {
             role = "SENIOR";
         } else {
