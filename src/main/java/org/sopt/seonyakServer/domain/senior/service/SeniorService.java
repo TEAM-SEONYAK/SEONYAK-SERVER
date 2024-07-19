@@ -7,7 +7,7 @@ import org.sopt.seonyakServer.domain.member.dto.MemberJoinRequest;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorCardProfileResponse;
-import org.sopt.seonyakServer.domain.senior.dto.SeniorListResponse;
+import org.sopt.seonyakServer.domain.senior.dto.SeniorFilterResponse;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileRequest;
 import org.sopt.seonyakServer.domain.senior.dto.SeniorProfileResponse;
 import org.sopt.seonyakServer.domain.senior.model.PreferredTimeList;
@@ -65,8 +65,10 @@ public class SeniorService {
     }
 
     @Transactional(readOnly = true)
-    public List<SeniorListResponse> searchSeniorFieldPosition(List<String> field, List<String> position) {
-        return seniorRepository.searchSeniorFieldPosition(field, position);
+    public SeniorFilterResponse searchSeniorFieldPosition(List<String> field, List<String> position) {
+        Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
+        return SeniorFilterResponse.of(member.getNickname(),
+                seniorRepository.searchSeniorFieldPosition(field, position));
     }
 
     @Transactional(readOnly = true)
