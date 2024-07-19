@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080", "http://localhost:8081", "http://localhost:5173",
-                        "https://api.seonyak-dev.kro.kr", "https://www.seonyak.com")
+                        "https://www.seonyak.com", "https://api.seonyak.com")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true)
