@@ -35,7 +35,7 @@ public class MemberController {
 
     @PatchMapping("/auth/join")
     public ResponseEntity<MemberJoinResponse> join(
-            @RequestBody MemberJoinRequest memberJoinRequest
+            @Valid @RequestBody MemberJoinRequest memberJoinRequest
     ) {
         return ResponseEntity.ok(memberService.patchMemberJoin(memberJoinRequest));
     }

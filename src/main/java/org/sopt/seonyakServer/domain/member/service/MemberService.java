@@ -96,7 +96,7 @@ public class MemberService {
                 String role = null;
 
                 if (member.getSenior() == null) {
-                    if (member.getCreatedAt() != member.getUpdatedAt()) { // update 내역이 있을 경우 이미 가입한 사용자로 판단
+                    if (member.getPhoneNumber() != null) { // 멤버 엔티티에 전화번호가 없으면 온보딩을 완료하지 못한 것으로 간주
                         role = "JUNIOR";
                     }
                 } else {
@@ -125,7 +125,7 @@ public class MemberService {
             String role = null;
 
             if (member.getSenior() == null) {
-                if (member.getCreatedAt() != member.getUpdatedAt()) { // update 내역이 있을 경우 이미 가입한 사용자로 판단
+                if (member.getPhoneNumber() != null) { // 멤버 엔티티에 전화번호가 없으면 온보딩을 완료하지 못한 것으로 간주
                     role = "JUNIOR";
                 }
             } else {
@@ -184,7 +184,7 @@ public class MemberService {
         memberRepository.save(member);
 
         Long seniorId = null;
-        if (memberJoinRequest.role().equals("SENIOR")) {
+        if ("SENIOR".equals(memberJoinRequest.role())) {
             member.addSenior(seniorService.createSenior(memberJoinRequest, member));
             seniorId = member.getSenior().getId();
         }
