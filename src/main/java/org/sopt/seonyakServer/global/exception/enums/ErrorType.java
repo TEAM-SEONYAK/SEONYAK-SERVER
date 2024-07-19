@@ -41,6 +41,7 @@ public enum ErrorType {
     // S3 관련 오류
     IMAGE_EXTENSION_ERROR(HttpStatus.BAD_REQUEST, "40051", "이미지 확장자는 jpg, png, webp만 가능합니다."),
     IMAGE_SIZE_ERROR(HttpStatus.BAD_REQUEST, "40052", "이미지 사이즈는 5MB를 넘을 수 없습니다."),
+    S3_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "40053", "S3 이미지 업로드에 실패했습니다."),
 
     // 인증 관련 오류
     EMPTY_PRINCIPAL_ERROR(HttpStatus.BAD_REQUEST, "40076", "Principal 객체가 없습니다. (null)"),
