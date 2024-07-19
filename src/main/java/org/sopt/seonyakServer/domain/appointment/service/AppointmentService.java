@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -36,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -62,6 +64,8 @@ public class AppointmentService {
     @Transactional
     public void postAppointment(AppointmentRequest appointmentRequest) {
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
+        log.info("member id: " + principalHandler.getUserIdFromPrincipal());
+        log.info("senior id: " + appointmentRequest.seniorId());
         Senior senior = seniorRepository.findSeniorByIdOrThrow(appointmentRequest.seniorId());
 
         // 자기 자신에게 약속을 신청하는 경우
