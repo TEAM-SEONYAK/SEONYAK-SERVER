@@ -33,7 +33,6 @@ public class SeniorService {
 
         Senior senior = Senior.create(
                 member,
-                memberJoinRequest.businessCard(),
                 memberJoinRequest.detailPosition(),
                 memberJoinRequest.company(),
                 memberJoinRequest.position(),
@@ -89,6 +88,7 @@ public class SeniorService {
 
     @Transactional(readOnly = true)
     public SeniorCardProfileResponse getSeniorCardProfile(final Long seniorId) {
+        Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
         Senior senior = seniorRepository.findSeniorByIdOrThrow(seniorId);
 
         return SeniorCardProfileResponse.of(
@@ -97,7 +97,8 @@ public class SeniorService {
                 senior.getMember().getField(),
                 senior.getPosition(),
                 senior.getDetailPosition(),
-                senior.getLevel()
+                senior.getLevel(),
+                member.getImage()
         );
     }
 }

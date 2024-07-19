@@ -1,11 +1,15 @@
 package org.sopt.seonyakServer.global.common.external.s3;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.global.common.external.s3.dto.PreSignedUrlResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -18,4 +22,19 @@ public class S3Controller {
         return ResponseEntity.ok(s3Service.getUploadPreSignedUrl());
     }
 
+    @PatchMapping("/profile-image")
+    public ResponseEntity<Void> uploadProfileImage(
+            @RequestParam("profileImage") @Valid MultipartFile profileImage
+    ) {
+        s3Service.uploadProfile(profileImage);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/businesscard-image")
+    public ResponseEntity<Void> uploadBusinessCardImage(
+            @RequestParam("businessCardImage") @Valid MultipartFile businessCardImage
+    ) {
+        s3Service.uploadBusinessCard(businessCardImage);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -6,7 +6,8 @@ public record SeniorCardProfileResponse(
         String field,
         String position,
         String detailPosition,
-        String level
+        String level,
+        String image
 ) {
     public static SeniorCardProfileResponse of(
             final String nickname,
@@ -14,7 +15,8 @@ public record SeniorCardProfileResponse(
             final String field,
             final String position,
             final String detailPosition,
-            final String level
+            final String level,
+            final String image
     ) {
         return new SeniorCardProfileResponse(
                 nickname,
@@ -22,7 +24,8 @@ public record SeniorCardProfileResponse(
                 field,
                 position,
                 detailPosition,
-                level
+                level,
+                image
         );
     }
 }
