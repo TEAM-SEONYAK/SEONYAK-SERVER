@@ -83,6 +83,11 @@ public class AppointmentService {
                 appointmentRequest.personalTopic()
         );
         appointmentRepository.save(appointment);
+
+        sendNoticeMessage(
+                appointment.getSenior().getMember(),
+                "' 후배님이 약속을 신청하셨습니다."
+        );
     }
 
     @Transactional
@@ -148,7 +153,7 @@ public class AppointmentService {
 
         message.setFrom(fromNumber);
         message.setTo(member.getPhoneNumber());
-        message.setText("[선약] " + member.getNickname() + messageDetail);
+        message.setText("[선약] '" + member.getNickname() + messageDetail);
 
         this.defaultMessageService.sendOne(new SingleMessageSendingRequest(message));
     }
