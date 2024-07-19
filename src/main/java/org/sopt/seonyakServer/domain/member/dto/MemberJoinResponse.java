@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record MemberJoinResponse(
         Long seniorId,
-        String role
+        String userType
 ) {
     public static MemberJoinResponse of(
             final Long seniorId,
-            final String role
+            final String userType
     ) {
         return new MemberJoinResponse(
                 seniorId,
-                role
+                userType
         );
     }
 }
