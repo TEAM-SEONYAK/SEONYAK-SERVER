@@ -185,17 +185,20 @@ public class MemberService {
         );
 
         Long seniorId = null;
-        String role = null;
+        String role;
         log.info("userType: " + memberJoinRequest.userType());
+
         if (memberJoinRequest.userType() == 1) {
             role = "SENIOR";
         } else {
             role = "JUNIOR";
         }
+
         if ("SENIOR".equals(role)) {
             member.addSenior(seniorService.createSenior(memberJoinRequest, member));
             seniorId = member.getSenior().getId();
         }
+
         return MemberJoinResponse.of(
                 seniorId,
                 role
