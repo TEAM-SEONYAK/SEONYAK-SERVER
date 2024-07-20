@@ -61,7 +61,7 @@ public class GoogleSocialService implements SocialService {
                 authorizationCode,
                 clientId,
                 clientSecret,
-                "https://www.seonyak.com/login/oauth2/code/google",
+                "https://seonyak.com",
                 GRANT_TYPE
         ).accessToken();
     }
