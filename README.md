@@ -228,3 +228,9 @@ ex) 코드 리뷰 간 참고사항, 질문 등 -->
 ## 3. **Architecture**
 
 <img width="100%" alt="architecture_diagram_seonyak" src="https://github.com/user-attachments/assets/25583467-131a-48e5-8a2a-4a9631a6e0c6">
+
+<br/>
+
+## 4. **ERD**
+
+<img width="100%" alt="erd_seonyak" src="https://github.com/user-attachments/assets/650039e6-f084-47f4-9ca1-6c1c9ce854f5">
