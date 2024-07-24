@@ -61,7 +61,7 @@ public class GoogleSocialService implements SocialService {
                 authorizationCode,
                 clientId,
                 clientSecret,
-                "postmessage",
+                redirectUri,
                 GRANT_TYPE
         ).accessToken();
     }
