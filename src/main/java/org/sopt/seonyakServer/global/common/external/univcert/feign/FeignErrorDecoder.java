@@ -24,6 +24,8 @@ public class FeignErrorDecoder implements ErrorDecoder {
             try {
                 String body = (String) stringDecoder.decode(response, String.class);
 
+                log.debug(body);
+
                 // 응답결과 JSON 파싱
                 JSONObject jsonObject = new JSONObject(body);
                 message = jsonObject.optString("message", "message 필드가 존재하지 않습니다.");
