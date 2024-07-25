@@ -36,6 +36,7 @@ public enum ErrorType {
     NOT_VALID_OCR_IMAGE(HttpStatus.BAD_REQUEST, "40021", "이미지 인식에 실패했습니다."),
     INVALID_SAME_SENIOR(HttpStatus.BAD_REQUEST, "40022", "이미 약속을 신청한 선배입니다."),
     NOT_PENDING_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40023", "확정 대기 약속이 아닙니다"),
+    NO_RESPONSE_BODY_ERROR(HttpStatus.BAD_REQUEST, "40024", "Response Body가 존재하지 않습니다."),
 
 
     // S3 관련 오류
