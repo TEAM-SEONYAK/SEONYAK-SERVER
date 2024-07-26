@@ -28,17 +28,16 @@ public class SeniorService {
     private final AppointmentService appointmentService;
     private final PrincipalHandler principalHandler;
 
-    @Transactional
     public Senior createSenior(final MemberJoinRequest memberJoinRequest, Member member) {
 
-        Senior senior = Senior.create(
-                member,
-                memberJoinRequest.businessCard(),
-                memberJoinRequest.company(),
-                memberJoinRequest.position(),
-                memberJoinRequest.detailPosition(),
-                memberJoinRequest.level()
-        );
+        Senior senior = Senior.builder()
+                .member(member)
+                .businessCard(memberJoinRequest.businessCard())
+                .company(memberJoinRequest.company())
+                .position(memberJoinRequest.position())
+                .detailPosition(memberJoinRequest.detailPosition())
+                .level(memberJoinRequest.level())
+                .build();
 
         return seniorRepository.save(senior);
     }
@@ -55,7 +54,6 @@ public class SeniorService {
                 seniorProfileRequest.story(),
                 seniorProfileRequest.preferredTimeList()
         );
-        seniorRepository.save(senior);
     }
 
     @Transactional(readOnly = true)

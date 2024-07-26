@@ -37,7 +37,7 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
     @JsonIgnore
     private LocalDateTime updatedAt;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private AppointmentCard(
             Long appointmentId,
             AppointmentStatus appointmentStatus,
@@ -97,47 +97,5 @@ public class AppointmentCard implements Comparable<AppointmentCard> {
 
         // 날짜가 다르면 날짜를 기준으로 비교 결과 반환
         return dateComparison;
-    }
-
-    public static AppointmentCard create(
-            Long appointmentId,
-            AppointmentStatus appointmentStatus,
-            Long seniorId,
-            String nickname,
-            String image,
-            String field,
-            String department,
-            List<String> topic,
-            String personalTopic,
-            String company,
-            String position,
-            String detailPosition,
-            String level,
-            String date,
-            String startTime,
-            String endTime,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt
-    ) {
-        return AppointmentCard.builder()
-                .appointmentId(appointmentId)
-                .appointmentStatus(appointmentStatus)
-                .seniorId(seniorId)
-                .nickname(nickname)
-                .image(image)
-                .field(field)
-                .department(department)
-                .topic(topic)
-                .personalTopic(personalTopic)
-                .company(company)
-                .position(position)
-                .detailPosition(detailPosition)
-                .level(level)
-                .date(date)
-                .startTime(startTime)
-                .endTime(endTime)
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
-                .build();
     }
 }

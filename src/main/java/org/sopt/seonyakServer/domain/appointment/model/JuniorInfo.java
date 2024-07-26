@@ -14,7 +14,7 @@ public class JuniorInfo {
     private String field;
     private String department;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private JuniorInfo(
             String nickname,
             String univName,
@@ -25,19 +25,5 @@ public class JuniorInfo {
         this.univName = univName;
         this.field = field;
         this.department = department;
-    }
-
-    public static JuniorInfo create(
-            String nickname,
-            String univName,
-            String field,
-            String department
-    ) {
-        return JuniorInfo.builder()
-                .nickname(nickname)
-                .univName(univName)
-                .field(field)
-                .department(department)
-                .build();
     }
 }

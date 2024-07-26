@@ -67,7 +67,7 @@ public class Member extends BaseTimeEntity {
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Senior senior;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private Member(
             final SocialType socialType,
             final String socialId,
@@ -76,18 +76,6 @@ public class Member extends BaseTimeEntity {
         this.socialType = socialType;
         this.socialId = socialId;
         this.email = email;
-    }
-
-    public static Member create(
-            final SocialType socialType,
-            final String socialId,
-            final String email
-    ) {
-        return Member.builder()
-                .socialType(socialType)
-                .socialId(socialId)
-                .email(email)
-                .build();
     }
 
     public void updateMember(
