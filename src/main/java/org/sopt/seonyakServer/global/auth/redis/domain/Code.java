@@ -17,22 +17,12 @@ public class Code {
 
     private String verificationCode;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private Code(
             final String phoneNumber,
             final String verificationCode
     ) {
         this.phoneNumber = phoneNumber;
         this.verificationCode = verificationCode;
-    }
-
-    public static Code createCode(
-            final String phoneNumber,
-            final String verificationCode
-    ) {
-        return Code.builder()
-                .phoneNumber(phoneNumber)
-                .verificationCode(verificationCode)
-                .build();
     }
 }

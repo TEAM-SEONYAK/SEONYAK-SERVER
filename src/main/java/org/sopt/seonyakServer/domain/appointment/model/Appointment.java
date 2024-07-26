@@ -66,7 +66,7 @@ public class Appointment extends BaseTimeEntity {
     @Column(name = "reject_detail")
     private String rejectDetail;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private Appointment(
             Member member,
             Senior senior,
@@ -81,24 +81,6 @@ public class Appointment extends BaseTimeEntity {
         this.timeList = timeList;
         this.topic = topic;
         this.personalTopic = personalTopic;
-    }
-
-    public static Appointment create(
-            Member member,
-            Senior senior,
-            AppointmentStatus appointmentStatus,
-            List<DateTimeRange> timeList,
-            List<String> topic,
-            String personalTopic
-    ) {
-        return Appointment.builder()
-                .member(member)
-                .senior(senior)
-                .appointmentStatus(appointmentStatus)
-                .timeList(timeList)
-                .topic(topic)
-                .personalTopic(personalTopic)
-                .build();
     }
 
     public void acceptAppointment(

@@ -63,7 +63,7 @@ public class Senior extends BaseTimeEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private PreferredTimeList preferredTimeList;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private Senior(
             Member member,
             String businessCard,
@@ -78,24 +78,6 @@ public class Senior extends BaseTimeEntity {
         this.position = position;
         this.detailPosition = detailPosition;
         this.level = level;
-    }
-
-    public static Senior create(
-            Member member,
-            String businessCard,
-            String company,
-            String position,
-            String detailPosition,
-            String level
-    ) {
-        return Senior.builder()
-                .member(member)
-                .businessCard(businessCard)
-                .company(company)
-                .position(position)
-                .detailPosition(detailPosition)
-                .level(level)
-                .build();
     }
 
     public void updateSenior(

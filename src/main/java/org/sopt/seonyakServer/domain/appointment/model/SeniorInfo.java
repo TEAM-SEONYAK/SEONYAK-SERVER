@@ -17,7 +17,7 @@ public class SeniorInfo {
     private String detailPosition;
     private String level;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private SeniorInfo(
             String nickname,
             String image,
@@ -34,25 +34,5 @@ public class SeniorInfo {
         this.position = position;
         this.detailPosition = detailPosition;
         this.level = level;
-    }
-
-    public static SeniorInfo create(
-            String nickname,
-            String image,
-            String company,
-            String field,
-            String position,
-            String detailPosition,
-            String level
-    ) {
-        return SeniorInfo.builder()
-                .nickname(nickname)
-                .image(image)
-                .company(company)
-                .field(field)
-                .position(position)
-                .detailPosition(detailPosition)
-                .level(level)
-                .build();
     }
 }

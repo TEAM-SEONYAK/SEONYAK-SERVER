@@ -110,11 +110,11 @@ public class MemberService {
                         member.getId()
                 );
             } else {
-                Member member = Member.create(
-                        memberInfoResponse.socialType(),
-                        memberInfoResponse.socialId(),
-                        memberInfoResponse.email()
-                );
+                Member member = Member.builder()
+                        .socialType(memberInfoResponse.socialType())
+                        .socialId(memberInfoResponse.socialId())
+                        .email(memberInfoResponse.email())
+                        .build();
 
                 return getTokenByMemberId(null, memberRepository.save(member).getId());
             }

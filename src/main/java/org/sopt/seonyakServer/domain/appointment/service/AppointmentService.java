@@ -78,14 +78,15 @@ public class AppointmentService {
             throw new CustomException(ErrorType.INVALID_SAME_SENIOR);
         }
 
-        Appointment appointment = Appointment.create(
-                member,
-                senior,
-                AppointmentStatus.PENDING,
-                appointmentRequest.timeList(),
-                appointmentRequest.topic(),
-                appointmentRequest.personalTopic()
-        );
+        Appointment appointment = Appointment.builder()
+                .member(member)
+                .senior(senior)
+                .appointmentStatus(AppointmentStatus.PENDING)
+                .timeList(appointmentRequest.timeList())
+                .topic(appointmentRequest.topic())
+                .personalTopic(appointmentRequest.personalTopic())
+                .build();
+
         appointmentRepository.save(appointment);
 
         sendNoticeMessage(
@@ -253,26 +254,26 @@ public class AppointmentService {
         }
 
         // Appointment에서 필요한 필드들을 매핑
-        return AppointmentCard.create(
-                appointment.getId(),
-                appointment.getAppointmentStatus(),
-                seniorId,
-                nickname,
-                image,
-                field,
-                department,
-                topic,
-                personalTopic,
-                company,
-                position,
-                detailPosition,
-                level,
-                date,
-                startTime,
-                endTime,
-                appointment.getCreatedAt(),
-                appointment.getUpdatedAt()
-        );
+        return AppointmentCard.builder()
+                .appointmentId(appointment.getId())
+                .appointmentStatus(appointment.getAppointmentStatus())
+                .seniorId(seniorId)
+                .nickname(nickname)
+                .image(image)
+                .field(field)
+                .department(department)
+                .topic(topic)
+                .personalTopic(personalTopic)
+                .company(company)
+                .position(position)
+                .detailPosition(detailPosition)
+                .level(level)
+                .date(date)
+                .startTime(startTime)
+                .endTime(endTime)
+                .createdAt(appointment.getCreatedAt())
+                .updatedAt(appointment.getUpdatedAt())
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -285,27 +286,28 @@ public class AppointmentService {
 
         Member member = appointment.getMember();
         Senior senior = appointment.getSenior();
+        Member seniorMember = senior.getMember();
 
         if (!userId.equals(member.getId()) && !userId.equals(senior.getMember().getId())) {
             throw new CustomException(ErrorType.NOT_MEMBERS_APPOINTMENT_ERROR);
         }
 
-        JuniorInfo juniorInfo = JuniorInfo.create(
-                member.getNickname(),
-                member.getUnivName(),
-                member.getField(),
-                member.getDepartmentList().get(0)
-        );
+        JuniorInfo juniorInfo = JuniorInfo.builder()
+                .nickname(member.getNickname())
+                .univName(member.getUnivName())
+                .field(member.getField())
+                .department(member.getDepartmentList().get(0))
+                .build();
 
-        SeniorInfo seniorInfo = SeniorInfo.create(
-                senior.getMember().getNickname(),
-                senior.getMember().getImage(),
-                senior.getCompany(),
-                senior.getMember().getField(),
-                senior.getPosition(),
-                senior.getDetailPosition(),
-                senior.getLevel()
-        );
+        SeniorInfo seniorInfo = SeniorInfo.builder()
+                .nickname(seniorMember.getNickname())
+                .image(seniorMember.getImage())
+                .company(senior.getCompany())
+                .field(seniorMember.getField())
+                .position(senior.getPosition())
+                .detailPosition(senior.getDetailPosition())
+                .level(senior.getLevel())
+                .build();
 
         return new AppointmentDetailResponse(
                 appointment.getAppointmentStatus(),
