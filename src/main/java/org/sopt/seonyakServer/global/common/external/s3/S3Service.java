@@ -8,7 +8,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.sopt.seonyakServer.domain.member.model.Member;
 import org.sopt.seonyakServer.domain.member.repository.MemberRepository;
-import org.sopt.seonyakServer.domain.senior.model.Senior;
 import org.sopt.seonyakServer.domain.senior.repository.SeniorRepository;
 import org.sopt.seonyakServer.global.auth.PrincipalHandler;
 import org.sopt.seonyakServer.global.common.external.s3.dto.PreSignedUrlResponse;
@@ -113,9 +112,15 @@ public class S3Service {
         String uuidFileName = UUID.randomUUID().toString() + ".jpg";
         // 경로 + 파일 이름
         String key = businessPath + uuidFileName;
-        Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
-        Senior senior = seniorRepository.findSeniorByIdOrThrow(member.getSenior().getId());
-        senior.addBusinessCard("https://" + bucketName + s3Substring + key);
+
+        /**
+         * 회원가입 도중이라 Senior 엔티티가 아직 DB에 추가되지 않았음에도 해당 엔티티의 id를 참조하므로 NullPointerException 발생,
+         * Presigned URL 구현 이전 임시 용도로 구성된 API로 구현 완료 시 사용하지 않게 될 API이므로 수정하기보단 주석 처리를 해놓겠습니다
+         */
+//        Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
+//        Senior senior = seniorRepository.findSeniorByIdOrThrow(member.getSenior().getId());
+//        senior.addBusinessCard("https://" + bucketName + s3Substring + key);
+
         try {
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)
