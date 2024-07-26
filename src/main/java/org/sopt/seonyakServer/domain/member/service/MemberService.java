@@ -176,6 +176,7 @@ public class MemberService {
     public MemberJoinResponse patchMemberJoin(MemberJoinRequest memberJoinRequest) {
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
+        log.info(String.valueOf(memberJoinRequest));
         log.info("영속성 컨텍스트에 포함되어 있나요(업데이트 이전)? " + entityManager.contains(member));
 
         member.updateMember(

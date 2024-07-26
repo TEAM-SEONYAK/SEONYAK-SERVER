@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public record MemberJoinRequest(
-        @NotBlank(message = "role 공백일 수 없습니다.")
+        @NotBlank(message = "role은 공백일 수 없습니다.")
         String role,
         Boolean isSubscribed,
         String nickname,
