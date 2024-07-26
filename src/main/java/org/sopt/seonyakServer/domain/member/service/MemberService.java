@@ -183,25 +183,20 @@ public class MemberService {
                 memberJoinRequest.field(),
                 memberJoinRequest.departmentList()
         );
+        log.info("role: " + memberJoinRequest.role());
 
         Long seniorId = null;
-        String role;
-        log.info("userType: " + memberJoinRequest.userType());
 
-        if (memberJoinRequest.userType() == 1) {
-            role = "SENIOR";
-        } else {
-            role = "JUNIOR";
-        }
-
-        if ("SENIOR".equals(role)) {
+        if ("SENIOR".equals(memberJoinRequest.role())) {
             member.addSenior(seniorService.createSenior(memberJoinRequest, member));
             seniorId = member.getSenior().getId();
+        } else if (!"JUNIOR".equals(memberJoinRequest.role())) {
+            throw new CustomException(ErrorType.INVALID_USER_TYPE_ERROR);
         }
 
         return MemberJoinResponse.of(
                 seniorId,
-                role
+                memberJoinRequest.role()
         );
     }
 

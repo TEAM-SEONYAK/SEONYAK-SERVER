@@ -38,6 +38,7 @@ public enum ErrorType {
     NOT_PENDING_APPOINTMENT_ERROR(HttpStatus.BAD_REQUEST, "40023", "확정 대기 약속이 아닙니다."),
     NO_RESPONSE_BODY_ERROR(HttpStatus.BAD_REQUEST, "40024", "Response Body가 존재하지 않습니다."),
     REDIRECT_URI_MISMATCH_ERROR(HttpStatus.BAD_REQUEST, "40025", "잘못된 Redirect Uri입니다."),
+    INVALID_USER_TYPE_ERROR(HttpStatus.BAD_REQUEST, "40026", "유효하지 않은 User Type입니다."),
 
     // S3 관련 오류
     IMAGE_EXTENSION_ERROR(HttpStatus.BAD_REQUEST, "40051", "이미지 확장자는 jpg, png, webp만 가능합니다."),

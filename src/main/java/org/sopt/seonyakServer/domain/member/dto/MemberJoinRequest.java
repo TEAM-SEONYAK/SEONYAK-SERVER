@@ -1,9 +1,11 @@
 package org.sopt.seonyakServer.domain.member.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 public record MemberJoinRequest(
-        int userType,
+        @NotBlank(message = "role 공백일 수 없습니다.")
+        String role,
         Boolean isSubscribed,
         String nickname,
         String image,
