@@ -183,7 +183,7 @@ public class MemberService {
                 memberJoinRequest.isSubscribed(),
                 memberJoinRequest.nickname(),
                 memberJoinRequest.image(),
-                memberJoinRequest.phoneNumber(),
+                memberJoinRequest.phoneNumber().replaceAll("-", ""),
                 memberJoinRequest.univName(),
                 memberJoinRequest.field(),
                 memberJoinRequest.departmentList()
