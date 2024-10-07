@@ -39,6 +39,8 @@ public enum ErrorType {
     NO_RESPONSE_BODY_ERROR(HttpStatus.BAD_REQUEST, "40024", "Response Body가 존재하지 않습니다."),
     REDIRECT_URI_MISMATCH_ERROR(HttpStatus.BAD_REQUEST, "40025", "잘못된 Redirect Uri입니다."),
     INVALID_USER_TYPE_ERROR(HttpStatus.BAD_REQUEST, "40026", "유효하지 않은 User Type입니다."),
+    INVALID_BOTH_TOPICS_PROVIDED(HttpStatus.BAD_REQUEST, "40027", "고민은 선택/작성 중 하나만 골라야 합니다."),
+    INVALID_NO_TOPIC_PROVIDED(HttpStatus.BAD_REQUEST, "40028", "고민은 선택/작성 중 하나는 골라야 합니다."),
 
     // S3 관련 오류
     IMAGE_EXTENSION_ERROR(HttpStatus.BAD_REQUEST, "40051", "이미지 확장자는 jpg, png, webp만 가능합니다."),
