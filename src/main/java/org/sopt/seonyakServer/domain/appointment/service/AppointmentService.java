@@ -74,6 +74,18 @@ public class AppointmentService {
             throw new CustomException(ErrorType.INVALID_SAME_SENIOR);
         }
 
+        // 두 고민이 전부 넘어온 경우
+        if ((appointmentRequest.topic() != null && !appointmentRequest.topic().isEmpty()) && (
+                appointmentRequest.personalTopic() != null && !appointmentRequest.personalTopic().isBlank())) {
+            throw new CustomException(ErrorType.INVALID_BOTH_TOPICS_PROVIDED);
+        }
+
+        // 두 고민이 전부 빈 값인 경우
+        if ((appointmentRequest.topic() == null || appointmentRequest.topic().isEmpty()) && (
+                appointmentRequest.personalTopic() == null || appointmentRequest.personalTopic().isBlank())) {
+            throw new CustomException(ErrorType.INVALID_NO_TOPIC_PROVIDED);
+        }
+
         Appointment appointment = Appointment.builder()
                 .member(member)
                 .senior(senior)
