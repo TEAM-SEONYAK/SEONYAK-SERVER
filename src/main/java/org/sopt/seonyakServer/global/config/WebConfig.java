@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080", "http://localhost:8081", "http://localhost:5173",
                         "https://seonyak.com", "https://www.seonyak.com", "https://api.seonyak.com",
-                        "https://www.seonyak.p-e.kr")
+                        "https://www.seonyak.p-e.kr", "https://api.seonyak.com/swagger-ui/index.html")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true)
