@@ -1,11 +1,9 @@
 package org.sopt.seonyakServer.domain.member.service;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -37,7 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -47,8 +44,6 @@ public class MemberService {
     private final SeniorService seniorService;
     private DefaultMessageService defaultMessageService;
     private final CodeService codeService;
-
-    private final EntityManager entityManager;
 
     @Value("${coolsms.api.key}")
     private String apiKey;
@@ -176,22 +171,15 @@ public class MemberService {
     public MemberJoinResponse patchMemberJoin(MemberJoinRequest memberJoinRequest) {
         Member member = memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal());
 
-        log.info(String.valueOf(memberJoinRequest));
-        log.info("영속성 컨텍스트에 포함되어 있나요(업데이트 이전)? " + entityManager.contains(member));
-
         member.updateMember(
                 memberJoinRequest.isSubscribed(),
                 memberJoinRequest.nickname(),
                 memberJoinRequest.image(),
-                memberJoinRequest.phoneNumber(),
+                memberJoinRequest.phoneNumber().replaceAll("-", ""),
                 memberJoinRequest.univName(),
                 memberJoinRequest.field(),
                 memberJoinRequest.departmentList()
         );
-        memberRepository.save(member);
-
-        log.info("영속성 컨텍스트에 포함되어 있나요(업데이트 이후)? " + entityManager.contains(member));
-        log.info("role: " + memberJoinRequest.role());
 
         Long seniorId = null;
 
@@ -201,9 +189,6 @@ public class MemberService {
         } else if (!"JUNIOR".equals(memberJoinRequest.role())) {
             throw new CustomException(ErrorType.INVALID_USER_TYPE_ERROR);
         }
-
-        log.info("제대로 저장됐나요? 닉네임 필드를 통해 확인: "
-                + memberRepository.findMemberByIdOrThrow(principalHandler.getUserIdFromPrincipal()).getNickname());
 
         return MemberJoinResponse.of(
                 seniorId,
