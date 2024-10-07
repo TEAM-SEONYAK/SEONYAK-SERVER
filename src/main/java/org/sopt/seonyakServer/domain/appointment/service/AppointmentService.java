@@ -91,7 +91,7 @@ public class AppointmentService {
 
         sendNoticeMessage(
                 appointment.getSenior().getMember(),
-                "' 후배님이 약속을 신청하셨습니다."
+                "'" + appointment.getMember().getNickname() + "' 후배님이 약속을 신청하셨습니다."
         );
     }
 
@@ -120,7 +120,7 @@ public class AppointmentService {
 
         sendNoticeMessage(
                 appointment.getMember(),
-                "' 선배님이 약속을 수락하셨습니다."
+                "'" + appointment.getSenior().getMember().getNickname() + "' 선배님이 약속을 수락하셨습니다."
         );
     }
 
@@ -149,7 +149,7 @@ public class AppointmentService {
 
         sendNoticeMessage(
                 appointment.getMember(),
-                "' 선배님이 약속을 거절하셨습니다."
+                "'" + appointment.getSenior().getMember().getNickname() + "' 선배님이 약속을 거절하셨습니다."
         );
     }
 
@@ -158,7 +158,7 @@ public class AppointmentService {
 
         message.setFrom(fromNumber);
         message.setTo(member.getPhoneNumber());
-        message.setText("[선약] '" + member.getNickname() + messageDetail);
+        message.setText("[선약] '" + messageDetail);
 
         this.defaultMessageService.sendOne(new SingleMessageSendingRequest(message));
     }
